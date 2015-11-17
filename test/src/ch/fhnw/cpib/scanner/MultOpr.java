@@ -1,21 +1,23 @@
 package ch.fhnw.cpib.scanner;
 
+import ch.fhnw.cpib.scanner.enums.Operators;
+import ch.fhnw.cpib.scanner.enums.Terminals;
+
 public class MultOpr extends Base {
 
-	private final Operators operator;
-
-	MultOpr(Terminals t, Operators op) {
-		super(t.MULTOPR);
-		operator = op;
-		// TODO Auto-generated constructor stub
+	private final Operators opr;
+	
+	MultOpr(Terminals t, Operators opr) {
+		super(t);
+		this.opr = opr;
 	}
 
 	public Operators getOperator() {
-		return operator;
+		return opr;
 	}
 	
 	public String toString(){
-		return operator.toString();
+		return opr.toString();
 	}
 
 }

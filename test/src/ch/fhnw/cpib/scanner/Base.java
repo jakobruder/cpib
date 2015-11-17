@@ -1,5 +1,7 @@
 package ch.fhnw.cpib.scanner;
 
+import ch.fhnw.cpib.scanner.enums.Terminals;
+
 public class Base implements IToken {
 
 	private final Terminals terminal;
