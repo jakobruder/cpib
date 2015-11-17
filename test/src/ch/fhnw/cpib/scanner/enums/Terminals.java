@@ -1,4 +1,4 @@
-package ch.fhnw.cpib.scanner;
+package ch.fhnw.cpib.scanner.enums;
 
 public enum Terminals {
 	LPAREN("LPAREN"), RPAREN("RPAREN"), LBRACE("LBRACE"), RBRACE("RBRACE"),

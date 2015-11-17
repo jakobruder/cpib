@@ -1,10 +1,15 @@
 package ch.fhnw.cpib.scanner;
 
+import ch.fhnw.cpib.scanner.enums.Operators;
+import ch.fhnw.cpib.scanner.enums.Terminals;
+
 public class MultOpr extends Base {
 
-	MultOpr(Terminals t, Operators op) {
+	private final Operators opr;
+	
+	MultOpr(Terminals t, Operators opr) {
 		super(t);
-		// TODO Auto-generated constructor stub
+		this.opr = opr;
 	}
 
 }
