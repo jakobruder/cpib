@@ -12,4 +12,12 @@ public class MultOpr extends Base {
 		this.opr = opr;
 	}
 
+	public Operators getOperator() {
+		return opr;
+	}
+	
+	public String toString(){
+		return opr.toString();
+	}
+
 }
