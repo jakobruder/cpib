@@ -6,8 +6,8 @@ public class Literal extends Base {
 
 	private final int value;
 	
-	public Literal(Terminals t, int value) {
-		super(t);
+	public Literal(int value) {
+		super(Terminals.LITERAL);
 		this.value = value;
 	}
 	
@@ -16,6 +16,5 @@ public class Literal extends Base {
 	}
 	
 	public String toString() {
-		return value + "";
-	}
-}
+		return "(" + super.toString() + "," + value + ")";
+	}}

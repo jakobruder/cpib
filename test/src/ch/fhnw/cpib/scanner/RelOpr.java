@@ -1,11 +1,14 @@
 package ch.fhnw.cpib.scanner;
 
+import ch.fhnw.cpib.scanner.enums.Operators;
+import ch.fhnw.cpib.scanner.enums.Terminals;
+
 public class RelOpr extends Base {
 
 	private final Operators relOpr;
 
-	RelOpr(Terminals t, Operators relOpr) {
-		super(t.RELOPR);
+	RelOpr(Operators relOpr) {
+		super(Terminals.RELOPR);
 		this.relOpr = relOpr;
 		// TODO Auto-generated constructor stub
 	}
@@ -14,4 +17,8 @@ public class RelOpr extends Base {
 		return relOpr;
 	}
 
+	public String toString() {
+		return "(" + super.toString() + "," + relOpr + ")";
+	}
+	
 }

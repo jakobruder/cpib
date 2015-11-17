@@ -7,8 +7,8 @@ public class BoolAnd extends Base {
 
 	private final Operators opr;
 
-	BoolAnd(Terminals t, Operators opr) {
-		super(t);
+	BoolAnd(Operators opr) {
+		super(Terminals.BOOLAND);
 		this.opr = opr;
 	}
 	
@@ -17,7 +17,7 @@ public class BoolAnd extends Base {
 	}
 	
 	public String toString() {
-		return opr.toString();
+		return "(" + super.toString() + "," + opr + ")";
 	}
 
 }

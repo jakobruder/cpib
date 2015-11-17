@@ -6,8 +6,8 @@ public class Ident extends Base {
 
 	private final String ident;
 	
-	public Ident(Terminals t, String ident) {
-		super(t.IDENT);
+	public Ident(String ident) {
+		super(Terminals.IDENT);
 		this.ident = ident;
 	}
 	
@@ -16,7 +16,7 @@ public class Ident extends Base {
 	}
 	
 	public String toString() {
-		return ident;
+		return "(" + super.toString() + "," + ident + ")";
 	}
 	
 }

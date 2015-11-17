@@ -7,8 +7,8 @@ public class AddOpr extends Base {
 
 	private final Operators opr;
 	
-	public AddOpr(Terminals t, Operators opr) {
-		super(t);
+	public AddOpr(Operators opr) {
+		super(Terminals.ADDOPR);
 		this.opr = opr;
 	}
 	
@@ -17,7 +17,7 @@ public class AddOpr extends Base {
 	}
 	
 	public String toString() {
-		return opr.toString();
+		return "(" + super.toString() + "," + opr + ")";
 	}
 	
 }
