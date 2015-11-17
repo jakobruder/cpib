@@ -5,7 +5,7 @@ public class Ident extends Base {
 	private final String ident;
 	
 	public Ident(Terminals t, String ident) {
-		super(t);
+		super(t.IDENT);
 		this.ident = ident;
 	}
 	
