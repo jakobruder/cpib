@@ -1,7 +1,7 @@
-package ch.fhnw.cpib.scanner.Symbols;
+package ch.fhnw.cpib.scanner.symbols;
 
-import Interfaces.IToken;
 import ch.fhnw.cpib.scanner.enums.Terminals;
+import ch.fhnw.cpib.scanner.interfaces.IToken;
 
 public class Becomes extends Base implements IToken {
 

@@ -1,4 +1,4 @@
-package Interfaces;
+package ch.fhnw.cpib.scanner.interfaces;
 
 public interface ITokenList {
 	public void add(IToken token);

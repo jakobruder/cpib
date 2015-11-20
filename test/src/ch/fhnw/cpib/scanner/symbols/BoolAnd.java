@@ -1,14 +1,14 @@
-package ch.fhnw.cpib.scanner.Symbols;
+package ch.fhnw.cpib.scanner.symbols;
 
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 
-public class BoolOr extends Base {
+public class BoolAnd extends Base {
 
 	private final Operators opr;
-	
-	public BoolOr(Operators opr) {
-		super(Terminals.BOOLOR);
+
+	BoolAnd(Operators opr) {
+		super(Terminals.BOOLAND);
 		this.opr = opr;
 	}
 	
@@ -19,4 +19,5 @@ public class BoolOr extends Base {
 	public String toString() {
 		return "(" + super.toString() + "," + opr + ")";
 	}
+
 }

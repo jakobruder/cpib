@@ -1,7 +1,7 @@
 package ch.fhnw.cpib.scanner;
 
-import ch.fhnw.cpib.scanner.Symbols.Base;
 import ch.fhnw.cpib.scanner.enums.Terminals;
+import ch.fhnw.cpib.scanner.symbols.Base;
 
 public class Ident extends Base {
 
