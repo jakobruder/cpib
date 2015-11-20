@@ -1,4 +1,4 @@
-package ch.fhnw.cpib.scanner;
+package ch.fhnw.cpib.scanner.Symbols;
 
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
@@ -10,7 +10,6 @@ public class RelOpr extends Base {
 	RelOpr(Operators relOpr) {
 		super(Terminals.RELOPR);
 		this.relOpr = relOpr;
-		// TODO Auto-generated constructor stub
 	}
 
 	public Operators getRelOpr() {

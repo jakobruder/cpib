@@ -1,12 +1,13 @@
-package ch.fhnw.cpib.scanner;
+package ch.fhnw.cpib.scanner.Symbols;
 
+import Interfaces.IToken;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 
 public class Base implements IToken {
 
 	private final Terminals terminal;
 
-	Base(Terminals t) {
+	public Base(Terminals t) {
 		this.terminal = t;
 	}
 

@@ -1,4 +1,4 @@
-package ch.fhnw.cpib.scanner;
+package ch.fhnw.cpib.scanner.Symbols;
 
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;

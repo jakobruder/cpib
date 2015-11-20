@@ -1,4 +1,4 @@
-package ch.fhnw.cpib.scanner;
+package Interfaces;
 
 import ch.fhnw.cpib.scanner.enums.Terminals;
 
