@@ -11,7 +11,7 @@ public class CommentState implements IScannerState {
 	@Override
 	public IScannerState handleCharacter(String ch, LinkedList<IToken> list)
 			throws ScannerException {
-		if (ch.matches("/n")) {
+		if (ch.matches("\n")) {
 			return new DefaultState();
 		} else {
 			return new CommentState();
