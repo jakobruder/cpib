@@ -7,7 +7,7 @@ public class BoolAnd extends Base {
 
 	private final Operators opr;
 
-	BoolAnd(Operators opr) {
+	public BoolAnd(Operators opr) {
 		super(Terminals.BOOLAND);
 		this.opr = opr;
 	}

@@ -5,7 +5,7 @@ import ch.fhnw.cpib.scanner.interfaces.IToken;
 
 public class Comma extends Base implements IToken {
 
-	Comma() {
+	public Comma() {
 		super(Terminals.COMMA);
 	}
 
