@@ -7,7 +7,7 @@ public class RelOpr extends Base {
 
 	private final Operators relOpr;
 
-	RelOpr(Operators relOpr) {
+	public RelOpr(Operators relOpr) {
 		super(Terminals.RELOPR);
 		this.relOpr = relOpr;
 	}

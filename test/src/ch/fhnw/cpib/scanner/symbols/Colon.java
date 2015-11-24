@@ -5,7 +5,7 @@ import ch.fhnw.cpib.scanner.interfaces.IToken;
 
 public class Colon extends Base implements IToken {
 
-	Colon() {
+	public Colon() {
 		super(Terminals.COLON);
 	}
 
