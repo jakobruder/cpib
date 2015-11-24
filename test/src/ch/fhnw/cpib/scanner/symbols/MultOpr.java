@@ -7,7 +7,7 @@ public class MultOpr extends Base {
 
 	private final Operators opr;
 
-	MultOpr(Operators opr) {
+	public MultOpr(Operators opr) {
 		super(Terminals.MULTOPR);
 		this.opr = opr;
 	}
