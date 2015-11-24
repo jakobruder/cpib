@@ -10,6 +10,7 @@ import ch.fhnw.cpib.scanner.interfaces.IScannerState;
 import ch.fhnw.cpib.scanner.symbols.AddOpr;
 import ch.fhnw.cpib.scanner.symbols.Base;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
+import ch.fhnw.cpib.scanner.symbols.RelOpr;
 
 public class DefaultState implements IScannerState {
 
@@ -54,7 +55,10 @@ public class DefaultState implements IScannerState {
 		} else if (ch.matches("\\-")) {
 			list.add(new AddOpr(Operators.MINUS));
 			return new DefaultState();
-		} else if (ch.matches(" ")) {
+		} else if (ch.matches("\\-")) {
+			list.add(new RelOpr(Operators.EQ));
+			return new DefaultState();
+		}else if (ch.matches(" ")) {
 			return new DefaultState();
 		} else {
 			throw new ScannerException("Invalid Character in default State: "
