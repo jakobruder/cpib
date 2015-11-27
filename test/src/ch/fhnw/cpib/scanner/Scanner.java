@@ -42,7 +42,7 @@ public class Scanner {
 	
 	public static void main(String[] args) {
 		Scanner s = new Scanner();
-		CharSequence program = "asdf := /= ; 123 + - + * 123123abab< <= > >= :=";
+		CharSequence program = "asdf := /= ; 123 + - + * 123123abab< <= > >= := //asdfsadfsdf \n testestestset";
 		LinkedList<IToken> list = s.scan(program);
 
 		for (int i = 0; i < list.size(); i++) {
