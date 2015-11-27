@@ -1,12 +1,10 @@
 package ch.fhnw.cpib.scanner.states;
 
-import java.util.LinkedList;
-
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.exceptions.ScannerException;
-import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.interfaces.IScannerState;
+import ch.fhnw.cpib.scanner.interfaces.ITokenList;
 import ch.fhnw.cpib.scanner.symbols.AddOpr;
 import ch.fhnw.cpib.scanner.symbols.Base;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
@@ -15,7 +13,7 @@ import ch.fhnw.cpib.scanner.symbols.RelOpr;
 public class DefaultState implements IScannerState {
 
 	@Override
-	public IScannerState handleCharacter(String ch, LinkedList<IToken> list)
+	public IScannerState handleCharacter(String ch, ITokenList list)
 			throws ScannerException {
 
 		if (ch.matches("[a-zA-Z]")) {
@@ -58,7 +56,7 @@ public class DefaultState implements IScannerState {
 		} else if (ch.matches("\\-")) {
 			list.add(new RelOpr(Operators.EQ));
 			return new DefaultState();
-		}else if (ch.matches(" ")) {
+		} else if (ch.matches(" ")) {
 			return new DefaultState();
 		} else {
 			throw new ScannerException("Invalid Character in default State: "
