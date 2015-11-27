@@ -25,7 +25,7 @@ public enum Terminals {
 
 	PROC("PROC"), PROGRAM("PROGRAM"), REF("REF"), RETURNS("RETURNS"), SKIP("SKIP"), THEN("THEN"),
 
-	TRUE("TRUE"), VAR("VAR"), WHILE("WHILE");
+	TRUE("TRUE"), VAR("VAR"), WHILE("WHILE"), VALUE("VALUE");
 
 	Terminals(String toString) {
 		this.toString = toString;
