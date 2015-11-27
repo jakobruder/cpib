@@ -2,7 +2,7 @@ package ch.fhnw.cpib.scanner.enums;
 
 public enum Value {
 	
-	BOOLVAL("BOOL"), INT64VAL("INT");
+	BOOL("BOOL"), INT64("INT");
 	
 	Value(String toString) {
 		this.toString = toString;

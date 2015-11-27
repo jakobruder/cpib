@@ -1,17 +1,20 @@
 package ch.fhnw.cpib.scanner.util;
 
 import ch.fhnw.cpib.scanner.Ident;
+import ch.fhnw.cpib.scanner.Literal;
 import ch.fhnw.cpib.scanner.enums.ChangeMode;
 import ch.fhnw.cpib.scanner.enums.FlowMode;
 import ch.fhnw.cpib.scanner.enums.MechMode;
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
+import ch.fhnw.cpib.scanner.enums.Value;
 import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.symbols.Base;
 import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
 import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
 import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
+import ch.fhnw.cpib.scanner.symbols.ValueToken;
 
 public class Utility {
 
@@ -20,7 +23,7 @@ public class Utility {
 
 		switch (tokenString) {
 		case "bool":
-//			token = new Type(Terminals.BOOL);
+			token = new ValueToken(Value.BOOL);
 			break;
 		case "call":
 			token = new Base(Terminals.CALL);
@@ -62,7 +65,7 @@ public class Utility {
 			token = new Base(Terminals.ENDWHILE);
 			break;
 		case "false":
-//			token = new Literal();
+			token = new Literal(false);
 			break;
 		case "fun":
 			token = new Base(Terminals.FUN);
@@ -83,7 +86,7 @@ public class Utility {
 			token = new FlowModeToken(FlowMode.INOUT);
 			break;
 		case "int64":
-//			token = new Type(Terminals.INT64);
+			token = new ValueToken(Value.INT64);
 			break;
 		case "local":
 			token = new Base(Terminals.LOCAL);
@@ -113,7 +116,7 @@ public class Utility {
 			token = new Base(Terminals.THEN);
 			break;
 		case "true":
-//			token = new Base();
+			token = new Literal(true);
 			break;
 		case "var":
 			token = new ChangeModeToken(ChangeMode.VAR);

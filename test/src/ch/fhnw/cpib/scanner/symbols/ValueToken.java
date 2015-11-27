@@ -3,11 +3,11 @@ package ch.fhnw.cpib.scanner.symbols;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.enums.Value;
 
-public class TypeToken extends Base{
+public class ValueToken extends Base{
 	
 	private Value value;
 	
-	public TypeToken(Value value) {
+	public ValueToken(Value value) {
 		super(Terminals.VALUE);
 		this.value = value;
 	}
