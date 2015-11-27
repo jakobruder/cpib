@@ -17,6 +17,8 @@ public class LiteralState implements IScannerState {
 		if (ch.matches("[0-9]")) {
 			value += ch;
 			return this;
+		} else if (ch.matches("[']")) {
+			return this;
 		} else {
 			list.add(new Literal(Integer.valueOf(value)));
 			return new DefaultState().handleCharacter(ch, list);
