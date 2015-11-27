@@ -2,18 +2,12 @@ package ch.fhnw.cpib.scanner;
 
 import java.util.LinkedList;
 
-import ch.fhnw.cpib.scanner.enums.ChangeMode;
-import ch.fhnw.cpib.scanner.enums.MechMode;
-import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.exceptions.ScannerException;
 import ch.fhnw.cpib.scanner.interfaces.IScannerState;
 import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.states.DefaultState;
 import ch.fhnw.cpib.scanner.symbols.Base;
-import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
-import ch.fhnw.cpib.scanner.symbols.MechModeToken;
-import ch.fhnw.cpib.scanner.symbols.MultOpr;
 
 public class Scanner {
 
