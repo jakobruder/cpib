@@ -45,8 +45,7 @@ class Parser implements IParser {
 			cpsCmd();
 			consume(Terminals.ENDPROGRAM);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -56,8 +55,7 @@ class Parser implements IParser {
 			progParamListop();
 			consume(Terminals.RPAREN);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -73,8 +71,7 @@ class Parser implements IParser {
 			progParamListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -85,8 +82,7 @@ class Parser implements IParser {
 			progParamListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -104,8 +100,7 @@ class Parser implements IParser {
 			globImpop2();
 			typedIdent();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -123,8 +118,7 @@ class Parser implements IParser {
 			decl();
 			cpsDeclop();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -135,8 +129,7 @@ class Parser implements IParser {
 			cpsDeclop();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -172,8 +165,7 @@ class Parser implements IParser {
 			cmd();
 			cpsCmdop();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -189,8 +181,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.ENDFUN) {
 		} else if (terminal == Terminals.ENDPROGRAM) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -200,8 +191,7 @@ class Parser implements IParser {
 			cpsDecl();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -215,8 +205,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.PROC) {
 			procDecl();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -233,8 +222,7 @@ class Parser implements IParser {
 			cpsCmd();
 			consume(Terminals.ENDFUN);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -245,8 +233,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.DO) {
 		} else if (terminal == Terminals.LOCAL) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -256,8 +243,7 @@ class Parser implements IParser {
 			cpsStoDecl();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -274,8 +260,7 @@ class Parser implements IParser {
 			cpsCmd();
 			consume(Terminals.ENDPROC);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -286,8 +271,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.IDENT) {
 			typedIdent();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -297,8 +281,7 @@ class Parser implements IParser {
 			consume(Terminals.COLON);
 			consume(Terminals.TYPE);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -308,8 +291,7 @@ class Parser implements IParser {
 			paramListop();
 			consume(Terminals.RPAREN);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -328,8 +310,7 @@ class Parser implements IParser {
 			paramListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -340,8 +321,7 @@ class Parser implements IParser {
 			paramListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -359,8 +339,7 @@ class Parser implements IParser {
 			globImpop2();
 			consume(Terminals.IDENT);
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -371,8 +350,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.IDENT) {
 		} else if (terminal == Terminals.CHANGEMODE) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -381,8 +359,7 @@ class Parser implements IParser {
 			consume(Terminals.CHANGEMODE);
 		} else if (terminal == Terminals.IDENT) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -397,8 +374,7 @@ class Parser implements IParser {
 			globImp();
 			globImpsop();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -407,8 +383,7 @@ class Parser implements IParser {
 			consume(Terminals.COMMA);
 			globImp();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -420,8 +395,7 @@ class Parser implements IParser {
 			stoDecl();
 			cpsStoDeclop();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -432,8 +406,7 @@ class Parser implements IParser {
 			cpsStoDeclop();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -459,8 +432,7 @@ class Parser implements IParser {
 			globImpop2();
 			typedIdent();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -470,8 +442,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.IDENT) {
 		} else if (terminal == Terminals.CHANGEMODE) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -520,8 +491,7 @@ class Parser implements IParser {
 			consume(Terminals.DEBUGOUT);
 			expr();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -536,8 +506,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.ENDPROGRAM) {
 		} else if (terminal == Terminals.SEMICOLON) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -546,8 +515,7 @@ class Parser implements IParser {
 			consume(Terminals.INIT);
 			idents();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -556,8 +524,7 @@ class Parser implements IParser {
 			consume(Terminals.IDENT);
 			identsop();
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -574,8 +541,7 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.ENDPROGRAM) {
 		} else if (terminal == Terminals.SEMICOLON) {
 		} else {
-			throw new GrammarError(
-					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -589,8 +555,581 @@ class Parser implements IParser {
 			}
 			return consumedToken;
 		} else {
-			throw new GrammarError("terminal expected: " + expectedTerminal
-					+ ", terminal found: " + terminal);
+			throw new GrammarError("terminal expected: " + expectedTerminal + ", terminal found: " + terminal);
 		}
 	}
+
+	private void expr() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			term1();
+			exprbool();
+			break;
+		case ADDOPR:
+			term1();
+			exprbool();
+			break;
+		case NOT:
+			term1();
+			exprbool();
+			break;
+		case IDENT:
+			term1();
+			exprbool();
+			break;
+		case BOOLOR:
+			consume(Terminals.BOOLOR);
+			term1();
+			term1opor();
+			break;
+		case BOOLAND:
+			consume(Terminals.BOOLAND);
+			term1();
+			term1opand();
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void exprbool() throws GrammarError {
+		switch (terminal) {
+		case BOOLOR:
+			consume(Terminals.BOOLOR);
+			term1();
+			term1opor();
+			break;
+		case BOOLAND:
+			consume(Terminals.BOOLAND);
+			term1();
+			term1opand();
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void repADDOPRterm3() throws GrammarError {
+		switch (terminal) {
+		case ADDOPR:
+			consume(Terminals.ADDOPR);
+			term3();
+			repADDOPRterm3();
+			break;
+		case BOOLOR:
+			// epsilon
+			break;
+		case BOOLAND:
+			// epsilon
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		case RELOPR:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void term3() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			factor();
+			repMULTOPRfactor();
+			break;
+		case ADDOPR:
+			factor();
+			repMULTOPRfactor();
+			break;
+		case NOT:
+			factor();
+			repMULTOPRfactor();
+			break;
+		case IDENT:
+			factor();
+			repMULTOPRfactor();
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void repMULTOPRfactor() throws GrammarError {
+		switch (terminal) {
+		case MULTOPR:
+			consume(Terminals.MULTOPR);
+			factor();
+			repMULTOPRfactor();
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		case RELOPR:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void factor() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			consume(Terminals.LPAREN);
+			expr();
+			consume(Terminals.RPAREN);
+			break;
+		case ADDOPR:
+			monadicOpr();
+			factor();
+			break;
+		case NOT:
+			monadicOpr();
+			factor();
+			break;
+		case IDENT:
+			consume(Terminals.IDENT);
+			factorop();
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void factorop() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			exprList();
+			break;
+		case ADDOPR:
+			// epsilon
+			break;
+		case BOOLOR:
+			// epsilon
+			break;
+		case BOOLAND:
+			// epsilon
+			break;
+		case MULTOPR:
+			// epsilon
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		case RELOPR:
+			// epsilon
+			break;
+		case INIT:
+			consume(Terminals.INIT);
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void term2() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			term3();
+			repADDOPRterm3();
+			break;
+		case ADDOPR:
+			term3();
+			repADDOPRterm3();
+			break;
+		case NOT:
+			term3();
+			repADDOPRterm3();
+			break;
+		case IDENT:
+			term3();
+			repADDOPRterm3();
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void term2op() throws GrammarError {
+		switch (terminal) {
+		case RELOPR:
+			consume(Terminals.RELOPR);
+			term2();
+			term2op();
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void term1() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			term2();
+			term2op();
+			break;
+		case ADDOPR:
+			term2();
+			term2op();
+			break;
+		case NOT:
+			term2();
+			term2op();
+			break;
+		case IDENT:
+			term2();
+			term2op();
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void term1opor() throws GrammarError {
+		switch (terminal) {
+		case BOOLOR:
+			consume(Terminals.BOOLOR);
+			term1();
+			term1opor();
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void term1opand() throws GrammarError {
+		switch (terminal) {
+		case BOOLAND:
+			consume(Terminals.BOOLAND);
+			term1();
+			term1opand();
+			break;
+		case DO:
+			// epsilon
+			break;
+		case THEN:
+			// epsilon
+			break;
+		case ENDWHILE:
+			// epsilon
+			break;
+		case ENDIF:
+			// epsilon
+			break;
+		case ELSE:
+			// epsilon
+			break;
+		case ENDPROC:
+			// epsilon
+			break;
+		case ENDFUN:
+			// epsilon
+			break;
+		case ENDPROGRAM:
+			// epsilon
+			break;
+		case SEMICOLON:
+			// epsilon
+			break;
+		case BECOMES:
+			// epsilon
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void exprList() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			consume(Terminals.LPAREN);
+			exprListop();
+			consume(Terminals.RPAREN);
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void monadicOpr() throws GrammarError {
+		switch (terminal) {
+		case ADDOPR:
+			consume(Terminals.ADDOPR);
+			break;
+		case NOT:
+			consume(Terminals.NOT);
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void exprListop() throws GrammarError {
+		switch (terminal) {
+		case LPAREN:
+			expr();
+			exprListopop();
+			break;
+		case ADDOPR:
+			expr();
+			exprListopop();
+			break;
+		case NOT:
+			expr();
+			exprListopop();
+			break;
+		case IDENT:
+			expr();
+			exprListopop();
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
+	private void exprListopop() throws GrammarError {
+		switch (terminal) {
+		case COMMA:
+			consume(Terminals.COMMA);
+			expr();
+			exprListopop();
+			break;
+		case RPAREN:
+			// epsilon
+			break;
+		default:
+			throw new GrammarError("Unexpected token");
+		}
+	}
+
 }
