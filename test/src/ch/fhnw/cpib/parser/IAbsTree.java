@@ -1,5 +1,7 @@
 package ch.fhnw.cpib.parser;
 
+import ch.fhnw.cpib.scanner.Literal;
+
 public interface IAbsTree {
 
 	public interface IExpr {
@@ -11,6 +13,13 @@ public interface IAbsTree {
 	}
 	
 	public class LiteralExpr implements IExpr {
+		private Literal literal;
+
+		public LiteralExpr(Literal literal) {
+			super();
+			this.literal = literal;
+		}
+		
 		
 	}
 	

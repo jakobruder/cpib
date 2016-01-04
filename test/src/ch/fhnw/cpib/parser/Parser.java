@@ -1,6 +1,6 @@
 package ch.fhnw.cpib.parser;
 
-import ch.fhnw.cpib.parser.IConcTree.IExpr;
+import ch.fhnw.cpib.parser.IConcTree.IConcExpr;
 import ch.fhnw.cpib.parser.IConcTree.IExprList;
 import ch.fhnw.cpib.parser.IConcTree.IExprListop;
 import ch.fhnw.cpib.parser.IConcTree.IExprListopop;
@@ -178,43 +178,43 @@ class Parser implements IParser {
 
 	private IConcTree.ICpsCmd cpsCmd() throws GrammarError {
 		if (terminal == Terminals.DEBUGOUT) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.DEBUGIN) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.CALL) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.WHILE) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.IF) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.LPAREN) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.ADDOPR) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.NOT) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.IDENT) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else if (terminal == Terminals.SKIP) {
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmd(cmd, cpsCmdOp);
 		} else {
@@ -225,7 +225,7 @@ class Parser implements IParser {
 	private IConcTree.ICpsCmdop cpsCmdop() throws GrammarError {
 		if (terminal == Terminals.SEMICOLON) {
 			Base semicolon = consume(Terminals.SEMICOLON);
-			IConcTree.ICmd cmd = cmd();
+			IConcTree.IConcCmd cmd = cmd();
 			IConcTree.ICpsCmdop cpsCmdOp = cpsCmdop();
 			return new IConcTree.CpsCmdopSemicolon(semicolon, cmd, cpsCmdOp);
 		} else if (terminal == Terminals.ENDWHILE) {
@@ -545,33 +545,33 @@ class Parser implements IParser {
 		}
 	}
 
-	private IConcTree.ICmd cmd() throws GrammarError {
+	private IConcTree.IConcCmd cmd() throws GrammarError {
 		if (terminal == Terminals.SKIP) {
 			IToken skip = consume(Terminals.SKIP);
 			return new IConcTree.CmdSkip(skip);
 		} else if (terminal == Terminals.LPAREN) {
-			IConcTree.IExpr expr1 = expr();
+			IConcTree.IConcExpr expr1 = expr();
 			IToken becomes = consume(Terminals.BECOMES);
-			IConcTree.IExpr expr2 = expr();
+			IConcTree.IConcExpr expr2 = expr();
 			return new IConcTree.CmdBecomes(expr1, becomes, expr2);
 		} else if (terminal == Terminals.ADDOPR) {
-			IConcTree.IExpr expr1 = expr();
+			IConcTree.IConcExpr expr1 = expr();
 			IToken becomes = consume(Terminals.BECOMES);
-			IConcTree.IExpr expr2 = expr();
+			IConcTree.IConcExpr expr2 = expr();
 			return new IConcTree.CmdBecomes(expr1, becomes, expr2);
 		} else if (terminal == Terminals.NOT) {
-			IConcTree.IExpr expr1 = expr();
+			IConcTree.IConcExpr expr1 = expr();
 			IToken becomes = consume(Terminals.BECOMES);
-			IConcTree.IExpr expr2 = expr();
+			IConcTree.IConcExpr expr2 = expr();
 			return new IConcTree.CmdBecomes(expr1, becomes, expr2);
 		} else if (terminal == Terminals.IDENT) {
-			IConcTree.IExpr expr1 = expr();
+			IConcTree.IConcExpr expr1 = expr();
 			IToken becomes = consume(Terminals.BECOMES);
-			IConcTree.IExpr expr2 = expr();
+			IConcTree.IConcExpr expr2 = expr();
 			return new IConcTree.CmdBecomes(expr1, becomes, expr2);
 		} else if (terminal == Terminals.IF) {
 			IToken ifToken = consume(Terminals.IF);
-			IConcTree.IExpr expr = expr();
+			IConcTree.IConcExpr expr = expr();
 			IToken then = consume(Terminals.THEN);
 			IConcTree.ICpsCmd cpsCmd1 = cpsCmd();
 			IToken elseToken = consume(Terminals.ELSE);
@@ -580,7 +580,7 @@ class Parser implements IParser {
 			return new IConcTree.CmdIf(ifToken, expr, then, cpsCmd1, elseToken, cpsCmd2, endif);
 		} else if (terminal == Terminals.WHILE) {
 			IToken tokenWhile = consume(Terminals.WHILE);
-			IConcTree.IExpr expr = expr();
+			IConcTree.IConcExpr expr = expr();
 			IToken tokenDo = consume(Terminals.DO);
 			IConcTree.ICpsCmd cpsCmd = cpsCmd();
 			IToken endWhile = consume(Terminals.ENDWHILE);
@@ -593,11 +593,11 @@ class Parser implements IParser {
 			return new IConcTree.CmdCall(call, ident, exprList, cmdOp);
 		} else if (terminal == Terminals.DEBUGIN) {
 			IToken debugin = consume(Terminals.DEBUGIN);
-			IConcTree.IExpr expr = expr();
+			IConcTree.IConcExpr expr = expr();
 			return new IConcTree.CmdDebugin(debugin, expr);
 		} else if (terminal == Terminals.DEBUGOUT) {
 			IToken debugout = consume(Terminals.DEBUGOUT);
-			IConcTree.IExpr expr = expr();
+			IConcTree.IConcExpr expr = expr();
 			return new IConcTree.CmdDebugout(debugout, expr);
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
@@ -686,7 +686,7 @@ class Parser implements IParser {
 		}
 	}
 
-	private IExpr expr() throws GrammarError {
+	private IConcExpr expr() throws GrammarError {
 		ITerm1 term1;
 		IExprbool exprbool;
 		switch (terminal) {
@@ -901,7 +901,7 @@ class Parser implements IParser {
 		switch (terminal) {
 		case LPAREN:
 			IToken lparen = consume(Terminals.LPAREN);
-			IExpr expr = expr();
+			IConcExpr expr = expr();
 			IToken rparen = consume(Terminals.RPAREN);
 			return new IConcTree.FactorLParen(lparen, expr, rparen);
 		case ADDOPR:
@@ -1146,7 +1146,7 @@ class Parser implements IParser {
 	}
 
 	private IExprListop exprListop() throws GrammarError {
-		IExpr expr;
+		IConcExpr expr;
 		IExprListopop exprListopop;
 		switch (terminal) {
 		case LPAREN:
@@ -1176,7 +1176,7 @@ class Parser implements IParser {
 		switch (terminal) {
 		case COMMA:
 			Comma comma = (Comma) consume(Terminals.COMMA);
-			IExpr expr = expr();
+			IConcExpr expr = expr();
 			IExprListopop exprListopop = exprListopop();
 			return new IConcTree.ExprListOpOpComma(comma, expr, exprListopop);
 		case RPAREN:
