@@ -3,6 +3,7 @@ package ch.fhnw.cpib.parser;
 import ch.fhnw.cpib.parser.IConcTree.IExpr;
 import ch.fhnw.cpib.parser.IConcTree.IExprList;
 import ch.fhnw.cpib.parser.IConcTree.IExprListop;
+import ch.fhnw.cpib.parser.IConcTree.IExprListopop;
 import ch.fhnw.cpib.parser.IConcTree.IExprbool;
 import ch.fhnw.cpib.parser.IConcTree.IFactor;
 import ch.fhnw.cpib.parser.IConcTree.IFactorop;
@@ -28,6 +29,7 @@ import ch.fhnw.cpib.scanner.symbols.AddOpr;
 import ch.fhnw.cpib.scanner.symbols.Base;
 import ch.fhnw.cpib.scanner.symbols.BoolAnd;
 import ch.fhnw.cpib.scanner.symbols.BoolOr;
+import ch.fhnw.cpib.scanner.symbols.Comma;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
 import ch.fhnw.cpib.scanner.symbols.RelOpr;
 
@@ -722,7 +724,6 @@ class Parser implements IParser {
 			return new IConcTree.Exprbool();
 		case ELSE:
 			return new IConcTree.Exprbool();
-			;
 		case ENDPROC:
 			return new IConcTree.Exprbool();
 		case ENDFUN:
@@ -1037,7 +1038,7 @@ class Parser implements IParser {
 	private ITerm1opand term1opand() throws GrammarError {
 		switch (terminal) {
 		case BOOLAND:
-			BoolAnd booland = consume(Terminals.BOOLAND);
+			BoolAnd booland = (BoolAnd) consume(Terminals.BOOLAND);
 			ITerm1 term1 = term1();
 			ITerm1opand term1opand = term1opand();
 			return new IConcTree.Term1OpAndBoolAnd(booland, term1, term1opand);
@@ -1080,55 +1081,55 @@ class Parser implements IParser {
 		}
 	}
 
-	private void monadicOpr() throws GrammarError {
+	private IMonadicOpr monadicOpr() throws GrammarError {
 		switch (terminal) {
 		case ADDOPR:
-			consume(Terminals.ADDOPR);
-			break;
+			AddOpr addopr = (AddOpr) consume(Terminals.ADDOPR);
+			return new IConcTree.MonadicOprAddOpr(addopr);
 		case NOT:
-			consume(Terminals.NOT);
-			break;
+			Base not = consume(Terminals.NOT);
+			return new IConcTree.MonadicOprNot(not);
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void exprListop() throws GrammarError {
+	private IExprListop exprListop() throws GrammarError {
+		IExpr expr;
+		IExprListopop exprListopop;
 		switch (terminal) {
 		case LPAREN:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpLParen(expr, exprListopop);
 		case ADDOPR:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpAddOpr(expr, exprListopop);
 		case NOT:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpNot(expr, exprListopop);
 		case IDENT:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpIdent(expr, exprListopop);
 		case RPAREN:
-			// epsilon
-			break;
+			return new IConcTree.ExprListOp();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void exprListopop() throws GrammarError {
+	private IExprListopop exprListopop() throws GrammarError {
 		switch (terminal) {
 		case COMMA:
-			consume(Terminals.COMMA);
-			expr();
-			exprListopop();
-			break;
+			Comma comma = (Comma) consume(Terminals.COMMA);
+			IExpr expr = expr();
+			IExprListopop exprListopop = exprListopop();
+			return new IConcTree.ExprListOpOpComma(comma, expr, exprListopop);
 		case RPAREN:
-			// epsilon
-			break;
+			return new IConcTree.ExprListOpOp();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
