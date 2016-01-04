@@ -775,19 +775,53 @@ public interface IConcTree {
 	}
 
 	public class ProgParamListop implements IProgParamListop {
+
+		public ProgParamListop() {
+
+		}
+
+	}
+
+	public class ProgParamListopIdent implements IProgParamListop {
 		private IProgParam progParam;
 		private IProgParamListopop progParamListopop;
 
-		public ProgParamListop(IProgParam progParam,
+		public ProgParamListopIdent(IProgParam progParam,
 				IProgParamListopop progParamListopop) {
-
+			super();
 			this.progParam = progParam;
 			this.progParamListopop = progParamListopop;
 		}
 
 	}
 
-	public class ProgParamListopopComma implements IProgParamListop {
+	public class ProgParamListopChangemode implements IProgParamListop {
+		private IProgParam progParam;
+		private IProgParamListopop progParamListopop;
+
+		public ProgParamListopChangemode(IProgParam progParam,
+				IProgParamListopop progParamListopop) {
+			super();
+			this.progParam = progParam;
+			this.progParamListopop = progParamListopop;
+		}
+
+	}
+
+	public class ProgParamListopFlowmode implements IProgParamListop {
+		private IProgParam progParam;
+		private IProgParamListopop progParamListopop;
+
+		public ProgParamListopFlowmode(IProgParam progParam,
+				IProgParamListopop progParamListopop) {
+			super();
+			this.progParam = progParam;
+			this.progParamListopop = progParamListopop;
+		}
+
+	}
+
+	public class ProgParamListopopComma implements IProgParamListopop {
 		private Comma comma;
 		private IProgParam progParam;
 		private IProgParamListopop progParamListopop;
