@@ -5,6 +5,7 @@ import ch.fhnw.cpib.parser.IConcTree.IExprbool;
 import ch.fhnw.cpib.parser.IConcTree.IIdents;
 import ch.fhnw.cpib.parser.IConcTree.IIdentsop;
 import ch.fhnw.cpib.parser.IConcTree.ITerm1;
+import ch.fhnw.cpib.parser.IConcTree.ITerm1opor;
 import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
 import ch.fhnw.cpib.scanner.enums.Operators;
@@ -630,10 +631,10 @@ class Parser implements IParser {
 			IExprbool exprbool = exprbool();
 			return new IConcTree.ExprIdent(term1, exprbool);
 		case BOOLOR:
-			consume(Terminals.BOOLOR);
-			term1();
-			term1opor();
-			break;
+			Base boolor = consume(Terminals.BOOLOR);
+			ITerm1 term1 = term1();
+			ITerm1opor term1opor = term1opor();
+			return new IConcTree.ExprBoolOr(boolor, term1, term1opor);
 		case BOOLAND:
 			consume(Terminals.BOOLAND);
 			term1();
