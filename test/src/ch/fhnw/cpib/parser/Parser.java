@@ -1,8 +1,14 @@
 package ch.fhnw.cpib.parser;
 
+import ch.fhnw.cpib.parser.IConcTree.IExpr;
+import ch.fhnw.cpib.parser.IConcTree.IExprbool;
+import ch.fhnw.cpib.parser.IConcTree.IIdents;
+import ch.fhnw.cpib.parser.IConcTree.IIdentsop;
+import ch.fhnw.cpib.parser.IConcTree.ITerm1;
 import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
 import ch.fhnw.cpib.scanner.enums.Terminals;
+import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.interfaces.ITokenList;
 import ch.fhnw.cpib.scanner.symbols.Base;
 
@@ -45,7 +51,8 @@ class Parser implements IParser {
 			cpsCmd();
 			consume(Terminals.ENDPROGRAM);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -55,7 +62,8 @@ class Parser implements IParser {
 			progParamListop();
 			consume(Terminals.RPAREN);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -71,7 +79,8 @@ class Parser implements IParser {
 			progParamListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -82,7 +91,8 @@ class Parser implements IParser {
 			progParamListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -100,7 +110,8 @@ class Parser implements IParser {
 			globImpop2();
 			typedIdent();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -118,7 +129,8 @@ class Parser implements IParser {
 			decl();
 			cpsDeclop();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -129,7 +141,8 @@ class Parser implements IParser {
 			cpsDeclop();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -165,7 +178,8 @@ class Parser implements IParser {
 			cmd();
 			cpsCmdop();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -181,7 +195,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.ENDFUN) {
 		} else if (terminal == Terminals.ENDPROGRAM) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -191,7 +206,8 @@ class Parser implements IParser {
 			cpsDecl();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -205,7 +221,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.PROC) {
 			procDecl();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -222,7 +239,8 @@ class Parser implements IParser {
 			cpsCmd();
 			consume(Terminals.ENDFUN);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -233,7 +251,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.DO) {
 		} else if (terminal == Terminals.LOCAL) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -243,7 +262,8 @@ class Parser implements IParser {
 			cpsStoDecl();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -260,7 +280,8 @@ class Parser implements IParser {
 			cpsCmd();
 			consume(Terminals.ENDPROC);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -271,7 +292,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.IDENT) {
 			typedIdent();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -281,7 +303,8 @@ class Parser implements IParser {
 			consume(Terminals.COLON);
 			consume(Terminals.TYPE);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -291,7 +314,8 @@ class Parser implements IParser {
 			paramListop();
 			consume(Terminals.RPAREN);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -310,7 +334,8 @@ class Parser implements IParser {
 			paramListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -321,7 +346,8 @@ class Parser implements IParser {
 			paramListopop();
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -339,7 +365,8 @@ class Parser implements IParser {
 			globImpop2();
 			consume(Terminals.IDENT);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -350,7 +377,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.IDENT) {
 		} else if (terminal == Terminals.CHANGEMODE) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -359,7 +387,8 @@ class Parser implements IParser {
 			consume(Terminals.CHANGEMODE);
 		} else if (terminal == Terminals.IDENT) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -374,7 +403,8 @@ class Parser implements IParser {
 			globImp();
 			globImpsop();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -383,7 +413,8 @@ class Parser implements IParser {
 			consume(Terminals.COMMA);
 			globImp();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -395,7 +426,8 @@ class Parser implements IParser {
 			stoDecl();
 			cpsStoDeclop();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -406,7 +438,8 @@ class Parser implements IParser {
 			cpsStoDeclop();
 		} else if (terminal == Terminals.DO) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -432,7 +465,8 @@ class Parser implements IParser {
 			globImpop2();
 			typedIdent();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -442,7 +476,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.IDENT) {
 		} else if (terminal == Terminals.CHANGEMODE) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -491,7 +526,8 @@ class Parser implements IParser {
 			consume(Terminals.DEBUGOUT);
 			expr();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -506,7 +542,8 @@ class Parser implements IParser {
 		} else if (terminal == Terminals.ENDPROGRAM) {
 		} else if (terminal == Terminals.SEMICOLON) {
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -515,33 +552,45 @@ class Parser implements IParser {
 			consume(Terminals.INIT);
 			idents();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
-	private void idents() throws GrammarError {
+	private IIdents idents() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
-			consume(Terminals.IDENT);
-			identsop();
+			Base ident = consume(Terminals.IDENT);
+			IIdentsop identsop = identsop();
+			return new IConcTree.Idents(ident, identsop);
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
-	private void identsop() throws GrammarError {
+	private IIdentsop identsop() throws GrammarError {
 		if (terminal == Terminals.COMMA) {
-			consume(Terminals.COMMA);
-			consume(Terminals.IDENT);
-			identsop();
+			Base comma = consume(Terminals.COMMA);
+			Base ident = consume(Terminals.IDENT);
+			IIdentsop identsop = identsop();
+			return new IConcTree.IdentsopComma(comma, ident, identsop);
 		} else if (terminal == Terminals.ENDWHILE) {
+			return new IConcTree.Identsop();
 		} else if (terminal == Terminals.ENDIF) {
+			return new IConcTree.Identsop();
 		} else if (terminal == Terminals.ELSE) {
+			return new IConcTree.Identsop();
 		} else if (terminal == Terminals.ENDPROC) {
+			return new IConcTree.Identsop();
 		} else if (terminal == Terminals.ENDFUN) {
+			return new IConcTree.Identsop();
 		} else if (terminal == Terminals.ENDPROGRAM) {
+			return new IConcTree.Identsop();
 		} else if (terminal == Terminals.SEMICOLON) {
+			return new IConcTree.Identsop();
 		} else {
-			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
+			throw new GrammarError(
+					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
@@ -555,28 +604,29 @@ class Parser implements IParser {
 			}
 			return consumedToken;
 		} else {
-			throw new GrammarError("terminal expected: " + expectedTerminal + ", terminal found: " + terminal);
+			throw new GrammarError("terminal expected: " + expectedTerminal
+					+ ", terminal found: " + terminal);
 		}
 	}
 
-	private void expr() throws GrammarError {
+	private IExpr expr() throws GrammarError {
 		switch (terminal) {
 		case LPAREN:
-			term1();
-			exprbool();
-			break;
+			ITerm1 term1 = term1();
+			IExprbool exprbool = exprbool();
+			return new IConcTree.ExprLParen(term1, exprbool); 
 		case ADDOPR:
-			term1();
-			exprbool();
-			break;
+			ITerm1 term1 = term1();
+			IExprbool exprbool = exprbool();
+			return new IConcTree.ExprAddopr(term1, exprbool);
 		case NOT:
-			term1();
-			exprbool();
-			break;
+			ITerm1 term1 = term1();
+			IExprbool exprbool = exprbool();
+			return new IConcTree.ExprNot(term1, exprbool);
 		case IDENT:
-			term1();
-			exprbool();
-			break;
+			ITerm1 term1 = term1();
+			IExprbool exprbool = exprbool();
+			return new IConcTree.ExprIdent(term1, exprbool);
 		case BOOLOR:
 			consume(Terminals.BOOLOR);
 			term1();
