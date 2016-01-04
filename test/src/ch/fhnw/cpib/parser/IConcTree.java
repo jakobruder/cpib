@@ -1,12 +1,12 @@
 package ch.fhnw.cpib.parser;
 
 import ch.fhnw.cpib.scanner.Ident;
-import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.symbols.AddOpr;
 import ch.fhnw.cpib.scanner.symbols.BoolAnd;
 import ch.fhnw.cpib.scanner.symbols.BoolOr;
 import ch.fhnw.cpib.scanner.symbols.Comma;
+import ch.fhnw.cpib.scanner.symbols.MultOpr;
 import ch.fhnw.cpib.scanner.symbols.RelOpr;
 
 public interface IConcTree {
@@ -394,11 +394,11 @@ public interface IConcTree {
 	}
 
 	public class RepMultoprFactorMultOpr implements IRepmultoprfactor {
-		private Operators multopr;
+		private MultOpr multopr;
 		private IFactor factor;
 		private IRepmultoprfactor repmultoprfactor;
 
-		public RepMultoprFactorMultOpr(Operators multopr, IFactor factor,
+		public RepMultoprFactorMultOpr(MultOpr multopr, IFactor factor,
 				IRepmultoprfactor repmultoprfactor) {
 			super();
 			this.multopr = multopr;
@@ -769,10 +769,15 @@ public interface IConcTree {
 	}
 
 	public class ProgParamList implements IProgParamList {
+		private IToken lparen;
 		private IProgParamListop progParamListop;
+		private IToken rparen;
 
-		public ProgParamList(IProgParamListop progParamListop) {
+		public ProgParamList(IToken lparen, IProgParamListop progParamListop,
+				IToken rparen) {
 			this.progParamListop = progParamListop;
+			this.lparen = lparen;
+			this.rparen = rparen;
 		}
 
 	}
