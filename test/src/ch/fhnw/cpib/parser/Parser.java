@@ -4,6 +4,7 @@ import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
+import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.interfaces.ITokenList;
 import ch.fhnw.cpib.scanner.symbols.Base;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
@@ -106,10 +107,11 @@ class Parser implements IParser {
 		}
 	}
 
-	private void cpsDecl() throws GrammarError {
+	private IConcTree.ICpsDecl cpsDecl() throws GrammarError {
 		if (terminal == Terminals.PROC) {
-			decl();
-			cpsDeclop();
+			IConcTree.IDecl decl = decl();
+			IConcTree.ICpsDeclop cpsDeclop = cpsDeclop();
+			return new IConcTree.CpsDecl(decl, cpsDeclop);
 		} else if (terminal == Terminals.FUN) {
 			decl();
 			cpsDeclop();
@@ -187,11 +189,13 @@ class Parser implements IParser {
 		}
 	}
 
-	private void programop() throws GrammarError {
+	private IConcTree.IProgramop programop() throws GrammarError {
 		if (terminal == Terminals.GLOBAL) {
-			consume(Terminals.GLOBAL);
-			cpsDecl();
+			IToken global = (IToken)consume(Terminals.GLOBAL);
+			IConcTree.ICpsDecl cpsDecl = cpsDecl();
+			return new IConcTree.ProgramopGlobal(global, cpsDecl);
 		} else if (terminal == Terminals.DO) {
+			return new IConcTree.ProgramopDo();
 		} else {
 			throw new GrammarError("Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
