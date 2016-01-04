@@ -2,9 +2,11 @@ package ch.fhnw.cpib.parser;
 
 import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
+import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.interfaces.ITokenList;
 import ch.fhnw.cpib.scanner.symbols.Base;
+import ch.fhnw.cpib.scanner.symbols.MultOpr;
 
 class Parser implements IParser {
 	private ITokenList tokenList;
