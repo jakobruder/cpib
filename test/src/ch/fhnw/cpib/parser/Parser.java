@@ -1185,5 +1185,4 @@ class Parser implements IParser {
 			throw new GrammarError("Unexpected token");
 		}
 	}
-
 }
