@@ -123,7 +123,7 @@ class Parser implements IParser {
 			Comma comma = (Comma)consume(Terminals.COMMA);
 			IConcTree.IProgParam progParam = progParam();
 			IConcTree.IProgParamListopop progParamListOpOp = progParamListopop();
-			return new IConcTree.ProgParamListopopComma(comma, progParam, progParamListopop)
+			return new IConcTree.ProgParamListopopComma(comma, progParam, progParamListOpOp);
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
 			throw new GrammarError(
@@ -131,19 +131,22 @@ class Parser implements IParser {
 		}
 	}
 
-	private void progParam() throws GrammarError {
+	private IConcTree.IProgParam progParam() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
-			globImpop1();
-			globImpop2();
-			typedIdent();
+			IConcTree.IGlobImpop1 globImpOp1 = globImpop1();
+			IConcTree.IGlobImpop2 globImpOp2 = globImpop2();
+			IConcTree.ITypedIdent typedIdent = typedIdent();
+			return new IConcTree.ProgParam(globImpOp1, globImpOp2, typedIdent);
 		} else if (terminal == Terminals.CHANGEMODE) {
-			globImpop1();
-			globImpop2();
-			typedIdent();
+			IConcTree.IGlobImpop1 globImpOp1 = globImpop1();
+			IConcTree.IGlobImpop2 globImpOp2 = globImpop2();
+			IConcTree.ITypedIdent typedIdent = typedIdent();
+			return new IConcTree.ProgParam(globImpOp1, globImpOp2, typedIdent);
 		} else if (terminal == Terminals.FLOWMODE) {
-			globImpop1();
-			globImpop2();
-			typedIdent();
+			IConcTree.IGlobImpop1 globImpOp1 = globImpop1();
+			IConcTree.IGlobImpop2 globImpOp2 = globImpop2();
+			IConcTree.ITypedIdent typedIdent = typedIdent();
+			return new IConcTree.ProgParam(globImpOp1, globImpOp2, typedIdent);
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
@@ -156,25 +159,29 @@ class Parser implements IParser {
 			IConcTree.ICpsDeclop cpsDeclop = cpsDeclop();
 			return new IConcTree.CpsDecl(decl, cpsDeclop);
 		} else if (terminal == Terminals.FUN) {
-			decl();
-			cpsDeclop();
+			IConcTree.IDecl decl = decl();
+			IConcTree.ICpsDeclop cpsDeclop = cpsDeclop();
+			return new IConcTree.CpsDecl(decl, cpsDeclop);
 		} else if (terminal == Terminals.IDENT) {
-			decl();
-			cpsDeclop();
+			IConcTree.IDecl decl = decl();
+			IConcTree.ICpsDeclop cpsDeclop = cpsDeclop();
+			return new IConcTree.CpsDecl(decl, cpsDeclop);
 		} else if (terminal == Terminals.CHANGEMODE) {
-			decl();
-			cpsDeclop();
+			IConcTree.IDecl decl = decl();
+			IConcTree.ICpsDeclop cpsDeclop = cpsDeclop();
+			return new IConcTree.CpsDecl(decl, cpsDeclop);
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
-	private void cpsDeclop() throws GrammarError {
+	private IConcTree.ICpsDeclop cpsDeclop() throws GrammarError {
 		if (terminal == Terminals.SEMICOLON) {
-			consume(Terminals.SEMICOLON);
-			decl();
-			cpsDeclop();
+			Base semicolon = consume(Terminals.SEMICOLON);
+			IConcTree.IDecl decl = decl();
+			IConcTree.ICpsDeclop cpsDeclOp = cpsDeclop();
+			return new IConcTree.CpsDeclopSemicolon(semicolon, decl, cpsDeclOp);
 		} else if (terminal == Terminals.DO) {
 		} else {
 			throw new GrammarError(
@@ -182,7 +189,7 @@ class Parser implements IParser {
 		}
 	}
 
-	private void cpsCmd() throws GrammarError {
+	private IConcTree.ICpsCmd cpsCmd() throws GrammarError {
 		if (terminal == Terminals.DEBUGOUT) {
 			cmd();
 			cpsCmdop();
