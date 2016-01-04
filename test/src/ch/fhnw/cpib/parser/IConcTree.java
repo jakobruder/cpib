@@ -635,10 +635,14 @@ public interface IConcTree {
 	public class ExprListLParen implements IExprList {
 		private IToken lparen;
 		private IExprListop exprListOp;
+		private IToken rparen;
 
-		public ExprListLParen(IExprListop exprListOp) {
+		public ExprListLParen(IToken lparen, IExprListop exprListOp,
+				IToken rparen) {
 			super();
 			this.exprListOp = exprListOp;
+			this.lparen = lparen;
+			this.rparen = rparen;
 		}
 
 	}
@@ -668,60 +672,48 @@ public interface IConcTree {
 	}
 
 	public class ExprListOpLParen implements IExprListop {
-		private IToken lparen;
-		private IExprListop exprListOp;
-		private IToken rparen;
+		private IExpr expr;
+		private IExprListopop exprListopop;
 
-		public ExprListOpLParen(IToken lparen, IExprListop exprListOp,
-				IToken rparen) {
+		public ExprListOpLParen(IExpr expr, IExprListopop exprListopop) {
 			super();
-			this.lparen = lparen;
-			this.exprListOp = exprListOp;
-			this.rparen = rparen;
+			this.expr = expr;
+			this.exprListopop = exprListopop;
 		}
 	}
 
 	public class ExprListOpAddOpr implements IExprListop {
-		private IToken lparen;
-		private IExprListop exprListOp;
-		private IToken rparen;
+		private IExpr expr;
+		private IExprListopop exprListopop;
 
-		public ExprListOpAddOpr(IToken lparen, IExprListop exprListOp,
-				IToken rparen) {
+		public ExprListOpAddOpr(IExpr expr, IExprListopop exprListopop) {
 			super();
-			this.lparen = lparen;
-			this.exprListOp = exprListOp;
-			this.rparen = rparen;
+			this.expr = expr;
+			this.exprListopop = exprListopop;
 		}
 
 	}
 
 	public class ExprListOpNot implements IExprListop {
-		private IToken lparen;
-		private IExprListop exprListOp;
-		private IToken rparen;
+		private IExpr expr;
+		private IExprListopop exprListopop;
 
-		public ExprListOpNot(IToken lparen, IExprListop exprListOp,
-				IToken rparen) {
+		public ExprListOpNot(IExpr expr, IExprListopop exprListopop) {
 			super();
-			this.lparen = lparen;
-			this.exprListOp = exprListOp;
-			this.rparen = rparen;
+			this.expr = expr;
+			this.exprListopop = exprListopop;
 		}
 
 	}
 
 	public class ExprListOpIdent implements IExprListop {
-		private IToken lparen;
-		private IExprListop exprListOp;
-		private IToken rparen;
+		private IExpr expr;
+		private IExprListopop exprListopop;
 
-		public ExprListOpIdent(IToken lparen, IExprListop exprListOp,
-				IToken rparen) {
+		public ExprListOpIdent(IExpr expr, IExprListopop exprListopop) {
 			super();
-			this.lparen = lparen;
-			this.exprListOp = exprListOp;
-			this.rparen = rparen;
+			this.expr = expr;
+			this.exprListopop = exprListopop;
 		}
 
 	}

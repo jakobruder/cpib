@@ -5,7 +5,12 @@ import ch.fhnw.cpib.parser.IConcTree.*;
 =======
 import ch.fhnw.cpib.parser.IConcTree.IExpr;
 import ch.fhnw.cpib.parser.IConcTree.IExprList;
+<<<<<<< HEAD
 >>>>>>> 9d3191050c42c24fa311ce4d5ebe7fca0521bb61
+=======
+import ch.fhnw.cpib.parser.IConcTree.IExprListop;
+import ch.fhnw.cpib.parser.IConcTree.IExprListopop;
+>>>>>>> ca69fc5ef24e95326be7175096bd7bcc4d6337d8
 import ch.fhnw.cpib.parser.IConcTree.IExprbool;
 import ch.fhnw.cpib.parser.IConcTree.IFactor;
 import ch.fhnw.cpib.parser.IConcTree.IFactorop;
@@ -36,6 +41,7 @@ import ch.fhnw.cpib.scanner.symbols.AddOpr;
 import ch.fhnw.cpib.scanner.symbols.Base;
 import ch.fhnw.cpib.scanner.symbols.BoolAnd;
 import ch.fhnw.cpib.scanner.symbols.BoolOr;
+import ch.fhnw.cpib.scanner.symbols.Comma;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
 import ch.fhnw.cpib.scanner.symbols.RelOpr;
 
@@ -735,7 +741,6 @@ class Parser implements IParser {
 			return new IConcTree.Exprbool();
 		case ELSE:
 			return new IConcTree.Exprbool();
-			;
 		case ENDPROC:
 			return new IConcTree.Exprbool();
 		case ENDFUN:
@@ -1021,149 +1026,127 @@ class Parser implements IParser {
 			ITerm1opor term1opor = term1opor();
 			return new IConcTree.Term1OpOrBoolOr(boolor, term1, term1opor);
 		case DO:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case THEN:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case ENDWHILE:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case ENDIF:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case ELSE:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case ENDPROC:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case ENDFUN:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case ENDPROGRAM:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case SEMICOLON:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case BECOMES:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		case RPAREN:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpOr();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void term1opand() throws GrammarError {
+	private ITerm1opand term1opand() throws GrammarError {
 		switch (terminal) {
 		case BOOLAND:
-			consume(Terminals.BOOLAND);
-			term1();
-			term1opand();
-			break;
+			BoolAnd booland = (BoolAnd) consume(Terminals.BOOLAND);
+			ITerm1 term1 = term1();
+			ITerm1opand term1opand = term1opand();
+			return new IConcTree.Term1OpAndBoolAnd(booland, term1, term1opand);
 		case DO:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case THEN:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case ENDWHILE:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case ENDIF:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case ELSE:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case ENDPROC:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case ENDFUN:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case ENDPROGRAM:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case SEMICOLON:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case BECOMES:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		case RPAREN:
-			// epsilon
-			break;
+			return new IConcTree.Term1OpAnd();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void exprList() throws GrammarError {
+	private IExprList exprList() throws GrammarError {
 		switch (terminal) {
 		case LPAREN:
-			consume(Terminals.LPAREN);
-			exprListop();
-			consume(Terminals.RPAREN);
-			break;
+			Base lparen = consume(Terminals.LPAREN);
+			IExprListop exprListop = exprListop();
+			Base rparen = consume(Terminals.RPAREN);
+			return new IConcTree.ExprListLParen(lparen, exprListop, rparen);
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void monadicOpr() throws GrammarError {
+	private IMonadicOpr monadicOpr() throws GrammarError {
 		switch (terminal) {
 		case ADDOPR:
-			consume(Terminals.ADDOPR);
-			break;
+			AddOpr addopr = (AddOpr) consume(Terminals.ADDOPR);
+			return new IConcTree.MonadicOprAddOpr(addopr);
 		case NOT:
-			consume(Terminals.NOT);
-			break;
+			Base not = consume(Terminals.NOT);
+			return new IConcTree.MonadicOprNot(not);
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void exprListop() throws GrammarError {
+	private IExprListop exprListop() throws GrammarError {
+		IExpr expr;
+		IExprListopop exprListopop;
 		switch (terminal) {
 		case LPAREN:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpLParen(expr, exprListopop);
 		case ADDOPR:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpAddOpr(expr, exprListopop);
 		case NOT:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpNot(expr, exprListopop);
 		case IDENT:
-			expr();
-			exprListopop();
-			break;
+			expr = expr();
+			exprListopop = exprListopop();
+			return new IConcTree.ExprListOpIdent(expr, exprListopop);
 		case RPAREN:
-			// epsilon
-			break;
+			return new IConcTree.ExprListOp();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
 	}
 
-	private void exprListopop() throws GrammarError {
+	private IExprListopop exprListopop() throws GrammarError {
 		switch (terminal) {
 		case COMMA:
-			consume(Terminals.COMMA);
-			expr();
-			exprListopop();
-			break;
+			Comma comma = (Comma) consume(Terminals.COMMA);
+			IExpr expr = expr();
+			IExprListopop exprListopop = exprListopop();
+			return new IConcTree.ExprListOpOpComma(comma, expr, exprListopop);
 		case RPAREN:
-			// epsilon
-			break;
+			return new IConcTree.ExprListOpOp();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
