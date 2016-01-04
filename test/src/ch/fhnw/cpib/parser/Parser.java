@@ -261,13 +261,13 @@ class Parser implements IParser {
 	private IConcTree.IDecl decl() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
 			IConcTree.IStoDecl stoDecl = stoDecl();
-			return new IConcTree.StoDeclIdent(stoDecl);
+			return new IConcTree.DeclIdent(stoDecl);
 		} else if (terminal == Terminals.CHANGEMODE) {
-			stoDecl();
+			return new IConcTree.DeclChangemode(stoDecl());
 		} else if (terminal == Terminals.FUN) {
-			funDecl();
+			return new IConcTree.DeclFun(funDecl());
 		} else if (terminal == Terminals.PROC) {
-			procDecl();
+			return new IConcTree.DeclProc(procDecl());
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
 		}
@@ -360,7 +360,7 @@ class Parser implements IParser {
 			IToken lparen = consume(Terminals.LPAREN);
 			IConcTree.IParamListop paramListOp = paramListop();
 			IToken rparen = consume(Terminals.RPAREN);
-			return new IConcTree.ParamList(lparen, paramListOp, rparen)
+			return new IConcTree.ParamList(lparen, paramListOp, rparen);
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
 		}
@@ -370,17 +370,21 @@ class Parser implements IParser {
 		if (terminal == Terminals.IDENT) {
 			IConcTree.IParam param = param();
 			IConcTree.IParamListopop paramListOpOp = paramListopop();
-			// return new IConcTree.ParamListo TODO:
+			return new IConcTree.ParamListop(param, paramListOpOp);
 		} else if (terminal == Terminals.CHANGEMODE) {
-			param();
-			paramListopop();
+			IConcTree.IParam param = param();
+			IConcTree.IParamListopop paramListOpOp = paramListopop();
+			return new IConcTree.ParamListop(param, paramListOpOp);
 		} else if (terminal == Terminals.MECHMODE) {
-			param();
-			paramListopop();
+			IConcTree.IParam param = param();
+			IConcTree.IParamListopop paramListOpOp = paramListopop();
+			return new IConcTree.ParamListop(param, paramListOpOp);
 		} else if (terminal == Terminals.FLOWMODE) {
-			param();
-			paramListopop();
+			IConcTree.IParam param = param();
+			IConcTree.IParamListopop paramListOpOp = paramListopop();
+			return new IConcTree.ParamListop(param, paramListOpOp);
 		} else if (terminal == Terminals.RPAREN) {
+			return new IConcTree.ParamListopRparen();
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
 		}
