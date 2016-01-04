@@ -821,6 +821,10 @@ public interface IConcTree {
 
 	}
 
+	public class ProgParamListopop implements IProgParamListopop {
+		
+	}
+	
 	public class ProgParamListopopComma implements IProgParamListopop {
 		private Comma comma;
 		private IProgParam progParam;
@@ -836,12 +840,12 @@ public interface IConcTree {
 
 	}
 
-	public class progParamIdent implements IProgParam {
+	public class ProgParamIdent implements IProgParam {
 		IGlobImpop1 globImpop1;
-		IGlobImpop1 globImpop2;
+		IGlobImpop2 globImpop2;
 		ITypedIdent typedIdent;
 
-		public progParamIdent(IGlobImpop1 globImpop1, IGlobImpop1 globImpop2,
+		public ProgParamIdent(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2,
 				ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
@@ -851,13 +855,13 @@ public interface IConcTree {
 
 	}
 
-	public class progParamChangemode implements IProgParam {
+	public class ProgParamChangemode implements IProgParam {
 		IGlobImpop1 globImpop1;
-		IGlobImpop1 globImpop2;
+		IGlobImpop2 globImpop2;
 		ITypedIdent typedIdent;
 
-		public progParamChangemode(IGlobImpop1 globImpop1,
-				IGlobImpop1 globImpop2, ITypedIdent typedIdent) {
+		public ProgParamChangemode(IGlobImpop1 globImpop1,
+				IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
@@ -866,13 +870,13 @@ public interface IConcTree {
 
 	}
 
-	public class progParamFlowmode implements IProgParam {
+	public class ProgParamFlowmode implements IProgParam {
 		IGlobImpop1 globImpop1;
-		IGlobImpop1 globImpop2;
+		IGlobImpop2 globImpop2;
 		ITypedIdent typedIdent;
 
-		public progParamFlowmode(IGlobImpop1 globImpop1,
-				IGlobImpop1 globImpop2, ITypedIdent typedIdent) {
+		public ProgParamFlowmode(IGlobImpop1 globImpop1,
+				IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
@@ -1412,22 +1416,25 @@ public interface IConcTree {
 
 	public class CmdDebugin implements ICmd {
 		private IToken debugin;
+		private IExpr expr;
 
-		public CmdDebugin(IToken debugin) {
+		public CmdDebugin(IToken debugin, IExpr expr) {
 			super();
 			this.debugin = debugin;
+			this.expr = expr;
 		}
 
 	}
 
 	public class CmdDebugout implements ICmd {
 		private IToken debugout;
+		private IExpr expr;
 
-		public CmdDebugout(IToken debugout) {
+		public CmdDebugout(IToken debugout, IExpr expr) {
 			super();
 			this.debugout = debugout;
+			this.expr = expr;
 		}
-
 	}
 
 	public class CmdopInit implements ICmdop {
