@@ -635,10 +635,14 @@ public interface IConcTree {
 	public class ExprListLParen implements IExprList {
 		private IToken lparen;
 		private IExprListop exprListOp;
+		private IToken rparen;
 
-		public ExprListLParen(IExprListop exprListOp) {
+		public ExprListLParen(IToken lparen, IExprListop exprListOp,
+				IToken rparen) {
 			super();
 			this.exprListOp = exprListOp;
+			this.lparen = lparen;
+			this.rparen = rparen;
 		}
 
 	}
