@@ -1,5 +1,7 @@
 package ch.fhnw.cpib.parser;
 
+import ch.fhnw.cpib.parser.IAbsTree.IAbsCmd;
+import ch.fhnw.cpib.parser.IAbsTree.IAbsExpr;
 import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.symbols.AddOpr;
@@ -13,66 +15,68 @@ public interface IConcTree {
 
 	public interface IConcExpr {
 
+		public IAbsExpr toAbs();
+
 	}
 
 	public interface IExprbool {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IRepaddoprterm3 {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm3 {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IRepmultoprfactor {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IFactor {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IFactorop {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm2 {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm1 {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IExprList {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IMonadicOpr {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm2op {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm1opor {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm1opand {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IExprListop {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IExprListopop {
-
+		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IProgram {
@@ -100,15 +104,15 @@ public interface IConcTree {
 	}
 
 	public interface ICpsCmd {
-
+		public IAbsCmd toAbs(IAbsCmd cmd);
 	}
 
 	public interface ICpsCmdop {
-
+		public IAbsCmd toAbs(IAbsCmd cmd);
 	}
 
 	public interface IProgramop {
-
+		
 	}
 
 	public interface IDecl {
@@ -192,26 +196,32 @@ public interface IConcTree {
 	}
 
 	public interface IConcCmd {
-
+		public IAbsCmd toAbs();
 	}
 
 	public interface ICmdop {
-
+		public IAbsCmd toAbs(IAbsCmd cmd);
 	}
 
 	public interface IGlobInits {
-
+		public IAbsCmd toAbs(IAbsCmd cmd);
 	}
 
 	public interface IIdents {
-
+		public IAbsCmd toAbs(IAbsCmd cmd);
 	}
 
 	public interface IIdentsop {
-
+		public IAbsCmd toAbs(IAbsCmd cmd);
 	}
 
 	public class Expr implements IConcExpr {
+
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -224,6 +234,12 @@ public interface IConcTree {
 			this.term1 = term1;
 			this.exprbool = exprbool;
 		}
+
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public class ExprAddopr implements IConcExpr {
@@ -234,6 +250,12 @@ public interface IConcTree {
 			super();
 			this.term1 = term1;
 			this.exprbool = exprbool;
+		}
+
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -248,6 +270,12 @@ public interface IConcTree {
 			this.exprbool = exprbool;
 		}
 
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class ExprIdent implements IConcExpr {
@@ -258,6 +286,12 @@ public interface IConcTree {
 			super();
 			this.term1 = term1;
 			this.exprbool = exprbool;
+		}
+
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -274,6 +308,12 @@ public interface IConcTree {
 			this.term1opor = term1opor;
 		}
 
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class ExprBoolAnd implements IConcExpr {
@@ -288,9 +328,21 @@ public interface IConcTree {
 			this.term1opand = term1opand;
 		}
 
+		@Override
+		public IAbsExpr toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Exprbool implements IExprbool {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -304,6 +356,12 @@ public interface IConcTree {
 			this.or = or;
 			this.term1 = term1;
 			this.term1opor = term1opor;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -320,9 +378,21 @@ public interface IConcTree {
 			this.term1opand = term1opand;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class RepAddoprTerm3 implements IRepaddoprterm3 {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -339,6 +409,12 @@ public interface IConcTree {
 			this.repaddoprterm3 = repaddoprterm3;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term3LParen implements ITerm3 {
@@ -349,6 +425,12 @@ public interface IConcTree {
 			super();
 			this.factor = factor;
 			this.repmultoprfactor = repmultoprfactor;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -363,6 +445,12 @@ public interface IConcTree {
 			this.repmultoprfactor = repmultoprfactor;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term3Not implements ITerm3 {
@@ -373,6 +461,12 @@ public interface IConcTree {
 			super();
 			this.factor = factor;
 			this.repmultoprfactor = repmultoprfactor;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -387,9 +481,21 @@ public interface IConcTree {
 			this.repmultoprfactor = repmultoprfactor;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class RepMultoprFactor implements IRepmultoprfactor {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -406,6 +512,12 @@ public interface IConcTree {
 			this.repmultoprfactor = repmultoprfactor;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class FactorLParen implements IFactor {
@@ -420,6 +532,12 @@ public interface IConcTree {
 			this.rparen = rparen;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class FactorAddopr implements IFactor {
@@ -430,6 +548,12 @@ public interface IConcTree {
 			super();
 			this.monadicOpr = monadicOpr;
 			this.factor = factor;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -444,6 +568,12 @@ public interface IConcTree {
 			this.factor = factor;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class FactorIdent implements IFactor {
@@ -456,9 +586,21 @@ public interface IConcTree {
 			this.factorop = factorop;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class FactorOp implements IFactorop {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -469,6 +611,12 @@ public interface IConcTree {
 			super();
 			this.exprList = exprList;
 		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public class FactorOpInit implements IFactorop {
@@ -477,6 +625,12 @@ public interface IConcTree {
 		public FactorOpInit(IToken init) {
 			super();
 			this.init = init;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -491,6 +645,12 @@ public interface IConcTree {
 			this.repaddoprterm3 = repaddoprterm3;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term2Addopr implements ITerm2 {
@@ -501,6 +661,12 @@ public interface IConcTree {
 			super();
 			this.term3 = term3;
 			this.repaddoprterm3 = repaddoprterm3;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -515,6 +681,12 @@ public interface IConcTree {
 			this.repaddoprterm3 = repaddoprterm3;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term2Ident implements ITerm2 {
@@ -527,9 +699,21 @@ public interface IConcTree {
 			this.repaddoprterm3 = repaddoprterm3;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term2op implements ITerm2op {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -545,6 +729,12 @@ public interface IConcTree {
 			this.term2Op = term2Op;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term1LParen implements ITerm1 {
@@ -555,6 +745,12 @@ public interface IConcTree {
 			super();
 			this.term2 = term2;
 			this.term2Op = term2Op;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -569,6 +765,12 @@ public interface IConcTree {
 			this.term2Op = term2Op;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term1Not implements ITerm1 {
@@ -579,6 +781,12 @@ public interface IConcTree {
 			super();
 			this.term2 = term2;
 			this.term2Op = term2Op;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -593,9 +801,21 @@ public interface IConcTree {
 			this.term2Op = term2Op;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term1OpOr implements ITerm1opor {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -611,9 +831,21 @@ public interface IConcTree {
 			this.term1OpOr = term1OpOr;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Term1OpAnd implements ITerm1opand {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -628,6 +860,12 @@ public interface IConcTree {
 			this.and = and;
 			this.term1 = term1;
 			this.term1OpAnd = term1OpAnd;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -645,6 +883,12 @@ public interface IConcTree {
 			this.rparen = rparen;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class MonadicOprAddOpr implements IMonadicOpr {
@@ -653,6 +897,12 @@ public interface IConcTree {
 		public MonadicOprAddOpr(AddOpr add) {
 			super();
 			this.add = add;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -665,9 +915,21 @@ public interface IConcTree {
 			this.not = not;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class ExprListOp implements IExprListop {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -680,6 +942,12 @@ public interface IConcTree {
 			this.expr = expr;
 			this.exprListopop = exprListopop;
 		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public class ExprListOpAddOpr implements IExprListop {
@@ -690,6 +958,12 @@ public interface IConcTree {
 			super();
 			this.expr = expr;
 			this.exprListopop = exprListopop;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -704,6 +978,12 @@ public interface IConcTree {
 			this.exprListopop = exprListopop;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class ExprListOpIdent implements IExprListop {
@@ -716,9 +996,21 @@ public interface IConcTree {
 			this.exprListopop = exprListopop;
 		}
 
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class ExprListOpOp implements IExprListopop {
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
@@ -733,6 +1025,12 @@ public interface IConcTree {
 			this.comma = comma;
 			this.expr = expr;
 			this.exprListOpOp = exprListOpOp;
+		}
+
+		@Override
+		public IAbsExpr toAbs(IAbsExpr expr) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -822,9 +1120,9 @@ public interface IConcTree {
 	}
 
 	public class ProgParamListopop implements IProgParamListopop {
-		
+
 	}
-	
+
 	public class ProgParamListopopComma implements IProgParamListopop {
 		private Comma comma;
 		private IProgParam progParam;
@@ -927,6 +1225,12 @@ public interface IConcTree {
 			this.cpsCmdop = cpsCmdop;
 		}
 
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class CpsCmdopSemicolon implements ICpsCmdop {
@@ -934,17 +1238,30 @@ public interface IConcTree {
 		private IConcCmd cmd;
 		private ICpsCmdop cpsCmdop;
 
-		public CpsCmdopSemicolon(IToken semicolon, IConcCmd cmd, ICpsCmdop cpsCmdop) {
+		public CpsCmdopSemicolon(IToken semicolon, IConcCmd cmd,
+				ICpsCmdop cpsCmdop) {
 			super();
 			this.semicolon = semicolon;
 			this.cmd = cmd;
 			this.cpsCmdop = cpsCmdop;
 		}
 
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	// TODO:
 	public class CpsCmdop implements ICpsCmdop {
+
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 		// empty
 	}
@@ -1339,6 +1656,12 @@ public interface IConcTree {
 			this.skip = skip;
 		}
 
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class CmdBecomes implements IConcCmd {
@@ -1353,6 +1676,12 @@ public interface IConcTree {
 			this.expr2 = expr2;
 		}
 
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class CmdIf implements IConcCmd {
@@ -1364,8 +1693,8 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd2;
 		private IToken endif;
 
-		public CmdIf(IToken tokenIf, IConcExpr expr, IToken then, ICpsCmd cpsCmd1,
-				IToken tokenElse, ICpsCmd cpsCmd2, IToken endif) {
+		public CmdIf(IToken tokenIf, IConcExpr expr, IToken then,
+				ICpsCmd cpsCmd1, IToken tokenElse, ICpsCmd cpsCmd2, IToken endif) {
 			super();
 			this.tokenIf = tokenIf;
 			this.expr = expr;
@@ -1374,6 +1703,12 @@ public interface IConcTree {
 			this.tokenElse = tokenElse;
 			this.cpsCmd2 = cpsCmd2;
 			this.endif = endif;
+		}
+
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -1395,6 +1730,12 @@ public interface IConcTree {
 			this.endWhile = endWhile;
 		}
 
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class CmdCall implements IConcCmd {
@@ -1412,6 +1753,12 @@ public interface IConcTree {
 			this.cmdop = cmdop;
 		}
 
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class CmdDebugin implements IConcCmd {
@@ -1422,6 +1769,12 @@ public interface IConcTree {
 			super();
 			this.debugin = debugin;
 			this.expr = expr;
+		}
+
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -1435,6 +1788,12 @@ public interface IConcTree {
 			this.debugout = debugout;
 			this.expr = expr;
 		}
+
+		@Override
+		public IAbsCmd toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public class CmdopInit implements ICmdop {
@@ -1445,10 +1804,22 @@ public interface IConcTree {
 			this.globInits = globInits;
 		}
 
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	// TODO:
 	public class Cmdop implements ICmdop {
+
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 		// empty
 	}
@@ -1463,6 +1834,12 @@ public interface IConcTree {
 			this.idents = idents;
 		}
 
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class Idents implements IIdents {
@@ -1473,6 +1850,12 @@ public interface IConcTree {
 			super();
 			this.ident = ident;
 			this.identsop = identsop;
+		}
+
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -1489,10 +1872,22 @@ public interface IConcTree {
 			this.identsop = identsop;
 		}
 
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	// TODO: empty
 	public class Identsop implements IIdentsop {
+
+		@Override
+		public IAbsCmd toAbs(IAbsCmd cmd) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 }
