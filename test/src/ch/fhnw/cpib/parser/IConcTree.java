@@ -11,7 +11,7 @@ import ch.fhnw.cpib.scanner.symbols.RelOpr;
 
 public interface IConcTree {
 
-	public interface IExpr {
+	public interface IConcExpr {
 
 	}
 
@@ -191,7 +191,7 @@ public interface IConcTree {
 
 	}
 
-	public interface ICmd {
+	public interface IConcCmd {
 
 	}
 
@@ -211,11 +211,11 @@ public interface IConcTree {
 
 	}
 
-	public class Expr implements IExpr {
+	public class Expr implements IConcExpr {
 
 	}
 
-	public class ExprLParen implements IExpr {
+	public class ExprLParen implements IConcExpr {
 		private ITerm1 term1;
 		private IExprbool exprbool;
 
@@ -226,7 +226,7 @@ public interface IConcTree {
 		}
 	}
 
-	public class ExprAddopr implements IExpr {
+	public class ExprAddopr implements IConcExpr {
 		private ITerm1 term1;
 		private IExprbool exprbool;
 
@@ -238,7 +238,7 @@ public interface IConcTree {
 
 	}
 
-	public class ExprNot implements IExpr {
+	public class ExprNot implements IConcExpr {
 		private ITerm1 term1;
 		private IExprbool exprbool;
 
@@ -250,7 +250,7 @@ public interface IConcTree {
 
 	}
 
-	public class ExprIdent implements IExpr {
+	public class ExprIdent implements IConcExpr {
 		private ITerm1 term1;
 		private IExprbool exprbool;
 
@@ -262,7 +262,7 @@ public interface IConcTree {
 
 	}
 
-	public class ExprBoolOr implements IExpr {
+	public class ExprBoolOr implements IConcExpr {
 		private BoolOr or;
 		private ITerm1 term1;
 		private ITerm1opor term1opor;
@@ -276,7 +276,7 @@ public interface IConcTree {
 
 	}
 
-	public class ExprBoolAnd implements IExpr {
+	public class ExprBoolAnd implements IConcExpr {
 		private BoolAnd and;
 		private ITerm1 term1;
 		private ITerm1opand term1opand;
@@ -410,10 +410,10 @@ public interface IConcTree {
 
 	public class FactorLParen implements IFactor {
 		private IToken lparen;
-		private IExpr expr;
+		private IConcExpr expr;
 		private IToken rparen;
 
-		public FactorLParen(IToken lparen, IExpr expr, IToken rparen) {
+		public FactorLParen(IToken lparen, IConcExpr expr, IToken rparen) {
 			super();
 			this.lparen = lparen;
 			this.expr = expr;
@@ -672,10 +672,10 @@ public interface IConcTree {
 	}
 
 	public class ExprListOpLParen implements IExprListop {
-		private IExpr expr;
+		private IConcExpr expr;
 		private IExprListopop exprListopop;
 
-		public ExprListOpLParen(IExpr expr, IExprListopop exprListopop) {
+		public ExprListOpLParen(IConcExpr expr, IExprListopop exprListopop) {
 			super();
 			this.expr = expr;
 			this.exprListopop = exprListopop;
@@ -683,10 +683,10 @@ public interface IConcTree {
 	}
 
 	public class ExprListOpAddOpr implements IExprListop {
-		private IExpr expr;
+		private IConcExpr expr;
 		private IExprListopop exprListopop;
 
-		public ExprListOpAddOpr(IExpr expr, IExprListopop exprListopop) {
+		public ExprListOpAddOpr(IConcExpr expr, IExprListopop exprListopop) {
 			super();
 			this.expr = expr;
 			this.exprListopop = exprListopop;
@@ -695,10 +695,10 @@ public interface IConcTree {
 	}
 
 	public class ExprListOpNot implements IExprListop {
-		private IExpr expr;
+		private IConcExpr expr;
 		private IExprListopop exprListopop;
 
-		public ExprListOpNot(IExpr expr, IExprListopop exprListopop) {
+		public ExprListOpNot(IConcExpr expr, IExprListopop exprListopop) {
 			super();
 			this.expr = expr;
 			this.exprListopop = exprListopop;
@@ -707,10 +707,10 @@ public interface IConcTree {
 	}
 
 	public class ExprListOpIdent implements IExprListop {
-		private IExpr expr;
+		private IConcExpr expr;
 		private IExprListopop exprListopop;
 
-		public ExprListOpIdent(IExpr expr, IExprListopop exprListopop) {
+		public ExprListOpIdent(IConcExpr expr, IExprListopop exprListopop) {
 			super();
 			this.expr = expr;
 			this.exprListopop = exprListopop;
@@ -724,10 +724,10 @@ public interface IConcTree {
 
 	public class ExprListOpOpComma implements IExprListopop {
 		private Comma comma;
-		private IExpr expr;
+		private IConcExpr expr;
 		private IExprListopop exprListOpOp;
 
-		public ExprListOpOpComma(Comma comma, IExpr expr,
+		public ExprListOpOpComma(Comma comma, IConcExpr expr,
 				IExprListopop exprListOpOp) {
 			super();
 			this.comma = comma;
@@ -918,10 +918,10 @@ public interface IConcTree {
 	}
 
 	public class CpsCmd implements ICpsCmd {
-		private ICmd cmd;
+		private IConcCmd cmd;
 		private ICpsCmdop cpsCmdop;
 
-		public CpsCmd(ICmd cmd, ICpsCmdop cpsCmdop) {
+		public CpsCmd(IConcCmd cmd, ICpsCmdop cpsCmdop) {
 			super();
 			this.cmd = cmd;
 			this.cpsCmdop = cpsCmdop;
@@ -931,10 +931,10 @@ public interface IConcTree {
 
 	public class CpsCmdopSemicolon implements ICpsCmdop {
 		private IToken semicolon;
-		private ICmd cmd;
+		private IConcCmd cmd;
 		private ICpsCmdop cpsCmdop;
 
-		public CpsCmdopSemicolon(IToken semicolon, ICmd cmd, ICpsCmdop cpsCmdop) {
+		public CpsCmdopSemicolon(IToken semicolon, IConcCmd cmd, ICpsCmdop cpsCmdop) {
 			super();
 			this.semicolon = semicolon;
 			this.cmd = cmd;
@@ -1331,7 +1331,7 @@ public interface IConcTree {
 		// empty
 	}
 
-	public class CmdSkip implements ICmd {
+	public class CmdSkip implements IConcCmd {
 		private IToken skip;
 
 		public CmdSkip(IToken skip) {
@@ -1341,12 +1341,12 @@ public interface IConcTree {
 
 	}
 
-	public class CmdBecomes implements ICmd {
-		private IExpr expr1;
+	public class CmdBecomes implements IConcCmd {
+		private IConcExpr expr1;
 		private IToken becomes;
-		private IExpr expr2;
+		private IConcExpr expr2;
 
-		public CmdBecomes(IExpr expr1, IToken becomes, IExpr expr2) {
+		public CmdBecomes(IConcExpr expr1, IToken becomes, IConcExpr expr2) {
 			super();
 			this.expr1 = expr1;
 			this.becomes = becomes;
@@ -1355,16 +1355,16 @@ public interface IConcTree {
 
 	}
 
-	public class CmdIf implements ICmd {
+	public class CmdIf implements IConcCmd {
 		private IToken tokenIf;
-		private IExpr expr;
+		private IConcExpr expr;
 		private IToken then;
 		private ICpsCmd cpsCmd1;
 		private IToken tokenElse;
 		private ICpsCmd cpsCmd2;
 		private IToken endif;
 
-		public CmdIf(IToken tokenIf, IExpr expr, IToken then, ICpsCmd cpsCmd1,
+		public CmdIf(IToken tokenIf, IConcExpr expr, IToken then, ICpsCmd cpsCmd1,
 				IToken tokenElse, ICpsCmd cpsCmd2, IToken endif) {
 			super();
 			this.tokenIf = tokenIf;
@@ -1378,14 +1378,14 @@ public interface IConcTree {
 
 	}
 
-	public class CmdWhile implements ICmd {
+	public class CmdWhile implements IConcCmd {
 		private IToken tokenWhile;
-		private IExpr expr;
+		private IConcExpr expr;
 		private IToken tokenDo;
 		private ICpsCmd cpsCmd;
 		private IToken endWhile;
 
-		public CmdWhile(IToken tokenWhile, IExpr expr, IToken tokenDo,
+		public CmdWhile(IToken tokenWhile, IConcExpr expr, IToken tokenDo,
 				ICpsCmd cpsCmd, IToken endWhile) {
 			super();
 			this.tokenWhile = tokenWhile;
@@ -1397,7 +1397,7 @@ public interface IConcTree {
 
 	}
 
-	public class CmdCall implements ICmd {
+	public class CmdCall implements IConcCmd {
 		private IToken call;
 		private IToken ident;
 		private IExprList exprList;
@@ -1414,11 +1414,11 @@ public interface IConcTree {
 
 	}
 
-	public class CmdDebugin implements ICmd {
+	public class CmdDebugin implements IConcCmd {
 		private IToken debugin;
-		private IExpr expr;
+		private IConcExpr expr;
 
-		public CmdDebugin(IToken debugin, IExpr expr) {
+		public CmdDebugin(IToken debugin, IConcExpr expr) {
 			super();
 			this.debugin = debugin;
 			this.expr = expr;
@@ -1426,11 +1426,11 @@ public interface IConcTree {
 
 	}
 
-	public class CmdDebugout implements ICmd {
+	public class CmdDebugout implements IConcCmd {
 		private IToken debugout;
-		private IExpr expr;
+		private IConcExpr expr;
 
-		public CmdDebugout(IToken debugout, IExpr expr) {
+		public CmdDebugout(IToken debugout, IConcExpr expr) {
 			super();
 			this.debugout = debugout;
 			this.expr = expr;
