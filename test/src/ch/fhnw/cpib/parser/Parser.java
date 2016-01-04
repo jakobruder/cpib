@@ -1,15 +1,26 @@
 package ch.fhnw.cpib.parser;
 
+<<<<<<< HEAD
+import ch.fhnw.cpib.parser.IConcTree.*;
+=======
 import ch.fhnw.cpib.parser.IConcTree.IExpr;
 import ch.fhnw.cpib.parser.IConcTree.IExprList;
+<<<<<<< HEAD
+>>>>>>> 9d3191050c42c24fa311ce4d5ebe7fca0521bb61
+=======
 import ch.fhnw.cpib.parser.IConcTree.IExprListop;
 import ch.fhnw.cpib.parser.IConcTree.IExprListopop;
+>>>>>>> ca69fc5ef24e95326be7175096bd7bcc4d6337d8
 import ch.fhnw.cpib.parser.IConcTree.IExprbool;
 import ch.fhnw.cpib.parser.IConcTree.IFactor;
 import ch.fhnw.cpib.parser.IConcTree.IFactorop;
 import ch.fhnw.cpib.parser.IConcTree.IIdents;
 import ch.fhnw.cpib.parser.IConcTree.IIdentsop;
+<<<<<<< HEAD
+import ch.fhnw.cpib.parser.IConcTree.IProgParamList;
+=======
 import ch.fhnw.cpib.parser.IConcTree.IMonadicOpr;
+>>>>>>> 9d3191050c42c24fa311ce4d5ebe7fca0521bb61
 import ch.fhnw.cpib.parser.IConcTree.IRepaddoprterm3;
 import ch.fhnw.cpib.parser.IConcTree.IRepmultoprfactor;
 import ch.fhnw.cpib.parser.IConcTree.ITerm1;
@@ -18,6 +29,7 @@ import ch.fhnw.cpib.parser.IConcTree.ITerm1opor;
 import ch.fhnw.cpib.parser.IConcTree.ITerm2;
 import ch.fhnw.cpib.parser.IConcTree.ITerm2op;
 import ch.fhnw.cpib.parser.IConcTree.ITerm3;
+import ch.fhnw.cpib.parser.IConcTree.ProgParamList;
 import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
 import ch.fhnw.cpib.scanner.Ident;
@@ -62,26 +74,28 @@ class Parser implements IParser {
 	}
 
 	// to be changed to return a tree
-	private void program() throws GrammarError {
+	private IConcTree.IProgram program() throws GrammarError {
 		if (terminal == Terminals.PROGRAM) {
-			consume(Terminals.PROGRAM);
-			consume(Terminals.IDENT);
-			progParamList();
-			programop();
-			consume(Terminals.DO);
-			cpsCmd();
-			consume(Terminals.ENDPROGRAM);
+			IToken program = consume(Terminals.PROGRAM);
+			Ident ident = (Ident)consume(Terminals.IDENT);
+			IConcTree.IProgParamList progParamList = progParamList();
+			IConcTree.IProgramop programOp = programop();
+			IToken doToken = consume(Terminals.DO);
+			IConcTree.ICpsCmd cpsCmd = cpsCmd();
+			IToken endProgram = consume(Terminals.ENDPROGRAM);
+			return new IConcTree.Program(program, ident, progParamList, programOp, doToken, cpsCmd, endProgram);
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
-	private void progParamList() throws GrammarError {
+	private IConcTree.IProgParamList progParamList() throws GrammarError {
 		if (terminal == Terminals.LPAREN) {
-			consume(Terminals.LPAREN);
-			progParamListop();
-			consume(Terminals.RPAREN);
+			IToken lparen = consume(Terminals.LPAREN);
+			IConcTree.IProgParamListop progParamListOp = progParamListop();
+			IToken rparen = consume(Terminals.RPAREN);
+			return new IConcTree.ProgParamList(lparen, progParamListOp, rparen);
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
@@ -90,8 +104,8 @@ class Parser implements IParser {
 
 	private void progParamListop() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
-			progParam();
-			progParamListopop();
+			IConcTree.IProgParam progParam = progParam();
+			IConcTree.IProgParamListopop progParamListOpOp = progParamListopop();
 		} else if (terminal == Terminals.CHANGEMODE) {
 			progParam();
 			progParamListopop();
@@ -136,10 +150,11 @@ class Parser implements IParser {
 		}
 	}
 
-	private void cpsDecl() throws GrammarError {
+	private IConcTree.ICpsDecl cpsDecl() throws GrammarError {
 		if (terminal == Terminals.PROC) {
-			decl();
-			cpsDeclop();
+			IConcTree.IDecl decl = decl();
+			IConcTree.ICpsDeclop cpsDeclop = cpsDeclop();
+			return new IConcTree.CpsDecl(decl, cpsDeclop);
 		} else if (terminal == Terminals.FUN) {
 			decl();
 			cpsDeclop();
@@ -221,11 +236,13 @@ class Parser implements IParser {
 		}
 	}
 
-	private void programop() throws GrammarError {
+	private IConcTree.IProgramop programop() throws GrammarError {
 		if (terminal == Terminals.GLOBAL) {
-			consume(Terminals.GLOBAL);
-			cpsDecl();
+			IToken global = (IToken)consume(Terminals.GLOBAL);
+			IConcTree.ICpsDecl cpsDecl = cpsDecl();
+			return new IConcTree.ProgramopGlobal(global, cpsDecl);
 		} else if (terminal == Terminals.DO) {
+			return new IConcTree.ProgramopDo();
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
