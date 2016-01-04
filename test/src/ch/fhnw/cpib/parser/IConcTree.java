@@ -888,10 +888,20 @@ public interface IConcTree {
 		// Empty
 	}
 
-	public class DeclSto implements IDecl {
+	public class DeclIdent implements IDecl {
 		private IStoDecl stoDecl;
 
-		public DeclSto(IStoDecl stoDecl) {
+		public DeclIdent(IStoDecl stoDecl) {
+			super();
+			this.stoDecl = stoDecl;
+		}
+
+	}
+
+	public class DeclChangemode implements IDecl {
+		private IStoDecl stoDecl;
+
+		public DeclChangemode(IStoDecl stoDecl) {
 			super();
 			this.stoDecl = stoDecl;
 		}
