@@ -821,19 +821,6 @@ public interface IConcTree {
 
 	}
 
-	public class ProgParamListopRparen implements IProgParamListop {
-		private IProgParam progParam;
-		private IProgParamListopop progParamListopop;
-
-		public ProgParamListopRparen(IProgParam progParam,
-				IProgParamListopop progParamListopop) {
-			super();
-			this.progParam = progParam;
-			this.progParamListopop = progParamListopop;
-		}
-
-	}
-
 	public class ProgParamListopopComma implements IProgParamListopop {
 		private Comma comma;
 		private IProgParam progParam;
