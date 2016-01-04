@@ -1,7 +1,10 @@
 package ch.fhnw.cpib.parser;
 
+import java.util.List;
+
 import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.Literal;
+import ch.fhnw.cpib.scanner.enums.Operators;
 
 public interface IAbsTree {
 
@@ -36,15 +39,36 @@ public interface IAbsTree {
 	}
 	
 	public class FunCallExpr implements IAbsExpr {
-		
+		private Ident identM;
+		private List<IAbsExpr> expressions;
+		public FunCallExpr(Ident identM, List<IAbsExpr> expressions) {
+			super();
+			this.identM = identM;
+			this.expressions = expressions;
+		}
 	}
 	
 	public class MonadicExpr implements IAbsExpr {
-		
+		private Operators operator;
+		private IAbsExpr expression;
+		public MonadicExpr(Operators operator, IAbsExpr expression) {
+			super();
+			this.operator = operator;
+			this.expression = expression;
+		}
 	}
 	
 	public class DyadicExpr implements IAbsExpr {
-		
+		private Operators operator;
+		private IAbsExpr expression1;
+		private IAbsExpr expression2;
+
+		public DyadicExpr(Operators operator, IAbsExpr expression1, IAbsExpr expression2) {
+			super();
+			this.operator = operator;
+			this.expression1 = expression1;
+			this.expression2 = expression2;
+		}
 	}
 	
 	public class SkipCmd implements IAbsCmd {
