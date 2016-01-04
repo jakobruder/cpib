@@ -836,6 +836,50 @@ public interface IConcTree {
 
 	}
 
+	public class progParamIdent implements IProgParam {
+		IGlobImpop1 globImpop1;
+		IGlobImpop1 globImpop2;
+		ITypedIdent typedIdent;
+
+		public progParamIdent(IGlobImpop1 globImpop1, IGlobImpop1 globImpop2,
+				ITypedIdent typedIdent) {
+			super();
+			this.globImpop1 = globImpop1;
+			this.globImpop2 = globImpop2;
+			this.typedIdent = typedIdent;
+		}
+
+	}
+
+	public class progParamChangemode implements IProgParam {
+		IGlobImpop1 globImpop1;
+		IGlobImpop1 globImpop2;
+		ITypedIdent typedIdent;
+
+		public progParamChangemode(IGlobImpop1 globImpop1,
+				IGlobImpop1 globImpop2, ITypedIdent typedIdent) {
+			super();
+			this.globImpop1 = globImpop1;
+			this.globImpop2 = globImpop2;
+			this.typedIdent = typedIdent;
+		}
+
+	}
+
+	public class progParamFlowmode implements IProgParam {
+		IGlobImpop1 globImpop1;
+		IGlobImpop1 globImpop2;
+		ITypedIdent typedIdent;
+
+		public progParamFlowmode(IGlobImpop1 globImpop1,
+				IGlobImpop1 globImpop2, ITypedIdent typedIdent) {
+			super();
+			this.globImpop1 = globImpop1;
+			this.globImpop2 = globImpop2;
+			this.typedIdent = typedIdent;
+		}
+	}
+
 	public class CpsDecl implements ICpsDecl {
 		private IDecl decl;
 		private ICpsDeclop cpsDeclop;
