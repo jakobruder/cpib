@@ -3,9 +3,13 @@ package ch.fhnw.cpib.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.fhnw.cpib.parser.IConcTree.ITypedIdent;
+import ch.fhnw.cpib.parser.IConcTree.TypedIdent;
 import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.Literal;
 import ch.fhnw.cpib.scanner.enums.Operators;
+import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
+import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
 
 public interface IAbsTree {
 
@@ -14,6 +18,53 @@ public interface IAbsTree {
 	}
 
 	public interface IAbsCmd {
+
+	}
+
+	public interface IAbsProgParam {
+
+	}
+
+	public interface IAbsDecl {
+
+	}
+
+	public class Program {
+		private Ident ident;
+		private IAbsProgParam progParam;
+		private IAbsDecl decl;
+		private IAbsCmd cmd;
+
+		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl) {
+			super();
+			this.ident = ident;
+			this.progParam = progParam;
+			this.decl = decl;
+		}
+	}
+
+	public class ProgParam implements IAbsProgParam {
+		private FlowModeToken flowmode;
+		private ChangeModeToken changemode;
+		private ITypedIdent typedIdent;
+
+		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
+				ITypedIdent typedIdent) {
+			super();
+			this.flowmode = flowmode;
+			this.changemode = changemode;
+			this.typedIdent = typedIdent;
+		}
+
+	}
+
+	public class ProgParamList implements IAbsProgParam {
+		private ArrayList<IAbsProgParam> progParamList;
+
+		public ProgParamList(ArrayList<IAbsProgParam> progParamList) {
+			super();
+			this.progParamList = progParamList;
+		}
 
 	}
 
