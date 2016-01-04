@@ -2,34 +2,6 @@ package ch.fhnw.cpib.parser;
 
 <<<<<<< HEAD
 import ch.fhnw.cpib.parser.IConcTree.*;
-=======
-import ch.fhnw.cpib.parser.IConcTree.IExpr;
-import ch.fhnw.cpib.parser.IConcTree.IExprList;
-<<<<<<< HEAD
->>>>>>> 9d3191050c42c24fa311ce4d5ebe7fca0521bb61
-=======
-import ch.fhnw.cpib.parser.IConcTree.IExprListop;
-import ch.fhnw.cpib.parser.IConcTree.IExprListopop;
->>>>>>> ca69fc5ef24e95326be7175096bd7bcc4d6337d8
-import ch.fhnw.cpib.parser.IConcTree.IExprbool;
-import ch.fhnw.cpib.parser.IConcTree.IFactor;
-import ch.fhnw.cpib.parser.IConcTree.IFactorop;
-import ch.fhnw.cpib.parser.IConcTree.IIdents;
-import ch.fhnw.cpib.parser.IConcTree.IIdentsop;
-<<<<<<< HEAD
-import ch.fhnw.cpib.parser.IConcTree.IProgParamList;
-=======
-import ch.fhnw.cpib.parser.IConcTree.IMonadicOpr;
->>>>>>> 9d3191050c42c24fa311ce4d5ebe7fca0521bb61
-import ch.fhnw.cpib.parser.IConcTree.IRepaddoprterm3;
-import ch.fhnw.cpib.parser.IConcTree.IRepmultoprfactor;
-import ch.fhnw.cpib.parser.IConcTree.ITerm1;
-import ch.fhnw.cpib.parser.IConcTree.ITerm1opand;
-import ch.fhnw.cpib.parser.IConcTree.ITerm1opor;
-import ch.fhnw.cpib.parser.IConcTree.ITerm2;
-import ch.fhnw.cpib.parser.IConcTree.ITerm2op;
-import ch.fhnw.cpib.parser.IConcTree.ITerm3;
-import ch.fhnw.cpib.parser.IConcTree.ProgParamList;
 import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
 import ch.fhnw.cpib.scanner.Ident;
@@ -102,28 +74,33 @@ class Parser implements IParser {
 		}
 	}
 
-	private void progParamListop() throws GrammarError {
+	private IConcTree.IProgParamListop progParamListop() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
 			IConcTree.IProgParam progParam = progParam();
 			IConcTree.IProgParamListopop progParamListOpOp = progParamListopop();
+			return new IConcTree.ProgParamListop(progParam, progParamListOpOp);
 		} else if (terminal == Terminals.CHANGEMODE) {
-			progParam();
-			progParamListopop();
+			IConcTree.IProgParam progParam = progParam();
+			IConcTree.IProgParamListopop progParamListOpOp = progParamListopop();
+			return new IConcTree.ProgParamListop(progParam, progParamListOpOp);
 		} else if (terminal == Terminals.FLOWMODE) {
-			progParam();
-			progParamListopop();
+			IConcTree.IProgParam progParam = progParam();
+			IConcTree.IProgParamListopop progParamListOpOp = progParamListopop();
+			return new IConcTree.ProgParamListop(progParam, progParamListOpOp);
 		} else if (terminal == Terminals.RPAREN) {
+			return new IConcTree.ProgParamListop();
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
-	private void progParamListopop() throws GrammarError {
+	private IConcTree.IProgParamListopop progParamListopop() throws GrammarError {
 		if (terminal == Terminals.COMMA) {
-			consume(Terminals.COMMA);
-			progParam();
-			progParamListopop();
+			Comma comma = (Comma)consume(Terminals.COMMA);
+			IConcTree.IProgParam progParam = progParam();
+			IConcTree.IProgParamListopop progParamListOpOp = progParamListopop();
+			return new IConcTree.ProgParamListopopComma(comma, progParam, progParamListopop)
 		} else if (terminal == Terminals.RPAREN) {
 		} else {
 			throw new GrammarError(
