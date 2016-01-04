@@ -1,18 +1,21 @@
 package ch.fhnw.cpib.parser;
 
-import ch.fhnw.cpib.parser.IConcTree.IExpr;
+import ch.fhnw.cpib.parser.IConcTree.*;
 import ch.fhnw.cpib.parser.IConcTree.IExprbool;
 import ch.fhnw.cpib.parser.IConcTree.IFactor;
 import ch.fhnw.cpib.parser.IConcTree.IIdents;
 import ch.fhnw.cpib.parser.IConcTree.IIdentsop;
+import ch.fhnw.cpib.parser.IConcTree.IProgParamList;
 import ch.fhnw.cpib.parser.IConcTree.IRepaddoprterm3;
 import ch.fhnw.cpib.parser.IConcTree.IRepmultoprfactor;
 import ch.fhnw.cpib.parser.IConcTree.ITerm1;
 import ch.fhnw.cpib.parser.IConcTree.ITerm1opand;
 import ch.fhnw.cpib.parser.IConcTree.ITerm1opor;
 import ch.fhnw.cpib.parser.IConcTree.ITerm3;
+import ch.fhnw.cpib.parser.IConcTree.ProgParamList;
 import ch.fhnw.cpib.parser.interfaces.IParser;
 import ch.fhnw.cpib.parser.interfaces.IProgram;
+import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.interfaces.IToken;
@@ -49,26 +52,28 @@ class Parser implements IParser {
 	}
 
 	// to be changed to return a tree
-	private void program() throws GrammarError {
+	private IConcTree.IProgram program() throws GrammarError {
 		if (terminal == Terminals.PROGRAM) {
-			consume(Terminals.PROGRAM);
-			consume(Terminals.IDENT);
-			progParamList();
-			programop();
-			consume(Terminals.DO);
-			cpsCmd();
-			consume(Terminals.ENDPROGRAM);
+			IToken program = consume(Terminals.PROGRAM);
+			Ident ident = (Ident)consume(Terminals.IDENT);
+			IConcTree.IProgParamList progParamList = progParamList();
+			IConcTree.IProgramop programOp = programop();
+			IToken doToken = consume(Terminals.DO);
+			IConcTree.ICpsCmd cpsCmd = cpsCmd();
+			IToken endProgram = consume(Terminals.ENDPROGRAM);
+			return new IConcTree.Program(program, ident, progParamList, programOp, doToken, cpsCmd, endProgram);
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
 		}
 	}
 
-	private void progParamList() throws GrammarError {
+	private IConcTree.IProgParamList progParamList() throws GrammarError {
 		if (terminal == Terminals.LPAREN) {
 			consume(Terminals.LPAREN);
-			progParamListop();
+			IConcTree.IProgParamListop progParamListOp = progParamListop();
 			consume(Terminals.RPAREN);
+			return new IConcTree.ProgParamList(progParamListOp);
 		} else {
 			throw new GrammarError(
 					"Does not start with terminal PROGRAM YOU DUMB LITTLE SHIT.");
