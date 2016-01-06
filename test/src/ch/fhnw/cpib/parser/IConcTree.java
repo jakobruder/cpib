@@ -981,8 +981,7 @@ public interface IConcTree {
 		@Override
 		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			exprList.add(expr.toAbs());
-			exprListopop.toAbs(exprList);
-			return exprList;
+			return exprListopop.toAbs(exprList);
 		}
 
 	}
@@ -1000,8 +999,7 @@ public interface IConcTree {
 		@Override
 		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			exprList.add(expr.toAbs());
-			exprListopop.toAbs(exprList);
-			return exprList;
+			return exprListopop.toAbs(exprList);
 		}
 
 	}
@@ -1019,8 +1017,7 @@ public interface IConcTree {
 		@Override
 		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			exprList.add(expr.toAbs());
-			exprListopop.toAbs(exprList);
-			return exprList;
+			return exprListopop.toAbs(exprList);
 		}
 
 	}
@@ -1038,8 +1035,7 @@ public interface IConcTree {
 		@Override
 		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			exprList.add(expr.toAbs());
-			exprListopop.toAbs(exprList);
-			return exprList;
+			return exprListopop.toAbs(exprList);
 		}
 
 	}
@@ -1070,8 +1066,7 @@ public interface IConcTree {
 		@Override
 		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			exprList.add(expr.toAbs());
-			exprListOpOp.toAbs(exprList);
-			return exprList;
+			return exprListOpOp.toAbs(exprList);
 		}
 
 	}
@@ -1857,10 +1852,10 @@ public interface IConcTree {
 	}
 
 	public class Idents implements IIdents {
-		private IToken ident;
+		private Ident ident;
 		private IIdentsop identsop;
 
-		public Idents(IToken ident, IIdentsop identsop) {
+		public Idents(Ident ident, IIdentsop identsop) {
 			super();
 			this.ident = ident;
 			this.identsop = identsop;
