@@ -57,8 +57,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private ITypedIdent typedIdent;
 
-		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
-				ITypedIdent typedIdent) {
+		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode, ITypedIdent typedIdent) {
 			super();
 			this.flowmode = flowmode;
 			this.changemode = changemode;
@@ -102,8 +101,7 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -123,8 +121,7 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -152,8 +149,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private TypedIdent typedIdent;
 
-		public Param(FlowModeToken flowmode, MechModeToken mechmode,
-				ChangeModeToken changemode, TypedIdent typedIdent) {
+		public Param(FlowModeToken flowmode, MechModeToken mechmode, ChangeModeToken changemode, TypedIdent typedIdent) {
 			super();
 			this.flowmode = flowmode;
 			this.mechmode = mechmode;
@@ -225,8 +221,7 @@ public interface IAbsTree {
 		private IAbsExpr expression1;
 		private IAbsExpr expression2;
 
-		public DyadicExpr(Operators operator, IAbsExpr expression1,
-				IAbsExpr expression2) {
+		public DyadicExpr(Operators operator, IAbsExpr expression1, IAbsExpr expression2) {
 			super();
 			this.operator = operator;
 			this.expression1 = expression1;
@@ -278,24 +273,22 @@ public interface IAbsTree {
 		private IAbsExpr expr;
 		private IAbsCmd cmd;
 
-		public WhileCmd(IAbsExpr expr) {
+		public WhileCmd(IAbsExpr expr, IAbsCmd cmd) {
 			super();
 			this.expr = expr;
+			this.cmd = cmd;
 		}
 
 	}
 
 	public class ProcCallCmd implements IAbsCmd {
 		private Ident ident;
-		private Ident identRoutine;
 		private ArrayList<IAbsExpr> exprListRoutine;
 		private ArrayList<Ident> identList;
 
-		public ProcCallCmd(Ident ident, Ident identRoutine,
-				ArrayList<IAbsExpr> exprListRoutine, ArrayList<Ident> identList) {
+		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine, ArrayList<Ident> identList) {
 			super();
 			this.ident = ident;
-			this.identRoutine = identRoutine;
 			this.exprListRoutine = exprListRoutine;
 			this.identList = identList;
 		}
