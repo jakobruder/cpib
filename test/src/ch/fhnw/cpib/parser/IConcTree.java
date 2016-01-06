@@ -1,10 +1,12 @@
 package ch.fhnw.cpib.parser;
 
+import java.util.ArrayList;
+
 import ch.fhnw.cpib.parser.IAbsTree.DyadicExpr;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsCmd;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsExpr;
-import ch.fhnw.cpib.parser.IAbsTree.MonadicExpr;
 import ch.fhnw.cpib.scanner.Ident;
+import ch.fhnw.cpib.scanner.Literal;
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.symbols.AddOpr;
@@ -23,26 +25,21 @@ public interface IConcTree {
 	}
 
 	public interface IExprbool {
-		public IAbsExpr toAbs();
 
 		public IAbsExpr toAbs(IAbsExpr expr);
 
 	}
 
 	public interface IRepaddoprterm3 {
-		public IAbsExpr toAbs();
 
 		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm3 {
 		public IAbsExpr toAbs();
-
-		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IRepmultoprfactor {
-		public IAbsExpr toAbs();
 
 		public IAbsExpr toAbs(IAbsExpr expr);
 	}
@@ -50,69 +47,54 @@ public interface IConcTree {
 	public interface IFactor {
 		public IAbsExpr toAbs();
 
-		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IFactorop {
-		public IAbsExpr toAbs();
 
-		public IAbsExpr toAbs(IAbsExpr expr);
+		public IAbsExpr toAbs(Ident ident);
 	}
 
 	public interface ITerm2 {
 		public IAbsExpr toAbs();
 
-		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm1 {
 		public IAbsExpr toAbs();
 
-		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IExprList {
-		public IAbsExpr toAbs();
+		public ArrayList<IAbsExpr> toAbs();
 
-		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IMonadicOpr {
 		public Operators getOperator();
-
-		public IAbsExpr toAbs();
-
-		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm2op {
-		public IAbsExpr toAbs();
 
 		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm1opor {
-		public IAbsExpr toAbs();
 
 		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface ITerm1opand {
-		public IAbsExpr toAbs();
 
 		public IAbsExpr toAbs(IAbsExpr expr);
 	}
 
 	public interface IExprListop {
-		public IAbsExpr toAbs();
 
-		public IAbsExpr toAbs(IAbsExpr expr);
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList);
 	}
 
 	public interface IExprListopop {
-		public IAbsExpr toAbs();
-
-		public IAbsExpr toAbs(IAbsExpr expr);
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList);
 	}
 
 	public interface IProgram {
@@ -374,12 +356,6 @@ public interface IConcTree {
 	public class Exprbool implements IExprbool {
 
 		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
 			return expr;
@@ -397,11 +373,6 @@ public interface IConcTree {
 			this.or = or;
 			this.term1 = term1;
 			this.term1opor = term1opor;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			return null;
 		}
 
 		@Override
@@ -428,11 +399,6 @@ public interface IConcTree {
 			return term1opand.toAbs(new IAbsTree.DyadicExpr(Operators.CAND, expr, term1.toAbs()));
 		}
 
-		@Override
-		public IAbsExpr toAbs() {
-			return null;
-		}
-
 	}
 
 	public class RepAddoprTerm3 implements IRepaddoprterm3 {
@@ -441,12 +407,6 @@ public interface IConcTree {
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
 			return expr;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 	}
@@ -465,6 +425,7 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
+<<<<<<< HEAD
 			return repaddoprterm3.toAbs(new IAbsTree.DyadicExpr(Operators.PLUS, expr, term3.toAbs()));
 		}
 
@@ -472,6 +433,10 @@ public interface IConcTree {
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
 			return null;
+=======
+			return repaddoprterm3.toAbs(new IAbsTree.DyadicExpr(addopr
+					.getOperator(), expr, term3.toAbs()));
+>>>>>>> 9c5cfee632137a29b3dd026bba65b52faf30af66
 		}
 
 	}
@@ -484,12 +449,6 @@ public interface IConcTree {
 			super();
 			this.factor = factor;
 			this.repmultoprfactor = repmultoprfactor;
-		}
-
-		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return expr;
 		}
 
 		@Override
@@ -507,12 +466,6 @@ public interface IConcTree {
 			super();
 			this.factor = factor;
 			this.repmultoprfactor = repmultoprfactor;
-		}
-
-		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return expr;
 		}
 
 		@Override
@@ -534,12 +487,6 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return expr;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
 			return repmultoprfactor.toAbs(factor.toAbs());
@@ -558,12 +505,6 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return expr;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
 			return repmultoprfactor.toAbs(factor.toAbs());
@@ -578,13 +519,6 @@ public interface IConcTree {
 			// TODO Auto-generated method stub
 			return expr;
 		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
 	}
 
 	public class RepMultoprFactorMultOpr implements IRepmultoprfactor {
@@ -602,13 +536,27 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
+<<<<<<< HEAD
 			return repmultoprfactor.toAbs(new DyadicExpr(Operators.TIMES, expr, factor.toAbs()));
+=======
+			return repmultoprfactor.toAbs(new DyadicExpr(multopr.getOperator(),
+					expr, factor.toAbs()));
+		}
+
+	}
+
+	public class FactorLiteral implements IFactor {
+		private Literal literal;
+
+		public FactorLiteral(Literal literal) {
+			super();
+			this.literal = literal;
+>>>>>>> 9c5cfee632137a29b3dd026bba65b52faf30af66
 		}
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.LiteralExpr(literal);
 		}
 
 	}
@@ -623,12 +571,6 @@ public interface IConcTree {
 			this.lparen = lparen;
 			this.expr = expr;
 			this.rparen = rparen;
-		}
-
-		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 		@Override
@@ -650,12 +592,6 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
 			return new IAbsTree.MonadicExpr(monadicOpr.getOperator(), factor.toAbs());
@@ -671,12 +607,6 @@ public interface IConcTree {
 			super();
 			this.monadicOpr = monadicOpr;
 			this.factor = factor;
-		}
-
-		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 		@Override
@@ -698,15 +628,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return factorop.toAbs(ident.toAbs());
+			return factorop.toAbs(ident);
 		}
 
 	}
@@ -714,15 +638,9 @@ public interface IConcTree {
 	public class FactorOp implements IFactorop {
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
+		public IAbsExpr toAbs(Ident ident) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.StoreExpr(ident, false);
 		}
 
 	}
@@ -736,15 +654,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
+		public IAbsExpr toAbs(Ident ident) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.FunCallExpr(ident, exprList.toAbs());
 		}
 	}
 
@@ -757,15 +669,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
+		public IAbsExpr toAbs(Ident ident) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.StoreExpr(ident, true);
 		}
 
 	}
@@ -781,15 +687,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
 	}
@@ -805,15 +705,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
 	}
@@ -829,15 +723,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
 	}
@@ -853,15 +741,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
 	}
@@ -871,13 +753,7 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return expr;
 		}
 
 	}
@@ -897,13 +773,8 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return term2Op.toAbs(new IAbsTree.DyadicExpr(relopr.getRelOpr(),
+					expr, term2.toAbs()));
 		}
 
 	}
@@ -919,15 +790,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return term2Op.toAbs(term2.toAbs());
 		}
 
 	}
@@ -943,15 +808,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return term2Op.toAbs(term2.toAbs());
 		}
 
 	}
@@ -967,15 +826,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return term2Op.toAbs(term2.toAbs());
 		}
 
 	}
@@ -991,15 +844,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return term2Op.toAbs(term2.toAbs());
 		}
 
 	}
@@ -1009,13 +856,7 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return expr;
 		}
 
 	}
@@ -1035,13 +876,8 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return term1OpOr.toAbs(new IAbsTree.DyadicExpr(or.getOperator(),
+					expr, term1.toAbs()));
 		}
 
 	}
@@ -1051,13 +887,7 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return expr;
 		}
 
 	}
@@ -1077,13 +907,8 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return term1OpAnd.toAbs(new IAbsTree.DyadicExpr(and.getOperator(),
+					expr, term1.toAbs()));
 		}
 
 	}
@@ -1101,13 +926,7 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
+		public ArrayList<IAbsExpr> toAbs() {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -1120,18 +939,6 @@ public interface IConcTree {
 		public MonadicOprAddOpr(AddOpr add) {
 			super();
 			this.add = add;
-		}
-
-		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 		@Override
@@ -1150,18 +957,6 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public Operators getOperator() {
 			// TODO Auto-generated method stub
 			return Operators.NOTOPR;
@@ -1172,15 +967,9 @@ public interface IConcTree {
 	public class ExprListOp implements IExprListop {
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return exprList;
 		}
 
 	}
@@ -1196,16 +985,12 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
+			exprList.add(expr.toAbs());
+			exprListopop.toAbs(exprList);
+			return exprList;
 		}
 
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
-		}
 	}
 
 	public class ExprListOpAddOpr implements IExprListop {
@@ -1219,15 +1004,10 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
+			exprList.add(expr.toAbs());
+			exprListopop.toAbs(exprList);
+			return exprList;
 		}
 
 	}
@@ -1243,15 +1023,10 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
+			exprList.add(expr.toAbs());
+			exprListopop.toAbs(exprList);
+			return exprList;
 		}
 
 	}
@@ -1267,15 +1042,10 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
+			exprList.add(expr.toAbs());
+			exprListopop.toAbs(exprList);
+			return exprList;
 		}
 
 	}
@@ -1283,15 +1053,9 @@ public interface IConcTree {
 	public class ExprListOpOp implements IExprListopop {
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
 			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return exprList;
 		}
 
 	}
@@ -1309,15 +1073,10 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<IAbsExpr> toAbs(ArrayList<IAbsExpr> exprList) {
+			exprList.add(expr.toAbs());
+			exprListOpOp.toAbs(exprList);
+			return exprList;
 		}
 
 	}
