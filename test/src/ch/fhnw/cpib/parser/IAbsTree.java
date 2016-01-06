@@ -197,9 +197,9 @@ public interface IAbsTree {
 	public class FunCallExpr implements IAbsExpr {
 
 		private Ident identM;
-		private List<IAbsExpr> expressions;
+		private ArrayList<IAbsExpr> expressions;
 
-		public FunCallExpr(Ident identM, List<IAbsExpr> expressions) {
+		public FunCallExpr(Ident identM, ArrayList<IAbsExpr> expressions) {
 			super();
 			this.identM = identM;
 			this.expressions = expressions;
