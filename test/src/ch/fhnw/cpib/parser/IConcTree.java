@@ -922,7 +922,7 @@ public interface IConcTree {
 		@Override
 		public ArrayList<IAbsExpr> toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return exprListOp.toAbs(new ArrayList<IAbsExpr>());
 		}
 
 	}
