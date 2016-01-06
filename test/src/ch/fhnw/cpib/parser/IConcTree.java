@@ -226,11 +226,11 @@ public interface IConcTree {
 	}
 
 	public interface IIdents {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public interface IIdentsop {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public class Expr implements IConcExpr {
@@ -1867,7 +1867,7 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
+		public ArrayList<Ident> toAbs() {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -1887,8 +1887,8 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
+		public ArrayList<Ident> toAbs() {
+			ArrayList<Ident> list = identsop.toAbs();
 			return null;
 		}
 
@@ -1897,9 +1897,8 @@ public interface IConcTree {
 	public class Identsop implements IIdentsop {
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return new ArrayList<Ident>();
 		}
 
 	}
