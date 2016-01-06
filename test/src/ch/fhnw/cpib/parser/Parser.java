@@ -660,7 +660,7 @@ class Parser implements IParser {
 
 	private IIdents idents() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
-			Base ident = consume(Terminals.IDENT);
+			Ident ident = (Ident) consume(Terminals.IDENT);
 			IIdentsop identsop = identsop();
 			return new IConcTree.Idents(ident, identsop);
 		} else {

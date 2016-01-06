@@ -1852,10 +1852,10 @@ public interface IConcTree {
 	}
 
 	public class Idents implements IIdents {
-		private IToken ident;
+		private Ident ident;
 		private IIdentsop identsop;
 
-		public Idents(IToken ident, IIdentsop identsop) {
+		public Idents(Ident ident, IIdentsop identsop) {
 			super();
 			this.ident = ident;
 			this.identsop = identsop;
