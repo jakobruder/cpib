@@ -1756,11 +1756,11 @@ public interface IConcTree {
 
 	public class CmdCall implements IConcCmd {
 		private IToken call;
-		private IToken ident;
+		private Ident ident;
 		private IExprList exprList;
 		private ICmdop cmdop;
 
-		public CmdCall(IToken call, IToken ident, IExprList exprList,
+		public CmdCall(IToken call, Ident ident, IExprList exprList,
 				ICmdop cmdop) {
 			super();
 			this.call = call;
