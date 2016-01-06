@@ -10,6 +10,7 @@ import ch.fhnw.cpib.scanner.Literal;
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
 import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
+import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 
 public interface IAbsTree {
 
@@ -26,6 +27,14 @@ public interface IAbsTree {
 	}
 
 	public interface IAbsDecl {
+
+	}
+
+	public interface IAbsParam {
+
+	}
+
+	public interface IAbsGlobalImp {
 
 	}
 
@@ -64,6 +73,102 @@ public interface IAbsTree {
 		public ProgParamList(ArrayList<IAbsProgParam> progParamList) {
 			super();
 			this.progParamList = progParamList;
+		}
+
+	}
+
+	public class StoDecl implements IAbsDecl {
+		private ChangeModeToken changemode;
+		private TypedIdent typedIdent;
+
+		public StoDecl(ChangeModeToken changemode, TypedIdent typedIdent) {
+			super();
+			this.changemode = changemode;
+			this.typedIdent = typedIdent;
+		}
+
+		public StoDecl(TypedIdent typedIdent) {
+			super();
+			this.typedIdent = typedIdent;
+		}
+
+	}
+
+	public class FunDecl implements IAbsDecl {
+		private Ident ident;
+		private IAbsParam param;
+		private IAbsDecl stoDecl;
+		private IAbsGlobalImp globImp;
+		private IAbsDecl stoDeclLocal;
+		private IAbsCmd cmd;
+
+		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
+				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+			super();
+			this.ident = ident;
+			this.param = param;
+			this.stoDecl = stoDecl;
+			this.globImp = globImp;
+			this.stoDeclLocal = stoDeclLocal;
+			this.cmd = cmd;
+		}
+
+	}
+
+	public class ProcDecl implements IAbsDecl {
+		private Ident ident;
+		private IAbsParam param;
+		private IAbsDecl stoDecl;
+		private IAbsGlobalImp globImp;
+		private IAbsDecl stoDeclLocal;
+		private IAbsCmd cmd;
+
+		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
+				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+			super();
+			this.ident = ident;
+			this.param = param;
+			this.stoDecl = stoDecl;
+			this.globImp = globImp;
+			this.stoDeclLocal = stoDeclLocal;
+			this.cmd = cmd;
+		}
+
+	}
+
+	public class CpsStoDecl implements IAbsDecl {
+		private ArrayList<IAbsDecl> stoDecls;
+
+		public CpsStoDecl(ArrayList<IAbsDecl> stoDecls) {
+			super();
+			this.stoDecls = stoDecls;
+		}
+
+	}
+
+	public class Param implements IAbsParam {
+		private FlowModeToken flowmode;
+		private MechModeToken mechmode;
+		private ChangeModeToken changemode;
+		private TypedIdent typedIdent;
+
+		public Param(FlowModeToken flowmode, MechModeToken mechmode,
+				ChangeModeToken changemode, TypedIdent typedIdent) {
+			super();
+			this.flowmode = flowmode;
+			this.mechmode = mechmode;
+			this.changemode = changemode;
+			this.typedIdent = typedIdent;
+		}
+
+	}
+
+	public class ParamList implements IAbsParam {
+		private ArrayList<IAbsParam> params;
+
+		public ParamList(ArrayList<IAbsParam> params) {
+			super();
+			this.params = params;
 		}
 
 	}
