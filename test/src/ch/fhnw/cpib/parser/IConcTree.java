@@ -377,7 +377,8 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
-			return term1opor.toAbs(new IAbsTree.DyadicExpr(Operators.COR, expr, term1.toAbs()));
+			return term1opor.toAbs(new IAbsTree.DyadicExpr(Operators.COR, expr,
+					term1.toAbs()));
 		}
 
 	}
@@ -396,7 +397,8 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
-			return term1opand.toAbs(new IAbsTree.DyadicExpr(Operators.CAND, expr, term1.toAbs()));
+			return term1opand.toAbs(new IAbsTree.DyadicExpr(Operators.CAND,
+					expr, term1.toAbs()));
 		}
 
 	}
@@ -416,7 +418,8 @@ public interface IConcTree {
 		private ITerm3 term3;
 		private IRepaddoprterm3 repaddoprterm3;
 
-		public RepAddoprTerm3AddOpr(AddOpr addopr, ITerm3 term3, IRepaddoprterm3 repaddoprterm3) {
+		public RepAddoprTerm3AddOpr(AddOpr addopr, ITerm3 term3,
+				IRepaddoprterm3 repaddoprterm3) {
 			super();
 			this.addopr = addopr;
 			this.term3 = term3;
@@ -425,18 +428,8 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
-<<<<<<< HEAD
-			return repaddoprterm3.toAbs(new IAbsTree.DyadicExpr(Operators.PLUS, expr, term3.toAbs()));
-		}
-
-		@Override
-		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
-			return null;
-=======
-			return repaddoprterm3.toAbs(new IAbsTree.DyadicExpr(addopr
-					.getOperator(), expr, term3.toAbs()));
->>>>>>> 9c5cfee632137a29b3dd026bba65b52faf30af66
+			return repaddoprterm3.toAbs(new IAbsTree.DyadicExpr(Operators.PLUS,
+					expr, term3.toAbs()));
 		}
 
 	}
@@ -526,7 +519,8 @@ public interface IConcTree {
 		private IFactor factor;
 		private IRepmultoprfactor repmultoprfactor;
 
-		public RepMultoprFactorMultOpr(MultOpr multopr, IFactor factor, IRepmultoprfactor repmultoprfactor) {
+		public RepMultoprFactorMultOpr(MultOpr multopr, IFactor factor,
+				IRepmultoprfactor repmultoprfactor) {
 			super();
 			this.multopr = multopr;
 			this.factor = factor;
@@ -536,9 +530,6 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
 			// TODO Auto-generated method stub
-<<<<<<< HEAD
-			return repmultoprfactor.toAbs(new DyadicExpr(Operators.TIMES, expr, factor.toAbs()));
-=======
 			return repmultoprfactor.toAbs(new DyadicExpr(multopr.getOperator(),
 					expr, factor.toAbs()));
 		}
@@ -551,7 +542,6 @@ public interface IConcTree {
 		public FactorLiteral(Literal literal) {
 			super();
 			this.literal = literal;
->>>>>>> 9c5cfee632137a29b3dd026bba65b52faf30af66
 		}
 
 		@Override
@@ -594,7 +584,8 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return new IAbsTree.MonadicExpr(monadicOpr.getOperator(), factor.toAbs());
+			return new IAbsTree.MonadicExpr(monadicOpr.getOperator(),
+					factor.toAbs());
 		}
 
 	}
@@ -612,7 +603,8 @@ public interface IConcTree {
 		@Override
 		public IAbsExpr toAbs() {
 			// TODO Auto-generated method stub
-			return new IAbsTree.MonadicExpr(monadicOpr.getOperator(), factor.toAbs());
+			return new IAbsTree.MonadicExpr(monadicOpr.getOperator(),
+					factor.toAbs());
 		}
 
 	}
@@ -897,7 +889,8 @@ public interface IConcTree {
 		private ITerm1 term1;
 		private ITerm1opand term1OpAnd;
 
-		public Term1OpAndBoolAnd(BoolAnd and, ITerm1 term1, ITerm1opand term1OpAnd) {
+		public Term1OpAndBoolAnd(BoolAnd and, ITerm1 term1,
+				ITerm1opand term1OpAnd) {
 			super();
 			this.and = and;
 			this.term1 = term1;
@@ -918,7 +911,8 @@ public interface IConcTree {
 		private IExprListop exprListOp;
 		private IToken rparen;
 
-		public ExprListLParen(IToken lparen, IExprListop exprListOp, IToken rparen) {
+		public ExprListLParen(IToken lparen, IExprListop exprListOp,
+				IToken rparen) {
 			super();
 			this.exprListOp = exprListOp;
 			this.lparen = lparen;
@@ -1065,7 +1059,8 @@ public interface IConcTree {
 		private IConcExpr expr;
 		private IExprListopop exprListOpOp;
 
-		public ExprListOpOpComma(Comma comma, IConcExpr expr, IExprListopop exprListOpOp) {
+		public ExprListOpOpComma(Comma comma, IConcExpr expr,
+				IExprListopop exprListOpOp) {
 			super();
 			this.comma = comma;
 			this.expr = expr;
@@ -1089,7 +1084,9 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd;
 		private IToken program, dotoken, endprogram;
 
-		public Program(IToken program, Ident ident, IProgParamList progParamList, IProgramop programop, IToken dotoken, ICpsCmd cpsCmd, IToken endprogram) {
+		public Program(IToken program, Ident ident,
+				IProgParamList progParamList, IProgramop programop,
+				IToken dotoken, ICpsCmd cpsCmd, IToken endprogram) {
 			super();
 			this.ident = ident;
 			this.progParamList = progParamList;
@@ -1107,7 +1104,8 @@ public interface IConcTree {
 		private IProgParamListop progParamListop;
 		private IToken rparen;
 
-		public ProgParamList(IToken lparen, IProgParamListop progParamListop, IToken rparen) {
+		public ProgParamList(IToken lparen, IProgParamListop progParamListop,
+				IToken rparen) {
 			this.progParamListop = progParamListop;
 			this.lparen = lparen;
 			this.rparen = rparen;
@@ -1127,7 +1125,8 @@ public interface IConcTree {
 		private IProgParam progParam;
 		private IProgParamListopop progParamListopop;
 
-		public ProgParamListopIdent(IProgParam progParam, IProgParamListopop progParamListopop) {
+		public ProgParamListopIdent(IProgParam progParam,
+				IProgParamListopop progParamListopop) {
 			super();
 			this.progParam = progParam;
 			this.progParamListopop = progParamListopop;
@@ -1139,7 +1138,8 @@ public interface IConcTree {
 		private IProgParam progParam;
 		private IProgParamListopop progParamListopop;
 
-		public ProgParamListopChangemode(IProgParam progParam, IProgParamListopop progParamListopop) {
+		public ProgParamListopChangemode(IProgParam progParam,
+				IProgParamListopop progParamListopop) {
 			super();
 			this.progParam = progParam;
 			this.progParamListopop = progParamListopop;
@@ -1151,7 +1151,8 @@ public interface IConcTree {
 		private IProgParam progParam;
 		private IProgParamListopop progParamListopop;
 
-		public ProgParamListopFlowmode(IProgParam progParam, IProgParamListopop progParamListopop) {
+		public ProgParamListopFlowmode(IProgParam progParam,
+				IProgParamListopop progParamListopop) {
 			super();
 			this.progParam = progParam;
 			this.progParamListopop = progParamListopop;
@@ -1168,7 +1169,8 @@ public interface IConcTree {
 		private IProgParam progParam;
 		private IProgParamListopop progParamListopop;
 
-		public ProgParamListopopComma(Comma comma, IProgParam progParam, IProgParamListopop progParamListopop) {
+		public ProgParamListopopComma(Comma comma, IProgParam progParam,
+				IProgParamListopop progParamListopop) {
 			super();
 			this.comma = comma;
 			this.progParam = progParam;
@@ -1182,7 +1184,8 @@ public interface IConcTree {
 		IGlobImpop2 globImpop2;
 		ITypedIdent typedIdent;
 
-		public ProgParamIdent(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
+		public ProgParamIdent(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2,
+				ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
@@ -1196,7 +1199,8 @@ public interface IConcTree {
 		IGlobImpop2 globImpop2;
 		ITypedIdent typedIdent;
 
-		public ProgParamChangemode(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
+		public ProgParamChangemode(IGlobImpop1 globImpop1,
+				IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
@@ -1210,7 +1214,8 @@ public interface IConcTree {
 		IGlobImpop2 globImpop2;
 		ITypedIdent typedIdent;
 
-		public ProgParamFlowmode(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
+		public ProgParamFlowmode(IGlobImpop1 globImpop1,
+				IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
@@ -1235,7 +1240,8 @@ public interface IConcTree {
 		private IDecl decl;
 		private ICpsDeclop cpsDeclop;
 
-		public CpsDeclopSemicolon(IToken semicolon, IDecl decl, ICpsDeclop cpsDeclop) {
+		public CpsDeclopSemicolon(IToken semicolon, IDecl decl,
+				ICpsDeclop cpsDeclop) {
 			super();
 			this.semicolon = semicolon;
 			this.decl = decl;
@@ -1273,7 +1279,8 @@ public interface IConcTree {
 		private IConcCmd cmd;
 		private ICpsCmdop cpsCmdop;
 
-		public CpsCmdopSemicolon(IToken semicolon, IConcCmd cmd, ICpsCmdop cpsCmdop) {
+		public CpsCmdopSemicolon(IToken semicolon, IConcCmd cmd,
+				ICpsCmdop cpsCmdop) {
 			super();
 			this.semicolon = semicolon;
 			this.cmd = cmd;
@@ -1370,8 +1377,10 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd;
 		private IToken endFun;
 
-		public FunDecl(IToken fun, IToken ident, IParamList paramList, IToken returns, IStoDecl stoDecl, IFunDeclop1 funDeclop1, IFunDeclop2 funDeclop2,
-				IToken tokenDo, ICpsCmd cpsCmd, IToken endFun) {
+		public FunDecl(IToken fun, IToken ident, IParamList paramList,
+				IToken returns, IStoDecl stoDecl, IFunDeclop1 funDeclop1,
+				IFunDeclop2 funDeclop2, IToken tokenDo, ICpsCmd cpsCmd,
+				IToken endFun) {
 			super();
 			this.fun = fun;
 			Ident = ident;
@@ -1434,8 +1443,10 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd;
 		private IToken endProc;
 
-		public ProcDecl(IToken proc, IToken ident, IParamList paramList, IToken returns, IStoDecl stoDecl, IFunDeclop1 funDeclop1, IFunDeclop2 funDeclop2,
-				IToken tokenDo, ICpsCmd cpsCmd, IToken endProc) {
+		public ProcDecl(IToken proc, IToken ident, IParamList paramList,
+				IToken returns, IStoDecl stoDecl, IFunDeclop1 funDeclop1,
+				IFunDeclop2 funDeclop2, IToken tokenDo, ICpsCmd cpsCmd,
+				IToken endProc) {
 			super();
 			this.proc = proc;
 			this.ident = ident;
@@ -1522,7 +1533,8 @@ public interface IConcTree {
 		private IParam param;
 		private IParamListopop paramListopop;
 
-		public ParamListopopComma(IToken comma, IParam param, IParamListopop paramListopop) {
+		public ParamListopopComma(IToken comma, IParam param,
+				IParamListopop paramListopop) {
 			super();
 			this.comma = comma;
 			this.param = param;
@@ -1540,7 +1552,8 @@ public interface IConcTree {
 		private IGlobImpop2 globImpop2;
 		private IToken ident;
 
-		public GlobImp(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2, IToken ident) {
+		public GlobImp(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2,
+				IToken ident) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
@@ -1618,7 +1631,8 @@ public interface IConcTree {
 		private IStoDecl stoDecl;
 		private ICpsStoDeclop cpsStoDeclop;
 
-		public CpsStoDeclopSemicolon(IToken semicolon, IStoDecl stoDecl, ICpsStoDeclop cpsStoDeclop) {
+		public CpsStoDeclopSemicolon(IToken semicolon, IStoDecl stoDecl,
+				ICpsStoDeclop cpsStoDeclop) {
 			super();
 			this.semicolon = semicolon;
 			this.stoDecl = stoDecl;
@@ -1637,7 +1651,8 @@ public interface IConcTree {
 		private IGlobImpop2 globImpop2;
 		private ITypedIdent typedIdent;
 
-		public Param(IGlobImpop1 globImpop1, IParamop paramop, IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
+		public Param(IGlobImpop1 globImpop1, IParamop paramop,
+				IGlobImpop2 globImpop2, ITypedIdent typedIdent) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.paramop = paramop;
@@ -1702,7 +1717,8 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd2;
 		private IToken endif;
 
-		public CmdIf(IToken tokenIf, IConcExpr expr, IToken then, ICpsCmd cpsCmd1, IToken tokenElse, ICpsCmd cpsCmd2, IToken endif) {
+		public CmdIf(IToken tokenIf, IConcExpr expr, IToken then,
+				ICpsCmd cpsCmd1, IToken tokenElse, ICpsCmd cpsCmd2, IToken endif) {
 			super();
 			this.tokenIf = tokenIf;
 			this.expr = expr;
@@ -1727,7 +1743,8 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd;
 		private IToken endWhile;
 
-		public CmdWhile(IToken tokenWhile, IConcExpr expr, IToken tokenDo, ICpsCmd cpsCmd, IToken endWhile) {
+		public CmdWhile(IToken tokenWhile, IConcExpr expr, IToken tokenDo,
+				ICpsCmd cpsCmd, IToken endWhile) {
 			super();
 			this.tokenWhile = tokenWhile;
 			this.expr = expr;
@@ -1748,7 +1765,8 @@ public interface IConcTree {
 		private IExprList exprList;
 		private ICmdop cmdop;
 
-		public CmdCall(IToken call, IToken ident, IExprList exprList, ICmdop cmdop) {
+		public CmdCall(IToken call, IToken ident, IExprList exprList,
+				ICmdop cmdop) {
 			super();
 			this.call = call;
 			this.ident = ident;
@@ -1805,7 +1823,7 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			//TODO:
+			// TODO:
 			return null;
 		}
 
