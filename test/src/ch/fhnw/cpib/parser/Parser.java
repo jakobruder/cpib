@@ -608,7 +608,7 @@ class Parser implements IParser {
 					endWhile);
 		} else if (terminal == Terminals.CALL) {
 			IToken call = consume(Terminals.CALL);
-			IToken ident = consume(Terminals.IDENT);
+			Ident ident = (Ident)consume(Terminals.IDENT);
 			IConcTree.IExprList exprList = exprList();
 			IConcTree.ICmdop cmdOp = cmdop();
 			return new IConcTree.CmdCall(call, ident, exprList, cmdOp);
