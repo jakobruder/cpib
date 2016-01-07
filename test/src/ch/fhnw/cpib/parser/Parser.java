@@ -681,7 +681,7 @@ class Parser implements IParser {
 	private IIdentsop identsop() throws GrammarError {
 		if (terminal == Terminals.COMMA) {
 			Base comma = consume(Terminals.COMMA);
-			Base ident = consume(Terminals.IDENT);
+			Ident ident = (Ident) consume(Terminals.IDENT);
 			IIdentsop identsop = identsop();
 			return new IConcTree.IdentsopComma(comma, ident, identsop);
 		} else if (terminal == Terminals.ENDWHILE) {
