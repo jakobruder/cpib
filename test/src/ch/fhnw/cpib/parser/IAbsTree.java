@@ -3,6 +3,8 @@ package ch.fhnw.cpib.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.fhnw.cpib.checker.ContextError;
+import ch.fhnw.cpib.checker.Types;
 import ch.fhnw.cpib.parser.IConcTree.ITypedIdent;
 import ch.fhnw.cpib.parser.IConcTree.TypedIdent;
 import ch.fhnw.cpib.scanner.Ident;
@@ -15,6 +17,8 @@ import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 public interface IAbsTree {
 
 	public interface IAbsExpr {
+
+		Types check() throws ContextError;
 
 	}
 
@@ -177,6 +181,11 @@ public interface IAbsTree {
 			this.literal = literal;
 		}
 
+		@Override
+		public Types check() throws ContextError {
+			return Types.LITERAL;
+		}
+
 	}
 
 	public class StoreExpr implements IAbsExpr {
@@ -187,6 +196,11 @@ public interface IAbsTree {
 			super();
 			this.ident = ident;
 			this.isInitialization = isInitialization;
+		}
+
+		@Override
+		public Types check() throws ContextError {
+			return Types.IDENT;
 		}
 	}
 
@@ -199,6 +213,12 @@ public interface IAbsTree {
 			super();
 			this.identM = identM;
 			this.expressions = expressions;
+		}
+
+		@Override
+		public Types check() throws ContextError {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
@@ -214,6 +234,24 @@ public interface IAbsTree {
 			this.expression = expression;
 		}
 
+		@Override
+		public Types check() throws ContextError {
+			Types type = expression.check();
+			switch (operator) {
+			case NOTOPR:
+				if (type == Types.BOOL) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case MINUS:
+				if (type == Types.INTEGER) {
+					return Types.INTEGER;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			default:
+				throw new RuntimeException();
+			}
+		}
 	}
 
 	public class DyadicExpr implements IAbsExpr {
@@ -226,6 +264,87 @@ public interface IAbsTree {
 			this.operator = operator;
 			this.expression1 = expression1;
 			this.expression2 = expression2;
+		}
+
+		public Types check() throws ContextError {
+			Types type1 = expression1.check();
+			Types type2 = expression2.check();
+
+			switch (operator) {
+			case PLUS:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.INTEGER;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case MINUS:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.INTEGER;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case TIMES:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.INTEGER;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case DIV_E:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.INTEGER;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case MOD_E:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.INTEGER;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case CAND:
+				if (type1 == Types.BOOL && type2 == Types.BOOL) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case COR:
+				if (type1 == Types.BOOL && type2 == Types.BOOL) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case LT:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case LE:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case EQ:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.BOOL;
+				}
+				if (type1 == Types.BOOL && type2 == Types.BOOL) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case NE:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.BOOL;
+				}
+				if (type1 == Types.BOOL && type2 == Types.BOOL) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case GE:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			case GT:
+				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
+					return Types.BOOL;
+				}
+				throw new ContextError("Type error in operator " + operator + ".");
+			default:
+				throw new RuntimeException();
+			}
 		}
 	}
 
