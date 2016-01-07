@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import ch.fhnw.cpib.parser.IAbsTree.DyadicExpr;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsCmd;
+import ch.fhnw.cpib.parser.IAbsTree.IAbsDecl;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsExpr;
+import ch.fhnw.cpib.parser.IAbsTree.IAbsParam;
+import ch.fhnw.cpib.parser.IAbsTree.IAbsProgParam;
 import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.Literal;
 import ch.fhnw.cpib.scanner.enums.Operators;
@@ -98,27 +101,27 @@ public interface IConcTree {
 	}
 
 	public interface IProgram {
-
+		public IAbsTree.Program toAbs();
 	}
 
 	public interface IProgParamList {
-
+		public IAbsParam toAbs();
 	}
 
 	public interface IProgParamListop {
-
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList);
 	}
 
 	public interface IProgParamListopop {
-
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList);
 	}
 
 	public interface ICpsDecl {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface ICpsDeclop {
-
+		public ArrayList<IAbsDecl> toAbs(ArrayList<IAbsDecl> declList);
 	}
 
 	public interface ICpsCmd {
@@ -130,31 +133,31 @@ public interface IConcTree {
 	}
 
 	public interface IProgramop {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface IDecl {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface IFunDecl {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface IFunDeclop1 {
-
+		public IAbsDecl toAbs(IAbsDecl decl);
 	}
 
 	public interface IFunDeclop2 {
-
+		public IAbsDecl toAbs(IAbsDecl decl);
 	}
 
 	public interface IProcDecl {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface IStoDecl {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface ITypedIdent {
@@ -162,15 +165,15 @@ public interface IConcTree {
 	}
 
 	public interface IParamList {
-
+		public IAbsProgParam toAbs();
 	}
 
 	public interface IParamListop {
-
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList);
 	}
 
 	public interface IParamListopop {
-
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList);
 	}
 
 	public interface IGlobImp {
@@ -218,19 +221,19 @@ public interface IConcTree {
 	}
 
 	public interface ICmdop {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public interface IGlobInits {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public interface IIdents {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public interface IIdentsop {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public class Expr implements IConcExpr {
@@ -1726,8 +1729,7 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.CondCmd(expr.toAbs(), cpsCmd1.toAbs(), cpsCmd2.toAbs());
 		}
 	}
 
@@ -1771,8 +1773,7 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			// TODO:
-			return null;
+			return new IAbsTree.ProcCallCmd(ident, exprList.toAbs(), cmdop.toAbs());
 		}
 	}
 
@@ -1817,9 +1818,8 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO:
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return globInits.toAbs();
 		}
 
 	}
@@ -1827,9 +1827,8 @@ public interface IConcTree {
 	public class Cmdop implements ICmdop {
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return new ArrayList<Ident>();
 		}
 	}
 
@@ -1844,9 +1843,8 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return idents.toAbs();
 		}
 
 	}
@@ -1862,19 +1860,20 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			ArrayList<Ident> list = identsop.toAbs();
+			list.add(0, ident);
+			return list;
 		}
 
 	}
 
 	public class IdentsopComma implements IIdentsop {
 		private IToken comma;
-		private IToken ident;
+		private Ident ident;
 		private IIdentsop identsop;
 
-		public IdentsopComma(IToken comma, IToken ident, IIdentsop identsop) {
+		public IdentsopComma(IToken comma, Ident ident, IIdentsop identsop) {
 			super();
 			this.comma = comma;
 			this.ident = ident;
@@ -1882,9 +1881,10 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			ArrayList<Ident> list = identsop.toAbs();
+			list.add(0, ident);
+			return list;
 		}
 
 	}
@@ -1892,9 +1892,8 @@ public interface IConcTree {
 	public class Identsop implements IIdentsop {
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return new ArrayList<Ident>();
 		}
 
 	}
