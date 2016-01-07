@@ -6,6 +6,7 @@ import ch.fhnw.cpib.parser.IAbsTree.DyadicExpr;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsCmd;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsDecl;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsExpr;
+import ch.fhnw.cpib.parser.IAbsTree.IAbsGlobalImp;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsParam;
 import ch.fhnw.cpib.parser.IAbsTree.IAbsProgParam;
 import ch.fhnw.cpib.scanner.Ident;
@@ -15,7 +16,10 @@ import ch.fhnw.cpib.scanner.interfaces.IToken;
 import ch.fhnw.cpib.scanner.symbols.AddOpr;
 import ch.fhnw.cpib.scanner.symbols.BoolAnd;
 import ch.fhnw.cpib.scanner.symbols.BoolOr;
+import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
 import ch.fhnw.cpib.scanner.symbols.Comma;
+import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
+import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
 import ch.fhnw.cpib.scanner.symbols.RelOpr;
 
@@ -105,15 +109,15 @@ public interface IConcTree {
 	}
 
 	public interface IProgParamList {
-		public IAbsParam toAbs();
+		public IAbsProgParam toAbs();
 	}
 
 	public interface IProgParamListop {
-		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList);
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList);
 	}
 
 	public interface IProgParamListopop {
-		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList);
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList);
 	}
 
 	public interface ICpsDecl {
@@ -129,7 +133,7 @@ public interface IConcTree {
 	}
 
 	public interface ICpsCmdop {
-		public IAbsCmd toAbs();
+		public ArrayList<IAbsCmd> toAbs(ArrayList<IAbsCmd> cmdList);
 	}
 
 	public interface IProgramop {
@@ -145,11 +149,11 @@ public interface IConcTree {
 	}
 
 	public interface IFunDeclop1 {
-		public IAbsDecl toAbs(IAbsDecl decl);
+		public IAbsGlobalImp toAbs();
 	}
 
 	public interface IFunDeclop2 {
-		public IAbsDecl toAbs(IAbsDecl decl);
+		public IAbsDecl toAbs();
 	}
 
 	public interface IProcDecl {
@@ -161,59 +165,60 @@ public interface IConcTree {
 	}
 
 	public interface ITypedIdent {
-
+		public TypedIdent getTypedIdent();
 	}
 
 	public interface IParamList {
-		public IAbsProgParam toAbs();
+		public IAbsParam toAbs();
 	}
 
 	public interface IParamListop {
-		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList);
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList);
 	}
 
 	public interface IParamListopop {
-		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList);
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList);
 	}
 
 	public interface IGlobImp {
-
+		public IAbsGlobalImp toAbs();
 	}
 
 	public interface IGlobImpop1 {
-
+		public FlowModeToken getFlowmode();
 	}
 
 	public interface IGlobImpop2 {
-
+		public ChangeModeToken getChangemode();
 	}
 
 	public interface IGlobImps {
-
+		public IAbsGlobalImp toAbs();
 	}
 
 	public interface IGlobImpsop {
-
+		public ArrayList<IAbsGlobalImp> toAbs(
+				ArrayList<IAbsGlobalImp> globalImpList);
 	}
 
 	public interface ICpsStoDecl {
-
+		public IAbsDecl toAbs();
 	}
 
 	public interface ICpsStoDeclop {
-
+		public ArrayList<IAbsDecl> toAbs(ArrayList<IAbsDecl> declList);
 	}
 
 	public interface IProgParam {
-
+		public IAbsProgParam toAbs();
 	}
 
 	public interface IParam {
-
+		public IAbsParam toAbs();
 	}
 
 	public interface IParamop {
-
+		public MechModeToken getMechmode();
 	}
 
 	public interface IConcCmd {
@@ -1095,6 +1100,12 @@ public interface IConcTree {
 			this.endprogram = endprogram;
 		}
 
+		@Override
+		public ch.fhnw.cpib.parser.IAbsTree.Program toAbs() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public class ProgParamList implements IProgParamList {
@@ -1109,12 +1120,25 @@ public interface IConcTree {
 			this.rparen = rparen;
 		}
 
+		@Override
+		public IAbsProgParam toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.ProgParamList(
+					progParamListop.toAbs(new ArrayList<IAbsProgParam>()));
+		}
+
 	}
 
 	public class ProgParamListop implements IProgParamListop {
 
 		public ProgParamListop() {
 
+		}
+
+		@Override
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList) {
+			// TODO Auto-generated method stub
+			return paramList;
 		}
 
 	}
@@ -1130,6 +1154,12 @@ public interface IConcTree {
 			this.progParamListopop = progParamListopop;
 		}
 
+		@Override
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList) {
+			paramList.add(progParam.toAbs());
+			return progParamListopop.toAbs(paramList);
+		}
+
 	}
 
 	public class ProgParamListopChangemode implements IProgParamListop {
@@ -1141,6 +1171,12 @@ public interface IConcTree {
 			super();
 			this.progParam = progParam;
 			this.progParamListopop = progParamListopop;
+		}
+
+		@Override
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList) {
+			paramList.add(progParam.toAbs());
+			return progParamListopop.toAbs(paramList);
 		}
 
 	}
@@ -1156,9 +1192,21 @@ public interface IConcTree {
 			this.progParamListopop = progParamListopop;
 		}
 
+		@Override
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList) {
+			paramList.add(progParam.toAbs());
+			return progParamListopop.toAbs(paramList);
+		}
+
 	}
 
 	public class ProgParamListopop implements IProgParamListopop {
+
+		@Override
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList) {
+			// TODO Auto-generated method stub
+			return paramList;
+		}
 
 	}
 
@@ -1173,6 +1221,12 @@ public interface IConcTree {
 			this.comma = comma;
 			this.progParam = progParam;
 			this.progParamListopop = progParamListopop;
+		}
+
+		@Override
+		public ArrayList<IAbsProgParam> toAbs(ArrayList<IAbsProgParam> paramList) {
+			paramList.add(progParam.toAbs());
+			return progParamListopop.toAbs(paramList);
 		}
 
 	}
@@ -1190,6 +1244,13 @@ public interface IConcTree {
 			this.typedIdent = typedIdent;
 		}
 
+		@Override
+		public IAbsProgParam toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.ProgParam(globImpop1.getFlowmode(),
+					globImpop2.getChangemode(), typedIdent);
+		}
+
 	}
 
 	public class ProgParamChangemode implements IProgParam {
@@ -1203,6 +1264,12 @@ public interface IConcTree {
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
 			this.typedIdent = typedIdent;
+		}
+
+		@Override
+		public IAbsProgParam toAbs() {
+			return new IAbsTree.ProgParam(globImpop1.getFlowmode(),
+					globImpop2.getChangemode(), typedIdent);
 		}
 
 	}
@@ -1219,6 +1286,12 @@ public interface IConcTree {
 			this.globImpop2 = globImpop2;
 			this.typedIdent = typedIdent;
 		}
+
+		@Override
+		public IAbsProgParam toAbs() {
+			return new IAbsTree.ProgParam(globImpop1.getFlowmode(),
+					globImpop2.getChangemode(), typedIdent);
+		}
 	}
 
 	public class CpsDecl implements ICpsDecl {
@@ -1229,6 +1302,13 @@ public interface IConcTree {
 			super();
 			this.decl = decl;
 			this.cpsDeclop = cpsDeclop;
+		}
+
+		@Override
+		public IAbsDecl toAbs() {
+			ArrayList<IAbsDecl> declList = new ArrayList<>();
+			declList.add(decl.toAbs());
+			return new IAbsTree.CpsDecl(cpsDeclop.toAbs(declList));
 		}
 
 	}
@@ -1246,10 +1326,22 @@ public interface IConcTree {
 			this.cpsDeclop = cpsDeclop;
 		}
 
+		@Override
+		public ArrayList<IAbsDecl> toAbs(ArrayList<IAbsDecl> declList) {
+			declList.add(decl.toAbs());
+			return cpsDeclop.toAbs(declList);
+		}
+
 	}
 
 	// TODO: Nothing?
 	public class CpsDeclopDo implements ICpsDeclop {
+
+		@Override
+		public ArrayList<IAbsDecl> toAbs(ArrayList<IAbsDecl> declList) {
+			// TODO Auto-generated method stub
+			return declList;
+		}
 
 		// empty
 	}
@@ -1266,8 +1358,9 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			ArrayList<IAbsCmd> cmdList = new ArrayList<>();
+			cmdList.add(cmd.toAbs());
+			return new IAbsTree.CpsCmd(cpsCmdop.toAbs(cmdList));
 		}
 
 	}
@@ -1286,9 +1379,9 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<IAbsCmd> toAbs(ArrayList<IAbsCmd> cmdList) {
+			cmdList.add(cmd.toAbs());
+			return cpsCmdop.toAbs(cmdList);
 		}
 
 	}
@@ -1297,9 +1390,9 @@ public interface IConcTree {
 	public class CpsCmdop implements ICpsCmdop {
 
 		@Override
-		public IAbsCmd toAbs() {
+		public ArrayList<IAbsCmd> toAbs(ArrayList<IAbsCmd> cmdList) {
 			// TODO Auto-generated method stub
-			return null;
+			return cmdList;
 		}
 
 		// empty
@@ -1315,10 +1408,22 @@ public interface IConcTree {
 			this.cpsDecl = cpsDecl;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return cpsDecl.toAbs();
+		}
+
 	}
 
 	// TODO:
 	public class ProgramopDo implements IProgramop {
+
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.CpsDecl(new ArrayList<IAbsDecl>());
+		}
 
 		// Empty
 	}
@@ -1331,6 +1436,12 @@ public interface IConcTree {
 			this.stoDecl = stoDecl;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return stoDecl.toAbs();
+		}
+
 	}
 
 	public class DeclChangemode implements IDecl {
@@ -1339,6 +1450,12 @@ public interface IConcTree {
 		public DeclChangemode(IStoDecl stoDecl) {
 			super();
 			this.stoDecl = stoDecl;
+		}
+
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return stoDecl.toAbs();
 		}
 
 	}
@@ -1351,6 +1468,12 @@ public interface IConcTree {
 			this.funDecl = funDecl;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return funDecl.toAbs();
+		}
+
 	}
 
 	public class DeclProc implements IDecl {
@@ -1361,11 +1484,17 @@ public interface IConcTree {
 			this.procDecl = procDecl;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return procDecl.toAbs();
+		}
+
 	}
 
 	public class FunDecl implements IFunDecl {
 		private IToken fun;
-		private IToken Ident;
+		private Ident ident;
 		private IParamList paramList;
 		private IToken returns;
 		private IStoDecl stoDecl;
@@ -1375,13 +1504,13 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd;
 		private IToken endFun;
 
-		public FunDecl(IToken fun, IToken ident, IParamList paramList,
+		public FunDecl(IToken fun, Ident ident, IParamList paramList,
 				IToken returns, IStoDecl stoDecl, IFunDeclop1 funDeclop1,
 				IFunDeclop2 funDeclop2, IToken tokenDo, ICpsCmd cpsCmd,
 				IToken endFun) {
 			super();
 			this.fun = fun;
-			Ident = ident;
+			this.ident = ident;
 			this.paramList = paramList;
 			this.returns = returns;
 			this.stoDecl = stoDecl;
@@ -1390,6 +1519,14 @@ public interface IConcTree {
 			this.tokenDo = tokenDo;
 			this.cpsCmd = cpsCmd;
 			this.endFun = endFun;
+		}
+
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.FunDecl(ident, paramList.toAbs(),
+					stoDecl.toAbs(), funDeclop1.toAbs(), funDeclop2.toAbs(),
+					cpsCmd.toAbs());
 		}
 
 	}
@@ -1404,10 +1541,22 @@ public interface IConcTree {
 			this.globImps = globImps;
 		}
 
+		@Override
+		public IAbsGlobalImp toAbs() {
+			// TODO Auto-generated method stub
+			return globImps.toAbs();
+		}
+
 	}
 
 	// TODO:
 	public class FunDeclop1 implements IFunDeclop1 {
+
+		@Override
+		public IAbsGlobalImp toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.GlobalImpList(new ArrayList<IAbsGlobalImp>());
+		}
 
 		// empty?
 	}
@@ -1422,16 +1571,28 @@ public interface IConcTree {
 			this.cpsStoDecl = cpsStoDecl;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return cpsStoDecl.toAbs();
+		}
+
 	}
 
 	public class FunDeclop2 implements IFunDeclop2 {
+
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.CpsStoDecl(new ArrayList<IAbsDecl>());
+		}
 
 		// empty
 	}
 
 	public class ProcDecl implements IProcDecl {
 		private IToken proc;
-		private IToken ident;
+		private Ident ident;
 		private IParamList paramList;
 		private IToken returns;
 		private IStoDecl stoDecl;
@@ -1441,7 +1602,7 @@ public interface IConcTree {
 		private ICpsCmd cpsCmd;
 		private IToken endProc;
 
-		public ProcDecl(IToken proc, IToken ident, IParamList paramList,
+		public ProcDecl(IToken proc, Ident ident, IParamList paramList,
 				IToken returns, IStoDecl stoDecl, IFunDeclop1 funDeclop1,
 				IFunDeclop2 funDeclop2, IToken tokenDo, ICpsCmd cpsCmd,
 				IToken endProc) {
@@ -1458,16 +1619,31 @@ public interface IConcTree {
 			this.endProc = endProc;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.ProcDecl(ident, paramList.toAbs(),
+					stoDecl.toAbs(), funDeclop1.toAbs(), funDeclop2.toAbs(),
+					cpsCmd.toAbs());
+		}
+
 	}
 
 	public class StoDeclChangemode implements IStoDecl {
-		private IToken Changemode;
+		private ChangeModeToken changemode;
 		private ITypedIdent typedIdent;
 
-		public StoDeclChangemode(IToken changemode, ITypedIdent typedIdent) {
+		public StoDeclChangemode(ChangeModeToken changemode,
+				ITypedIdent typedIdent) {
 			super();
-			Changemode = changemode;
+			this.changemode = changemode;
 			this.typedIdent = typedIdent;
+		}
+
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.StoDecl(changemode, typedIdent.getTypedIdent());
 		}
 
 	}
@@ -1480,18 +1656,30 @@ public interface IConcTree {
 			this.typedIdent = typedIdent;
 		}
 
+		@Override
+		public IAbsDecl toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.StoDecl(typedIdent.getTypedIdent());
+		}
+
 	}
 
 	public class TypedIdent implements ITypedIdent {
-		private IToken ident;
+		private Ident ident;
 		private IToken colon;
 		private IToken type;
 
-		public TypedIdent(IToken ident, IToken colon, IToken type) {
+		public TypedIdent(Ident ident, IToken colon, IToken type) {
 			super();
 			this.ident = ident;
 			this.colon = colon;
 			this.type = type;
+		}
+
+		@Override
+		public TypedIdent getTypedIdent() {
+			// TODO Auto-generated method stub
+			return this;
 		}
 
 	}
@@ -1508,6 +1696,13 @@ public interface IConcTree {
 			this.rParen = rParen;
 		}
 
+		@Override
+		public IAbsParam toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.ParamList(
+					paramListop.toAbs(new ArrayList<IAbsParam>()));
+		}
+
 	}
 
 	public class ParamListop implements IParamListop {
@@ -1519,9 +1714,21 @@ public interface IConcTree {
 			this.param = param;
 			this.paramListopop = paramListopop;
 		}
+
+		@Override
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList) {
+			paramList.add(param.toAbs());
+			return paramListopop.toAbs(paramList);
+		}
 	}
 
 	public class ParamListopRparen implements IParamListop {
+
+		@Override
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList) {
+			// TODO Auto-generated method stub
+			return paramList;
+		}
 
 		// empty?
 	}
@@ -1539,52 +1746,95 @@ public interface IConcTree {
 			this.paramListopop = paramListopop;
 		}
 
+		@Override
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList) {
+			paramList.add(param.toAbs());
+			return paramListopop.toAbs(paramList);
+		}
+
 	}
 
 	public class ParamListopopRparen implements IParamListopop {
+
+		@Override
+		public ArrayList<IAbsParam> toAbs(ArrayList<IAbsParam> paramList) {
+			// TODO Auto-generated method stub
+			return paramList;
+		}
 		// empty
 	}
 
 	public class GlobImp implements IGlobImp {
 		private IGlobImpop1 globImpop1;
 		private IGlobImpop2 globImpop2;
-		private IToken ident;
+		private Ident ident;
 
 		public GlobImp(IGlobImpop1 globImpop1, IGlobImpop2 globImpop2,
-				IToken ident) {
+				Ident ident) {
 			super();
 			this.globImpop1 = globImpop1;
 			this.globImpop2 = globImpop2;
 			this.ident = ident;
 		}
 
+		@Override
+		public IAbsGlobalImp toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.GlobalImp(ident, globImpop1.getFlowmode(),
+					globImpop2.getChangemode());
+		}
+
 	}
 
 	public class GlobImpop1Flowmode implements IGlobImpop1 {
-		private IToken flowmode;
+		private FlowModeToken flowmode;
 
-		public GlobImpop1Flowmode(IToken flowmode) {
+		public GlobImpop1Flowmode(FlowModeToken flowmode) {
 			super();
 			this.flowmode = flowmode;
+		}
+
+		@Override
+		public FlowModeToken getFlowmode() {
+			// TODO Auto-generated method stub
+			return flowmode;
 		}
 
 	}
 
 	public class GlobImpop1 implements IGlobImpop1 {
+
+		@Override
+		public FlowModeToken getFlowmode() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		// empty
 	}
 
 	public class GlobImpop2Changemode implements IGlobImpop2 {
-		private IToken changemode;
+		private ChangeModeToken changemode;
 
-		public GlobImpop2Changemode(IToken changemode) {
+		public GlobImpop2Changemode(ChangeModeToken changemode) {
 			super();
 			this.changemode = changemode;
+		}
+
+		@Override
+		public ChangeModeToken getChangemode() {
+			// TODO Auto-generated method stub
+			return changemode;
 		}
 
 	}
 
 	public class GlobImpop2Ident implements IGlobImpop2 {
+
+		@Override
+		public ChangeModeToken getChangemode() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		// empty
 	}
 
@@ -1598,16 +1848,44 @@ public interface IConcTree {
 			this.globImpsop = globImpsop;
 		}
 
+		@Override
+		public IAbsGlobalImp toAbs() {
+			ArrayList<IAbsGlobalImp> globalImpList = new ArrayList<>();
+			globalImpList.add(globImp.toAbs());
+			return new IAbsTree.GlobalImpList(globImpsop.toAbs(globalImpList));
+		}
+
 	}
 
 	public class GlobImpsop implements IGlobImpsop {
+
+		@Override
+		public ArrayList<IAbsGlobalImp> toAbs(
+				ArrayList<IAbsGlobalImp> globalImpList) {
+			// TODO Auto-generated method stub
+			return globalImpList;
+		}
+
+	}
+
+	public class GlobImpsopComma implements IGlobImpsop {
 		private IToken comma;
 		private IGlobImp globImp;
+		private IGlobImpsop globImpsop;
 
-		public GlobImpsop(IToken comma, IGlobImp globImp) {
+		public GlobImpsopComma(IToken comma, IGlobImp globImp,
+				IGlobImpsop globImpsop) {
 			super();
 			this.comma = comma;
 			this.globImp = globImp;
+			this.globImpsop = globImpsop;
+		}
+
+		@Override
+		public ArrayList<IAbsGlobalImp> toAbs(
+				ArrayList<IAbsGlobalImp> globalImpList) {
+			globalImpList.add(globImp.toAbs());
+			return globImpsop.toAbs(globalImpList);
 		}
 
 	}
@@ -1620,6 +1898,13 @@ public interface IConcTree {
 			super();
 			this.stoDecl = stoDecl;
 			this.cpsStoDeclop = cpsStoDeclop;
+		}
+
+		@Override
+		public IAbsDecl toAbs() {
+			ArrayList<IAbsDecl> declList = new ArrayList<>();
+			declList.add(stoDecl.toAbs());
+			return new IAbsTree.CpsStoDecl(cpsStoDeclop.toAbs(declList));
 		}
 
 	}
@@ -1637,9 +1922,21 @@ public interface IConcTree {
 			this.cpsStoDeclop = cpsStoDeclop;
 		}
 
+		@Override
+		public ArrayList<IAbsDecl> toAbs(ArrayList<IAbsDecl> declList) {
+			declList.add(stoDecl.toAbs());
+			return cpsStoDeclop.toAbs(declList);
+		}
+
 	}
 
 	public class CpsStoDeclopDo implements ICpsStoDeclop {
+
+		@Override
+		public ArrayList<IAbsDecl> toAbs(ArrayList<IAbsDecl> declList) {
+			// TODO Auto-generated method stub
+			return declList;
+		}
 		// empty
 	}
 
@@ -1658,19 +1955,39 @@ public interface IConcTree {
 			this.typedIdent = typedIdent;
 		}
 
+		@Override
+		public IAbsParam toAbs() {
+			// TODO Auto-generated method stub
+			return new IAbsTree.Param(globImpop1.getFlowmode(),
+					paramop.getMechmode(), globImpop2.getChangemode(),
+					typedIdent.getTypedIdent());
+		}
+
 	}
 
 	public class ParamopMechmode implements IParamop {
-		private IToken mechmode;
+		private MechModeToken mechmode;
 
-		public ParamopMechmode(IToken mechmode) {
+		public ParamopMechmode(MechModeToken mechmode) {
 			super();
 			this.mechmode = mechmode;
+		}
+
+		@Override
+		public MechModeToken getMechmode() {
+			// TODO Auto-generated method stub
+			return mechmode;
 		}
 
 	}
 
 	public class Paramop implements IParamop {
+
+		@Override
+		public MechModeToken getMechmode() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		// empty
 	}
 
@@ -1729,7 +2046,8 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			return new IAbsTree.CondCmd(expr.toAbs(), cpsCmd1.toAbs(), cpsCmd2.toAbs());
+			return new IAbsTree.CondCmd(expr.toAbs(), cpsCmd1.toAbs(),
+					cpsCmd2.toAbs());
 		}
 	}
 
@@ -1773,7 +2091,8 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			return new IAbsTree.ProcCallCmd(ident, exprList.toAbs(), cmdop.toAbs());
+			return new IAbsTree.ProcCallCmd(ident, exprList.toAbs(),
+					cmdop.toAbs());
 		}
 	}
 

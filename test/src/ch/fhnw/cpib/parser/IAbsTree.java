@@ -38,6 +38,31 @@ public interface IAbsTree {
 
 	}
 
+	public class GlobalImpList implements IAbsGlobalImp {
+		private ArrayList<IAbsGlobalImp> globalImpList;
+
+		public GlobalImpList(ArrayList<IAbsGlobalImp> globalImpList) {
+			super();
+			this.globalImpList = globalImpList;
+		}
+
+	}
+
+	public class GlobalImp implements IAbsGlobalImp {
+		private Ident ident;
+		private FlowModeToken flowmode;
+		private ChangeModeToken changemode;
+
+		public GlobalImp(Ident ident, FlowModeToken flowmode,
+				ChangeModeToken changemode) {
+			super();
+			this.ident = ident;
+			this.flowmode = flowmode;
+			this.changemode = changemode;
+		}
+
+	}
+
 	public class Program {
 		private Ident ident;
 		private IAbsProgParam progParam;
@@ -57,7 +82,8 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private ITypedIdent typedIdent;
 
-		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode, ITypedIdent typedIdent) {
+		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
+				ITypedIdent typedIdent) {
 			super();
 			this.flowmode = flowmode;
 			this.changemode = changemode;
@@ -101,7 +127,8 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
+				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -121,7 +148,8 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
+				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -143,13 +171,24 @@ public interface IAbsTree {
 
 	}
 
+	public class CpsDecl implements IAbsDecl {
+		private ArrayList<IAbsDecl> declList;
+
+		public CpsDecl(ArrayList<IAbsDecl> declList) {
+			super();
+			this.declList = declList;
+		}
+
+	}
+
 	public class Param implements IAbsParam {
 		private FlowModeToken flowmode;
 		private MechModeToken mechmode;
 		private ChangeModeToken changemode;
 		private TypedIdent typedIdent;
 
-		public Param(FlowModeToken flowmode, MechModeToken mechmode, ChangeModeToken changemode, TypedIdent typedIdent) {
+		public Param(FlowModeToken flowmode, MechModeToken mechmode,
+				ChangeModeToken changemode, TypedIdent typedIdent) {
 			super();
 			this.flowmode = flowmode;
 			this.mechmode = mechmode;
@@ -221,7 +260,8 @@ public interface IAbsTree {
 		private IAbsExpr expression1;
 		private IAbsExpr expression2;
 
-		public DyadicExpr(Operators operator, IAbsExpr expression1, IAbsExpr expression2) {
+		public DyadicExpr(Operators operator, IAbsExpr expression1,
+				IAbsExpr expression2) {
 			super();
 			this.operator = operator;
 			this.expression1 = expression1;
@@ -286,7 +326,8 @@ public interface IAbsTree {
 		private ArrayList<IAbsExpr> exprListRoutine;
 		private ArrayList<Ident> identList;
 
-		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine, ArrayList<Ident> identList) {
+		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine,
+				ArrayList<Ident> identList) {
 			super();
 			this.ident = ident;
 			this.exprListRoutine = exprListRoutine;
