@@ -218,11 +218,11 @@ public interface IConcTree {
 	}
 
 	public interface ICmdop {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public interface IGlobInits {
-		public IAbsCmd toAbs();
+		public ArrayList<Ident> toAbs();
 	}
 
 	public interface IIdents {
@@ -1726,8 +1726,7 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.CondCmd(expr.toAbs(), cpsCmd1.toAbs(), cpsCmd2.toAbs());
 		}
 	}
 
@@ -1756,11 +1755,11 @@ public interface IConcTree {
 
 	public class CmdCall implements IConcCmd {
 		private IToken call;
-		private IToken ident;
+		private Ident ident;
 		private IExprList exprList;
 		private ICmdop cmdop;
 
-		public CmdCall(IToken call, IToken ident, IExprList exprList,
+		public CmdCall(IToken call, Ident ident, IExprList exprList,
 				ICmdop cmdop) {
 			super();
 			this.call = call;
@@ -1771,8 +1770,7 @@ public interface IConcTree {
 
 		@Override
 		public IAbsCmd toAbs() {
-			// TODO:
-			return null;
+			return new IAbsTree.ProcCallCmd(ident, exprList.toAbs(), cmdop.toAbs());
 		}
 	}
 
@@ -1817,9 +1815,8 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO:
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return globInits.toAbs();
 		}
 
 	}
@@ -1827,9 +1824,8 @@ public interface IConcTree {
 	public class Cmdop implements ICmdop {
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return new ArrayList<Ident>();
 		}
 	}
 
@@ -1844,9 +1840,8 @@ public interface IConcTree {
 		}
 
 		@Override
-		public IAbsCmd toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+		public ArrayList<Ident> toAbs() {
+			return idents.toAbs();
 		}
 
 	}
@@ -1863,18 +1858,19 @@ public interface IConcTree {
 
 		@Override
 		public ArrayList<Ident> toAbs() {
-			// TODO Auto-generated method stub
-			return null;
+			ArrayList<Ident> list = identsop.toAbs();
+			list.add(0, ident);
+			return list;
 		}
 
 	}
 
 	public class IdentsopComma implements IIdentsop {
 		private IToken comma;
-		private IToken ident;
+		private Ident ident;
 		private IIdentsop identsop;
 
-		public IdentsopComma(IToken comma, IToken ident, IIdentsop identsop) {
+		public IdentsopComma(IToken comma, Ident ident, IIdentsop identsop) {
 			super();
 			this.comma = comma;
 			this.ident = ident;
@@ -1884,7 +1880,8 @@ public interface IConcTree {
 		@Override
 		public ArrayList<Ident> toAbs() {
 			ArrayList<Ident> list = identsop.toAbs();
-			return null;
+			list.add(0, ident);
+			return list;
 		}
 
 	}
