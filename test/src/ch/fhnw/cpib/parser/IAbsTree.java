@@ -18,6 +18,7 @@ import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
 import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
 import ch.fhnw.cpib.scanner.symbols.MechModeToken;
+import ch.fhnw.cpib.virtualMachine.VirtualMachine;
 
 public interface IAbsTree {
 
@@ -112,6 +113,8 @@ public interface IAbsTree {
 
 		Types check(String ident) throws ContextError;
 
+		public int generateCode(int loc, VirtualMachine vm, Context context);
+		
 		boolean isLValue();
 
 		boolean isRValue();
@@ -121,6 +124,8 @@ public interface IAbsTree {
 	public interface IAbsCmd {
 
 		void check(String ident) throws ContextError;
+
+		public int generateCode(int loc, VirtualMachine vm, Context context);
 
 	}
 
@@ -165,8 +170,7 @@ public interface IAbsTree {
 		private FlowModeToken flowmode;
 		private ChangeModeToken changemode;
 
-		public GlobalImp(Ident ident, FlowModeToken flowmode,
-				ChangeModeToken changemode) {
+		public GlobalImp(Ident ident, FlowModeToken flowmode, ChangeModeToken changemode) {
 			super();
 			this.ident = ident;
 			if (flowmode == null) {
@@ -221,8 +225,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private ITypedIdent typedIdent;
 
-		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
-				ITypedIdent typedIdent) {
+		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode, ITypedIdent typedIdent) {
 			super();
 			if (flowmode == null) {
 				this.flowmode = new FlowModeToken(FlowMode.IN);
@@ -327,8 +330,7 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -359,8 +361,7 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -424,8 +425,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private TypedIdent typedIdent;
 
-		public Param(FlowModeToken flowmode, MechModeToken mechmode,
-				ChangeModeToken changemode, TypedIdent typedIdent) {
+		public Param(FlowModeToken flowmode, MechModeToken mechmode, ChangeModeToken changemode, TypedIdent typedIdent) {
 			super();
 			if (flowmode == null) {
 				this.flowmode = new FlowModeToken(FlowMode.IN);
@@ -513,6 +513,12 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
+		
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 
 	}
 
@@ -546,6 +552,12 @@ public interface IAbsTree {
 		public boolean isRValue() {
 			// TODO Auto-generated method stub
 			return true;
+		}
+
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 	}
 
@@ -602,6 +614,12 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
+		
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 
 	}
 
@@ -624,14 +642,12 @@ public interface IAbsTree {
 				if (type == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MINUS:
 				if (type == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			default:
 				throw new RuntimeException();
 			}
@@ -648,6 +664,12 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
+		
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	}
 
 	public class DyadicExpr implements IAbsExpr {
@@ -655,8 +677,7 @@ public interface IAbsTree {
 		private IAbsExpr expression1;
 		private IAbsExpr expression2;
 
-		public DyadicExpr(Operators operator, IAbsExpr expression1,
-				IAbsExpr expression2) {
+		public DyadicExpr(Operators operator, IAbsExpr expression1, IAbsExpr expression2) {
 			super();
 			this.operator = operator;
 			this.expression1 = expression1;
@@ -672,64 +693,51 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MINUS:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case TIMES:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case DIV_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MOD_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case CAND:
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case COR:
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case LT:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case LE:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case EQ:
 				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
@@ -742,20 +750,15 @@ public interface IAbsTree {
 						return Types.NOT_EQUAL_BOOL;
 					}
 				} else if (type1 == Types.LESSEQUAL_BOOL) {
-					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER
-							|| type2 == Types.EQUAL_BOOL) {
+					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						return Types.LESSEQUAL_BOOL;
 					}
 				} else if (type1 == Types.GREATEREQUAL_BOOL) {
-					if (type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.INTEGER
-							|| type2 == Types.EQUAL_BOOL) {
+					if (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						return Types.GREATEREQUAL_BOOL;
 					}
 				} else if (type1 == Types.NOT_EQUAL_BOOL) {
-					if (type2 == Types.EQUAL_BOOL
-							|| type2 == Types.NOT_EQUAL_BOOL
-							|| type2 == Types.INTEGER) {
+					if (type2 == Types.EQUAL_BOOL || type2 == Types.NOT_EQUAL_BOOL || type2 == Types.INTEGER) {
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
@@ -763,8 +766,7 @@ public interface IAbsTree {
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case NE:
 				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
@@ -774,30 +776,21 @@ public interface IAbsTree {
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case GE:
-				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER
-							|| type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case GT:
-				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER
-							|| type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			default:
 				throw new RuntimeException();
 			}
@@ -814,6 +807,12 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
+		
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	}
 
 	public class SkipCmd implements IAbsCmd {
@@ -822,6 +821,11 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
 
+		}
+
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			return loc;
 		}
 	}
 
@@ -838,16 +842,20 @@ public interface IAbsTree {
 		@Override
 		public void check(String ident) throws ContextError {
 			if (!expr1.isLValue()) {
-				throw new ContextError(
-						"The expression on the left side is not a left hand expression.");
+				throw new ContextError("The expression on the left side is not a left hand expression.");
 			}
 			if (!expr2.isRValue()) {
-				throw new ContextError(
-						"The expression on the right is not a right hand expression.");
+				throw new ContextError("The expression on the right is not a right hand expression.");
 			}
 			if (expr1.check(ident) != expr2.check(ident)) {
 				throw new ContextError("Expressions are not the same type");
 			}
+		}
+
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -866,6 +874,12 @@ public interface IAbsTree {
 				cmd.check(ident);
 			}
 
+		}
+
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -888,12 +902,17 @@ public interface IAbsTree {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (!expr.isRValue()) {
-				throw new ContextError(
-						"Expression is not a right hand expression");
+				throw new ContextError("Expression is not a right hand expression");
 			}
 			cmd1.check(ident);
 			cmd2.check(ident);
 
+		}
+
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -914,11 +933,15 @@ public interface IAbsTree {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (expr.isLValue()) {
-				throw new ContextError(
-						"Expression is not a right hand expression");
+				throw new ContextError("Expression is not a right hand expression");
 			}
 			cmd.check(ident);
 		}
+
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			//TODO:
+			return 0;		}
 
 	}
 
@@ -927,8 +950,7 @@ public interface IAbsTree {
 		private ArrayList<IAbsExpr> exprListRoutine;
 		private ArrayList<Ident> identList;
 
-		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine,
-				ArrayList<Ident> identList) {
+		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine, ArrayList<Ident> identList) {
 			super();
 			this.ident = ident;
 			this.exprListRoutine = exprListRoutine;
@@ -936,15 +958,15 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
 		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
 
+		}
+		
+		@Override
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -958,9 +980,9 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
-
+			return 0;
 		}
 
 		@Override
@@ -980,9 +1002,9 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
-
+			return 0;
 		}
 
 		@Override
