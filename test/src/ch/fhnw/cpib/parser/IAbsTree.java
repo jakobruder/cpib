@@ -2,7 +2,6 @@ package ch.fhnw.cpib.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import ch.fhnw.cpib.checker.ContextError;
 import ch.fhnw.cpib.checker.Types;
@@ -345,8 +344,8 @@ public interface IAbsTree {
 			Types type = expression.check();
 			switch (operator) {
 			case NOTOPR:
-				if (type == Types.BOOL) {
-					return Types.BOOL;
+				if (type == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
@@ -411,56 +410,102 @@ public interface IAbsTree {
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case CAND:
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case COR:
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case LT:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
+						|| type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
+							|| type2 == Types.EQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case LE:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
+						|| type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
+							|| type2 == Types.EQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case EQ:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
+					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
+						return Types.EQUAL_BOOL;
+					} else if (type2 == Types.LESSEQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					} else if (type2 == Types.GREATEREQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					} else if (type2 == Types.NOT_EQUAL_BOOL) {
+						return Types.NOT_EQUAL_BOOL;
+					}
+				} else if (type1 == Types.LESSEQUAL_BOOL) {
+					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER
+							|| type2 == Types.EQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					}
+				} else if (type1 == Types.GREATEREQUAL_BOOL) {
+					if (type2 == Types.GREATEREQUAL_BOOL
+							|| type2 == Types.INTEGER
+							|| type2 == Types.EQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					}
+				} else if (type1 == Types.NOT_EQUAL_BOOL) {
+					if (type2 == Types.EQUAL_BOOL
+							|| type2 == Types.NOT_EQUAL_BOOL
+							|| type2 == Types.INTEGER) {
+						return Types.NOT_EQUAL_BOOL;
+					}
 				}
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case NE:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						return Types.NOT_EQUAL_BOOL;
+					}
 				}
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case GE:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
+						|| type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER
+							|| type2 == Types.GREATEREQUAL_BOOL
+							|| type2 == Types.EQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case GT:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
+						|| type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER
+							|| type2 == Types.GREATEREQUAL_BOOL
+							|| type2 == Types.EQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
@@ -471,13 +516,11 @@ public interface IAbsTree {
 	}
 
 	public class SkipCmd implements IAbsCmd {
-
 		@Override
 		public void check() throws ContextError {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
 
 	public class AssiCmd implements IAbsCmd {
@@ -504,6 +547,7 @@ public interface IAbsTree {
 				throw new ContextError("Expressions are not the same type");
 			}
 		}
+
 	}
 
 	public class CpsCmd implements IAbsCmd {
@@ -538,7 +582,7 @@ public interface IAbsTree {
 
 		@Override
 		public void check() throws ContextError {
-			if (expr.check() != Types.BOOL) {
+			if (expr.check() != Types.COND_BOOL) {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (expr.isLValue()) {
@@ -549,6 +593,7 @@ public interface IAbsTree {
 			cmd2.check();
 
 		}
+
 	}
 
 	public class WhileCmd implements IAbsCmd {
@@ -563,7 +608,7 @@ public interface IAbsTree {
 
 		@Override
 		public void check() throws ContextError {
-			if (expr.check() != Types.BOOL) {
+			if (expr.check() != Types.COND_BOOL) {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (expr.isLValue()) {
@@ -627,4 +672,5 @@ public interface IAbsTree {
 		}
 
 	}
+
 }
