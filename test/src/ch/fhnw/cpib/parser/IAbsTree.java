@@ -25,11 +25,12 @@ public interface IAbsTree {
 		private class IdentState {
 			boolean initialised;
 			Types type;
+			boolean directAccess;
 
-			public IdentState(boolean initialised, Types type) {
+			public IdentState(boolean initialised, boolean directAccess) {
 				super();
 				this.initialised = initialised;
-				this.type = type;
+				this.directAccess = directAccess;
 			}
 
 		}
@@ -41,8 +42,18 @@ public interface IAbsTree {
 			return !(out == null || (!(out.initialised && isInit)) || type != out.type);
 		}
 
-		boolean addIdent(String ident, Types type) {
-			return (idents.put(ident, new IdentState(false, type)) == null);
+		boolean addIdent(String ident, boolean directAccess) {
+			return (idents.put(ident, new IdentState(false, directAccess)) == null);
+		}
+
+		boolean setTypeForIdent(String ident, Types type) {
+			IdentState state = idents.get(ident);
+			if (state != null) {
+				state.type = type;
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -61,18 +72,20 @@ public interface IAbsTree {
 	}
 
 	public interface IAbsProgParam {
-
+		void check() throws ContextError;
 	}
 
 	public interface IAbsDecl {
-
+		void check() throws ContextError;
 	}
 
 	public interface IAbsParam {
-
+		void check() throws ContextError;
 	}
 
 	public interface IAbsGlobalImp {
+
+		public boolean addToContext(String ident);
 
 	}
 
@@ -84,6 +97,14 @@ public interface IAbsTree {
 			this.globalImpList = globalImpList;
 		}
 
+		public boolean addToContext(String ident) {
+			for (IAbsGlobalImp globalImp : globalImpList) {
+				if (!globalImp.addToContext(ident)) {
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 
 	public class GlobalImp implements IAbsGlobalImp {
@@ -107,6 +128,12 @@ public interface IAbsTree {
 			}
 		}
 
+		@Override
+		public boolean addToContext(String ident) {
+			Context currentContext = contexts.get(ident);
+			return currentContext.addIdent(this.ident.getIdent(), true);
+		}
+
 	}
 
 	public class Program {
@@ -120,6 +147,12 @@ public interface IAbsTree {
 			this.ident = ident;
 			this.progParam = progParam;
 			this.decl = decl;
+		}
+
+		public void check() throws ContextError {
+			progParam.check();
+			decl.check();
+			cmd.check();
 		}
 	}
 
@@ -144,6 +177,12 @@ public interface IAbsTree {
 			this.typedIdent = typedIdent;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class ProgParamList implements IAbsProgParam {
@@ -152,6 +191,12 @@ public interface IAbsTree {
 		public ProgParamList(ArrayList<IAbsProgParam> progParamList) {
 			super();
 			this.progParamList = progParamList;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
@@ -175,6 +220,12 @@ public interface IAbsTree {
 			this.typedIdent = typedIdent;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class FunDecl implements IAbsDecl {
@@ -194,6 +245,12 @@ public interface IAbsTree {
 			this.globImp = globImp;
 			this.stoDeclLocal = stoDeclLocal;
 			this.cmd = cmd;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
@@ -217,6 +274,12 @@ public interface IAbsTree {
 			this.cmd = cmd;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class CpsStoDecl implements IAbsDecl {
@@ -227,6 +290,12 @@ public interface IAbsTree {
 			this.stoDecls = stoDecls;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class CpsDecl implements IAbsDecl {
@@ -235,6 +304,12 @@ public interface IAbsTree {
 		public CpsDecl(ArrayList<IAbsDecl> declList) {
 			super();
 			this.declList = declList;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
@@ -266,6 +341,12 @@ public interface IAbsTree {
 			this.typedIdent = typedIdent;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class ParamList implements IAbsParam {
@@ -274,6 +355,12 @@ public interface IAbsTree {
 		public ParamList(ArrayList<IAbsParam> params) {
 			super();
 			this.params = params;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
@@ -289,6 +376,12 @@ public interface IAbsTree {
 		@Override
 		public Types check() throws ContextError {
 			return Types.LITERAL;
+		}
+
+		@Override
+		public boolean isLValue() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 
 	}
@@ -307,6 +400,12 @@ public interface IAbsTree {
 		public Types check() throws ContextError {
 			return Types.IDENT;
 		}
+
+		@Override
+		public boolean isLValue() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	}
 
 	public class FunCallExpr implements IAbsExpr {
@@ -324,6 +423,12 @@ public interface IAbsTree {
 		public Types check() throws ContextError {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public boolean isLValue() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 
 	}
@@ -358,6 +463,12 @@ public interface IAbsTree {
 			default:
 				throw new RuntimeException();
 			}
+		}
+
+		@Override
+		public boolean isLValue() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
@@ -512,6 +623,12 @@ public interface IAbsTree {
 			default:
 				throw new RuntimeException();
 			}
+		}
+
+		@Override
+		public boolean isLValue() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
