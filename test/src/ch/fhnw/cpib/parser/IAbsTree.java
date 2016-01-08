@@ -1,6 +1,7 @@
 package ch.fhnw.cpib.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.fhnw.cpib.checker.ContextError;
@@ -9,6 +10,9 @@ import ch.fhnw.cpib.parser.IConcTree.ITypedIdent;
 import ch.fhnw.cpib.parser.IConcTree.TypedIdent;
 import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.Literal;
+import ch.fhnw.cpib.scanner.enums.ChangeMode;
+import ch.fhnw.cpib.scanner.enums.FlowMode;
+import ch.fhnw.cpib.scanner.enums.MechMode;
 import ch.fhnw.cpib.scanner.enums.Operators;
 import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
 import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
@@ -16,13 +20,44 @@ import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 
 public interface IAbsTree {
 
+	public HashMap<String, Context> contexts = new HashMap<>();
+
+	public class Context {
+		private class IdentState {
+			boolean initialised;
+			Types type;
+
+			public IdentState(boolean initialised, Types type) {
+				super();
+				this.initialised = initialised;
+				this.type = type;
+			}
+
+		}
+
+		private HashMap<String, IdentState> idents = new HashMap<>();
+
+		boolean isStoreOk(String ident, boolean isInit, Types type) {
+			IdentState out = idents.get(ident);
+			return !(out == null || (!(out.initialised && isInit)) || type != out.type);
+		}
+
+		boolean addIdent(String ident, Types type) {
+			return (idents.put(ident, new IdentState(false, type)) == null);
+		}
+	}
+
 	public interface IAbsExpr {
 
 		Types check() throws ContextError;
 
+		boolean isLValue();
+
 	}
 
 	public interface IAbsCmd {
+
+		void check() throws ContextError;
 
 	}
 
@@ -61,8 +96,16 @@ public interface IAbsTree {
 				ChangeModeToken changemode) {
 			super();
 			this.ident = ident;
-			this.flowmode = flowmode;
-			this.changemode = changemode;
+			if (flowmode == null) {
+				this.flowmode = new FlowModeToken(FlowMode.IN);
+			} else {
+				this.flowmode = flowmode;
+			}
+			if (changemode == null) {
+				this.changemode = new ChangeModeToken(ChangeMode.CONST);
+			} else {
+				this.changemode = changemode;
+			}
 		}
 
 	}
@@ -89,8 +132,16 @@ public interface IAbsTree {
 		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
 				ITypedIdent typedIdent) {
 			super();
-			this.flowmode = flowmode;
-			this.changemode = changemode;
+			if (flowmode == null) {
+				this.flowmode = new FlowModeToken(FlowMode.IN);
+			} else {
+				this.flowmode = flowmode;
+			}
+			if (changemode == null) {
+				this.changemode = new ChangeModeToken(ChangeMode.CONST);
+			} else {
+				this.changemode = changemode;
+			}
 			this.typedIdent = typedIdent;
 		}
 
@@ -112,7 +163,11 @@ public interface IAbsTree {
 
 		public StoDecl(ChangeModeToken changemode, TypedIdent typedIdent) {
 			super();
-			this.changemode = changemode;
+			if (changemode == null) {
+				this.changemode = new ChangeModeToken(ChangeMode.CONST);
+			} else {
+				this.changemode = changemode;
+			}
 			this.typedIdent = typedIdent;
 		}
 
@@ -194,9 +249,21 @@ public interface IAbsTree {
 		public Param(FlowModeToken flowmode, MechModeToken mechmode,
 				ChangeModeToken changemode, TypedIdent typedIdent) {
 			super();
-			this.flowmode = flowmode;
-			this.mechmode = mechmode;
-			this.changemode = changemode;
+			if (flowmode == null) {
+				this.flowmode = new FlowModeToken(FlowMode.IN);
+			} else {
+				this.flowmode = flowmode;
+			}
+			if (mechmode == null) {
+				this.mechmode = new MechModeToken(MechMode.COPY);
+			} else {
+				this.mechmode = mechmode;
+			}
+			if (changemode == null) {
+				this.changemode = new ChangeModeToken(ChangeMode.CONST);
+			} else {
+				this.changemode = changemode;
+			}
 			this.typedIdent = typedIdent;
 		}
 
@@ -281,12 +348,14 @@ public interface IAbsTree {
 				if (type == Types.BOOL) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case MINUS:
 				if (type == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			default:
 				throw new RuntimeException();
 			}
@@ -315,47 +384,56 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case MINUS:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case TIMES:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case DIV_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case MOD_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case CAND:
 				if (type1 == Types.BOOL && type2 == Types.BOOL) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case COR:
 				if (type1 == Types.BOOL && type2 == Types.BOOL) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case LT:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case LE:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case EQ:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.BOOL;
@@ -363,7 +441,8 @@ public interface IAbsTree {
 				if (type1 == Types.BOOL && type2 == Types.BOOL) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case NE:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.BOOL;
@@ -371,17 +450,20 @@ public interface IAbsTree {
 				if (type1 == Types.BOOL && type2 == Types.BOOL) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case GE:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			case GT:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator + ".");
+				throw new ContextError("Type error in operator " + operator
+						+ ".");
 			default:
 				throw new RuntimeException();
 			}
@@ -389,6 +471,12 @@ public interface IAbsTree {
 	}
 
 	public class SkipCmd implements IAbsCmd {
+
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
 
 	}
 
@@ -402,6 +490,20 @@ public interface IAbsTree {
 			this.expr2 = expr2;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			if (!expr1.isLValue()) {
+				throw new ContextError(
+						"The expression on the left side is not a left hand expression.");
+			}
+			if (expr2.isLValue()) {
+				throw new ContextError(
+						"The expression on the right is not a right hand expression.");
+			}
+			if (expr1.check() != expr2.check()) {
+				throw new ContextError("Expressions are not the same type");
+			}
+		}
 	}
 
 	public class CpsCmd implements IAbsCmd {
@@ -410,6 +512,14 @@ public interface IAbsTree {
 		public CpsCmd(ArrayList<IAbsCmd> cmdList) {
 			super();
 			this.cmdList = cmdList;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			for (IAbsCmd cmd : cmdList) {
+				cmd.check();
+			}
+
 		}
 
 	}
@@ -426,6 +536,19 @@ public interface IAbsTree {
 			this.cmd2 = cmd2;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			if (expr.check() != Types.BOOL) {
+				throw new ContextError("Expression is not boolean");
+			}
+			if (expr.isLValue()) {
+				throw new ContextError(
+						"Expression is not a right hand expression");
+			}
+			cmd1.check();
+			cmd2.check();
+
+		}
 	}
 
 	public class WhileCmd implements IAbsCmd {
@@ -436,6 +559,18 @@ public interface IAbsTree {
 			super();
 			this.expr = expr;
 			this.cmd = cmd;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			if (expr.check() != Types.BOOL) {
+				throw new ContextError("Expression is not boolean");
+			}
+			if (expr.isLValue()) {
+				throw new ContextError(
+						"Expression is not a right hand expression");
+			}
+			cmd.check();
 		}
 
 	}
@@ -453,6 +588,12 @@ public interface IAbsTree {
 			this.identList = identList;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class InputCmd implements IAbsCmd {
@@ -463,6 +604,12 @@ public interface IAbsTree {
 			this.expr = expr;
 		}
 
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	public class OutputCmd implements IAbsCmd {
@@ -471,6 +618,12 @@ public interface IAbsTree {
 		public OutputCmd(IAbsExpr expr) {
 			super();
 			this.expr = expr;
+		}
+
+		@Override
+		public void check() throws ContextError {
+			// TODO Auto-generated method stub
+
 		}
 
 	}
