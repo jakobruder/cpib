@@ -513,7 +513,7 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
-		
+	
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -614,7 +614,7 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
-		
+	
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -988,7 +988,6 @@ public interface IAbsTree {
 		@Override
 		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
-
 		}
 
 	}
@@ -1002,15 +1001,14 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public int generateCode(int loc, VirtualMachine vm, Context context) {
+		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
-			return 0;
 		}
 
 		@Override
-		public void check(String ident) throws ContextError {
+		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
-
+			return 0;
 		}
 
 	}

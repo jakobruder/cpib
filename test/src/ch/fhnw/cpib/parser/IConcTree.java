@@ -706,7 +706,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
 			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
@@ -724,7 +723,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
 			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
@@ -742,7 +740,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
 			return repaddoprterm3.toAbs(term3.toAbs());
 		}
 
@@ -752,7 +749,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
 			return expr;
 		}
 
@@ -772,7 +768,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs(IAbsExpr expr) {
-			// TODO Auto-generated method stub
 			return term2Op.toAbs(new IAbsTree.DyadicExpr(relopr.getRelOpr(),
 					expr, term2.toAbs()));
 		}
@@ -791,7 +786,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
 			return term2Op.toAbs(term2.toAbs());
 		}
 
@@ -809,7 +803,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
 			return term2Op.toAbs(term2.toAbs());
 		}
 
@@ -827,7 +820,6 @@ public interface IConcTree {
 
 		@Override
 		public IAbsExpr toAbs() {
-			// TODO Auto-generated method stub
 			return term2Op.toAbs(term2.toAbs());
 		}
 
