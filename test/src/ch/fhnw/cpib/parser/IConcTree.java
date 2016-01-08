@@ -1101,9 +1101,10 @@ public interface IConcTree {
 		}
 
 		@Override
-		public ch.fhnw.cpib.parser.IAbsTree.Program toAbs() {
+		public IAbsTree.Program toAbs() {
 			// TODO Auto-generated method stub
-			return null;
+			return new IAbsTree.Program(ident, progParamList.toAbs(),
+					programop.toAbs(), cpsCmd.toAbs());
 		}
 
 	}
@@ -1674,6 +1675,14 @@ public interface IConcTree {
 			this.ident = ident;
 			this.colon = colon;
 			this.type = type;
+		}
+
+		public Ident getIdent() {
+			return ident;
+		}
+
+		public IToken getType() {
+			return type;
 		}
 
 		@Override
