@@ -1,7 +1,6 @@
 package ch.fhnw.cpib.parser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.fhnw.cpib.checker.ContextError;
 import ch.fhnw.cpib.checker.Types;
@@ -57,8 +56,7 @@ public interface IAbsTree {
 		private FlowModeToken flowmode;
 		private ChangeModeToken changemode;
 
-		public GlobalImp(Ident ident, FlowModeToken flowmode,
-				ChangeModeToken changemode) {
+		public GlobalImp(Ident ident, FlowModeToken flowmode, ChangeModeToken changemode) {
 			super();
 			this.ident = ident;
 			this.flowmode = flowmode;
@@ -86,8 +84,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private ITypedIdent typedIdent;
 
-		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
-				ITypedIdent typedIdent) {
+		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode, ITypedIdent typedIdent) {
 			super();
 			this.flowmode = flowmode;
 			this.changemode = changemode;
@@ -131,8 +128,7 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -152,8 +148,7 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -191,8 +186,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private TypedIdent typedIdent;
 
-		public Param(FlowModeToken flowmode, MechModeToken mechmode,
-				ChangeModeToken changemode, TypedIdent typedIdent) {
+		public Param(FlowModeToken flowmode, MechModeToken mechmode, ChangeModeToken changemode, TypedIdent typedIdent) {
 			super();
 			this.flowmode = flowmode;
 			this.mechmode = mechmode;
@@ -278,8 +272,8 @@ public interface IAbsTree {
 			Types type = expression.check();
 			switch (operator) {
 			case NOTOPR:
-				if (type == Types.BOOL) {
-					return Types.BOOL;
+				if (type == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case MINUS:
@@ -298,8 +292,7 @@ public interface IAbsTree {
 		private IAbsExpr expression1;
 		private IAbsExpr expression2;
 
-		public DyadicExpr(Operators operator, IAbsExpr expression1,
-				IAbsExpr expression2) {
+		public DyadicExpr(Operators operator, IAbsExpr expression1, IAbsExpr expression2) {
 			super();
 			this.operator = operator;
 			this.expression1 = expression1;
@@ -337,49 +330,80 @@ public interface IAbsTree {
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case CAND:
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case COR:
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case LT:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case LE:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case EQ:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
+					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
+						return Types.EQUAL_BOOL;
+					} else if (type2 == Types.LESSEQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					} else if (type2 == Types.GREATEREQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					} else if (type2 == Types.NOT_EQUAL_BOOL) {
+						return Types.NOT_EQUAL_BOOL;
+					}
+				} else if (type1 == Types.LESSEQUAL_BOOL) {
+					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						return Types.LESSEQUAL_BOOL;
+					}
+				} else if (type1 == Types.GREATEREQUAL_BOOL) {
+					if (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					}
+				} else if (type1 == Types.NOT_EQUAL_BOOL) {
+					if (type2 == Types.EQUAL_BOOL || type2 == Types.NOT_EQUAL_BOOL || type2 == Types.INTEGER) {
+						return Types.NOT_EQUAL_BOOL;
+					}
 				}
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case NE:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						return Types.NOT_EQUAL_BOOL;
+					}
 				}
-				if (type1 == Types.BOOL && type2 == Types.BOOL) {
-					return Types.BOOL;
+				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
+					return Types.COND_BOOL;
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case GE:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case GT:
-				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
-					return Types.BOOL;
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						return Types.GREATEREQUAL_BOOL;
+					}
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			default:
@@ -388,90 +412,89 @@ public interface IAbsTree {
 		}
 	}
 
-	public class SkipCmd implements IAbsCmd {
+		public class SkipCmd implements IAbsCmd {
 
-	}
-
-	public class AssiCmd implements IAbsCmd {
-		private IAbsExpr expr1;
-		private IAbsExpr expr2;
-
-		public AssiCmd(IAbsExpr expr1, IAbsExpr expr2) {
-			super();
-			this.expr1 = expr1;
-			this.expr2 = expr2;
 		}
 
-	}
+		public class AssiCmd implements IAbsCmd {
+			private IAbsExpr expr1;
+			private IAbsExpr expr2;
 
-	public class CpsCmd implements IAbsCmd {
-		private ArrayList<IAbsCmd> cmdList;
+			public AssiCmd(IAbsExpr expr1, IAbsExpr expr2) {
+				super();
+				this.expr1 = expr1;
+				this.expr2 = expr2;
+			}
 
-		public CpsCmd(ArrayList<IAbsCmd> cmdList) {
-			super();
-			this.cmdList = cmdList;
 		}
 
-	}
+		public class CpsCmd implements IAbsCmd {
+			private ArrayList<IAbsCmd> cmdList;
 
-	public class CondCmd implements IAbsCmd {
-		private IAbsExpr expr;
-		private IAbsCmd cmd1;
-		private IAbsCmd cmd2;
+			public CpsCmd(ArrayList<IAbsCmd> cmdList) {
+				super();
+				this.cmdList = cmdList;
+			}
 
-		public CondCmd(IAbsExpr expr, IAbsCmd cmd1, IAbsCmd cmd2) {
-			super();
-			this.expr = expr;
-			this.cmd1 = cmd1;
-			this.cmd2 = cmd2;
 		}
 
-	}
+		public class CondCmd implements IAbsCmd {
+			private IAbsExpr expr;
+			private IAbsCmd cmd1;
+			private IAbsCmd cmd2;
 
-	public class WhileCmd implements IAbsCmd {
-		private IAbsExpr expr;
-		private IAbsCmd cmd;
+			public CondCmd(IAbsExpr expr, IAbsCmd cmd1, IAbsCmd cmd2) {
+				super();
+				this.expr = expr;
+				this.cmd1 = cmd1;
+				this.cmd2 = cmd2;
+			}
 
-		public WhileCmd(IAbsExpr expr, IAbsCmd cmd) {
-			super();
-			this.expr = expr;
-			this.cmd = cmd;
 		}
 
-	}
+		public class WhileCmd implements IAbsCmd {
+			private IAbsExpr expr;
+			private IAbsCmd cmd;
 
-	public class ProcCallCmd implements IAbsCmd {
-		private Ident ident;
-		private ArrayList<IAbsExpr> exprListRoutine;
-		private ArrayList<Ident> identList;
+			public WhileCmd(IAbsExpr expr, IAbsCmd cmd) {
+				super();
+				this.expr = expr;
+				this.cmd = cmd;
+			}
 
-		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine,
-				ArrayList<Ident> identList) {
-			super();
-			this.ident = ident;
-			this.exprListRoutine = exprListRoutine;
-			this.identList = identList;
 		}
 
-	}
+		public class ProcCallCmd implements IAbsCmd {
+			private Ident ident;
+			private ArrayList<IAbsExpr> exprListRoutine;
+			private ArrayList<Ident> identList;
 
-	public class InputCmd implements IAbsCmd {
-		private IAbsExpr expr;
+			public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine, ArrayList<Ident> identList) {
+				super();
+				this.ident = ident;
+				this.exprListRoutine = exprListRoutine;
+				this.identList = identList;
+			}
 
-		public InputCmd(IAbsExpr expr) {
-			super();
-			this.expr = expr;
 		}
 
-	}
+		public class InputCmd implements IAbsCmd {
+			private IAbsExpr expr;
 
-	public class OutputCmd implements IAbsCmd {
-		private IAbsExpr expr;
+			public InputCmd(IAbsExpr expr) {
+				super();
+				this.expr = expr;
+			}
 
-		public OutputCmd(IAbsExpr expr) {
-			super();
-			this.expr = expr;
 		}
 
-	}
+		public class OutputCmd implements IAbsCmd {
+			private IAbsExpr expr;
+
+			public OutputCmd(IAbsExpr expr) {
+				super();
+				this.expr = expr;
+			}
+
+		}
 }
