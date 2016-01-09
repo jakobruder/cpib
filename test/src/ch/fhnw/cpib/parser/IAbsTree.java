@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import ch.fhnw.cpib.checker.ContextError;
 import ch.fhnw.cpib.checker.Types;
+import ch.fhnw.cpib.parser.IAbsTree.Context.IdentState;
 import ch.fhnw.cpib.parser.IConcTree.ITypedIdent;
 import ch.fhnw.cpib.parser.IConcTree.TypedIdent;
 import ch.fhnw.cpib.scanner.Ident;
@@ -13,6 +14,7 @@ import ch.fhnw.cpib.scanner.enums.ChangeMode;
 import ch.fhnw.cpib.scanner.enums.FlowMode;
 import ch.fhnw.cpib.scanner.enums.MechMode;
 import ch.fhnw.cpib.scanner.enums.Operators;
+import ch.fhnw.cpib.scanner.enums.Terminals;
 import ch.fhnw.cpib.scanner.symbols.ChangeModeToken;
 import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
 import ch.fhnw.cpib.scanner.symbols.MechModeToken;
@@ -20,31 +22,71 @@ import ch.fhnw.cpib.virtualMachine.VirtualMachine;
 
 public interface IAbsTree {
 
+	public static final String GLOBAL_IDENT = "GLOBAL";
 	public HashMap<String, Context> contexts = new HashMap<>();
 
 	public class Context {
-		private class IdentState {
+
+		String returnIdent;
+		boolean addReturnIdent = false;
+
+		public class IdentState {
+
 			boolean initialised;
 			Types type;
 			boolean directAccess;
+			ChangeMode changemode;
+			FlowMode flowmode;
 
-			public IdentState(boolean initialised, boolean directAccess) {
+			public IdentState(boolean initialised, boolean directAccess,
+					ChangeMode constant, FlowMode flowmode) {
 				super();
 				this.initialised = initialised;
 				this.directAccess = directAccess;
+				this.changemode = changemode;
+				this.flowmode = flowmode;
 			}
 
 		}
 
-		private HashMap<String, IdentState> idents = new HashMap<>();
+		HashMap<String, IdentState> idents = new HashMap<>();
+		ArrayList<IdentState> inputParams = new ArrayList<>();
 
-		boolean isStoreOk(String ident, boolean isInit, Types type) {
+		boolean isStoreOk(String ident, boolean isInit) {
 			IdentState out = idents.get(ident);
-			return !(out == null || (!(out.initialised && isInit)) || type != out.type);
+			return !(out == null || (!(out.initialised && isInit)));
 		}
 
-		boolean addIdent(String ident, boolean directAccess) {
-			return (idents.put(ident, new IdentState(false, directAccess)) == null);
+		Types getTypeForIdent(String ident) {
+			IdentState out = idents.get(ident);
+			if (out != null) {
+				return out.type;
+			}
+			return null;
+		}
+
+		boolean initIdent(String ident) {
+			IdentState out = idents.get(ident);
+			if (out != null) {
+				out.initialised = true;
+				return true;
+			}
+			return false;
+		}
+
+		boolean addIdent(String ident, boolean directAccess,
+				ChangeMode changemode, FlowMode flowmode, boolean isInputParam) {
+			IdentState identState = new IdentState(false, directAccess,
+					changemode, flowmode);
+			if (isInputParam) {
+				inputParams.add(identState);
+			}
+			if (addReturnIdent) {
+				addReturnIdent = false;
+				returnIdent = ident;
+			}
+			return (idents.put(ident, identState) == null);
+
 		}
 
 		boolean setTypeForIdent(String ident, Types type) {
@@ -56,21 +98,32 @@ public interface IAbsTree {
 				return false;
 			}
 		}
+
+		boolean hasIdent(String ident) {
+			IdentState out = idents.get(ident);
+			if (out != null) {
+				return true;
+			}
+			return false;
+		}
+
 	}
 
 	public interface IAbsExpr {
 
-		Types check() throws ContextError;
+		Types check(String ident) throws ContextError;
 
 		public int generateCode(int loc, VirtualMachine vm, Context context);
 		
 		boolean isLValue();
 
+		boolean isRValue();
+
 	}
 
 	public interface IAbsCmd {
 
-		void check() throws ContextError;
+		void check(String ident) throws ContextError;
 
 		public int generateCode(int loc, VirtualMachine vm, Context context);
 
@@ -81,11 +134,11 @@ public interface IAbsTree {
 	}
 
 	public interface IAbsDecl {
-		void check() throws ContextError;
+		void check(String ident) throws ContextError;
 	}
 
 	public interface IAbsParam {
-		void check() throws ContextError;
+		void check(String ident) throws ContextError;
 	}
 
 	public interface IAbsGlobalImp {
@@ -134,10 +187,14 @@ public interface IAbsTree {
 
 		@Override
 		public boolean addToContext(String ident) {
-			Context currentContext = contexts.get(ident);
-			return currentContext.addIdent(this.ident.getIdent(), true);
+			if (contexts.get(GLOBAL_IDENT).hasIdent(ident)) {
+				Context currentContext = contexts.get(ident);
+				return currentContext.addIdent(this.ident.getIdent(), true,
+						changemode.getChangeMode(), flowmode.getFlowMode(),
+						false);
+			}
+			return false;
 		}
-
 	}
 
 	public class Program {
@@ -146,17 +203,20 @@ public interface IAbsTree {
 		private IAbsDecl decl;
 		private IAbsCmd cmd;
 
-		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl) {
+		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl,
+				IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.progParam = progParam;
 			this.decl = decl;
+			this.cmd = cmd;
 		}
 
 		public void check() throws ContextError {
+			contexts.put(GLOBAL_IDENT, new Context());
 			progParam.check();
-			decl.check();
-			cmd.check();
+			decl.check(GLOBAL_IDENT);
+			cmd.check(GLOBAL_IDENT);
 		}
 	}
 
@@ -182,10 +242,23 @@ public interface IAbsTree {
 
 		@Override
 		public void check() throws ContextError {
-			// TODO Auto-generated method stub
-
+			Context context = contexts.get(GLOBAL_IDENT);
+			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
+			if (context.addIdent(identName, true, changemode.getChangeMode(),
+					flowmode.getFlowMode(), true)) {
+				Types type;
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
+						.getTerminal();
+				if (typeTerminal == Terminals.BOOL) {
+					type = Types.COND_BOOL;
+				} else {
+					type = Types.INTEGER;
+				}
+				context.setTypeForIdent(identName, type);
+			} else {
+				throw new ContextError("Error at progParam check");
+			}
 		}
-
 	}
 
 	public class ProgParamList implements IAbsProgParam {
@@ -198,7 +271,9 @@ public interface IAbsTree {
 
 		@Override
 		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+			for (IAbsProgParam progParam : progParamList) {
+				progParam.check();
+			}
 
 		}
 
@@ -206,6 +281,7 @@ public interface IAbsTree {
 
 	public class StoDecl implements IAbsDecl {
 		private ChangeModeToken changemode;
+		private FlowModeToken flowmode = new FlowModeToken(FlowMode.IN);
 		private TypedIdent typedIdent;
 
 		public StoDecl(ChangeModeToken changemode, TypedIdent typedIdent) {
@@ -224,8 +300,23 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			Context context = contexts.get(ident);
+			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
+			if (context.addIdent(identName, true, changemode.getChangeMode(),
+					flowmode.getFlowMode(), false)) {
+				Types type;
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
+						.getTerminal();
+				if (typeTerminal == Terminals.BOOL) {
+					type = Types.COND_BOOL;
+				} else {
+					type = Types.INTEGER;
+				}
+				context.setTypeForIdent(identName, type);
+			} else {
+				throw new ContextError("Error at progParam check");
+			}
 
 		}
 
@@ -250,11 +341,16 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			contexts.put(this.ident.getIdent(), new Context());
+			param.check(this.ident.getIdent());
+			contexts.get(this.ident.getIdent()).addReturnIdent = true;
+			stoDecl.check(this.ident.getIdent());
+			globImp.addToContext(this.ident.getIdent());
+			stoDeclLocal.check(this.ident.getIdent());
+			cmd.check(this.ident.getIdent());
 
 		}
-
 	}
 
 	public class ProcDecl implements IAbsDecl {
@@ -276,11 +372,15 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			contexts.put(this.ident.getIdent(), new Context());
+			param.check(this.ident.getIdent());
+			stoDecl.check(this.ident.getIdent());
+			globImp.addToContext(this.ident.getIdent());
+			stoDeclLocal.check(this.ident.getIdent());
+			cmd.check(this.ident.getIdent());
 
 		}
-
 	}
 
 	public class CpsStoDecl implements IAbsDecl {
@@ -292,8 +392,10 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			for (IAbsDecl decl : stoDecls) {
+				decl.check(ident);
+			}
 
 		}
 
@@ -308,8 +410,10 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			for (IAbsDecl decl : declList) {
+				decl.check(ident);
+			}
 
 		}
 
@@ -342,11 +446,29 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			Context context = contexts.get(ident);
+			String identName = typedIdent.getIdent().getIdent();
+			boolean directAccess = false;
+			Types type;
+			if (typedIdent.getType().getTerminal() == Terminals.BOOL) {
+				type = Types.COND_BOOL;
+			} else {
+				type = Types.INTEGER;
+			}
+			if (mechmode.getMechMode() == MechMode.COPY) {
+				directAccess = true;
+			}
+			if (context != null) {
+				context.addIdent(identName, directAccess,
+						changemode.getChangeMode(), flowmode.getFlowMode(),
+						true);
+				context.setTypeForIdent(identName, type);
+			} else {
+				throw new ContextError("Error at param");
+			}
 
 		}
-
 	}
 
 	public class ParamList implements IAbsParam {
@@ -358,8 +480,10 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
+		public void check(String ident) throws ContextError {
+			for (IAbsParam param : params) {
+				param.check(ident);
+			}
 
 		}
 
@@ -374,7 +498,7 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public Types check() throws ContextError {
+		public Types check(String ident) throws ContextError {
 			return Types.LITERAL;
 		}
 
@@ -384,6 +508,12 @@ public interface IAbsTree {
 			return false;
 		}
 
+		@Override
+		public boolean isRValue() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+	
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -403,14 +533,25 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public Types check() throws ContextError {
-			return Types.IDENT;
+		public Types check(String ident) throws ContextError {
+			Context context = contexts.get(ident);
+			context.isStoreOk(this.ident.getIdent(), isInitialization);
+			if (isInitialization) {
+				context.initIdent(this.ident.getIdent());
+			}
+			return context.getTypeForIdent(this.ident.getIdent());
 		}
 
 		@Override
 		public boolean isLValue() {
 			// TODO Auto-generated method stub
-			return false;
+			return true;
+		}
+
+		@Override
+		public boolean isRValue() {
+			// TODO Auto-generated method stub
+			return true;
 		}
 
 		@Override
@@ -432,9 +573,34 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public Types check() throws ContextError {
-			// TODO Auto-generated method stub
-			return null;
+		public Types check(String ident) throws ContextError {
+			Context context = contexts.get(identM.getIdent());
+			if (context != null) {
+				if (expressions.size() != context.inputParams.size()) {
+					throw new ContextError("Wrong number of input params");
+				}
+				for (int i = 0; i < context.inputParams.size(); i++) {
+					IdentState state = context.inputParams.get(i);
+					IAbsExpr expr = expressions.get(i);
+					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
+						throw new ContextError(
+								"Input param is not a right hand expression");
+					}
+					if (state.flowmode == FlowMode.INOUT
+							&& !(expr.isRValue() && expr.isLValue())) {
+						throw new ContextError(
+								"Inout param is not right and left hand expression");
+					}
+					if (state.flowmode == FlowMode.OUT && !expr.isLValue()) {
+						throw new ContextError(
+								"Out param is not Left hand expression");
+					}
+
+				}
+				return context.getTypeForIdent(context.returnIdent);
+			} else {
+				throw new ContextError("Function does not exist");
+			}
 		}
 
 		@Override
@@ -443,6 +609,12 @@ public interface IAbsTree {
 			return false;
 		}
 
+		@Override
+		public boolean isRValue() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+	
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -463,8 +635,8 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public Types check() throws ContextError {
-			Types type = expression.check();
+		public Types check(String ident) throws ContextError {
+			Types type = expression.check(ident);
 			switch (operator) {
 			case NOTOPR:
 				if (type == Types.COND_BOOL) {
@@ -488,6 +660,12 @@ public interface IAbsTree {
 		}
 
 		@Override
+		public boolean isRValue() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+		
+		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
 			return 0;
@@ -506,9 +684,9 @@ public interface IAbsTree {
 			this.expression2 = expression2;
 		}
 
-		public Types check() throws ContextError {
-			Types type1 = expression1.check();
-			Types type2 = expression2.check();
+		public Types check(String ident) throws ContextError {
+			Types type1 = expression1.check(ident);
+			Types type2 = expression2.check(ident);
 
 			switch (operator) {
 			case PLUS:
@@ -625,6 +803,12 @@ public interface IAbsTree {
 		}
 
 		@Override
+		public boolean isRValue() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+		
+		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
 			return 0;
@@ -632,8 +816,9 @@ public interface IAbsTree {
 	}
 
 	public class SkipCmd implements IAbsCmd {
+
 		@Override
-		public void check() throws ContextError {
+		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
 
 		}
@@ -655,14 +840,14 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
+		public void check(String ident) throws ContextError {
 			if (!expr1.isLValue()) {
 				throw new ContextError("The expression on the left side is not a left hand expression.");
 			}
-			if (expr2.isLValue()) {
+			if (!expr2.isRValue()) {
 				throw new ContextError("The expression on the right is not a right hand expression.");
 			}
-			if (expr1.check() != expr2.check()) {
+			if (expr1.check(ident) != expr2.check(ident)) {
 				throw new ContextError("Expressions are not the same type");
 			}
 		}
@@ -684,9 +869,9 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
+		public void check(String ident) throws ContextError {
 			for (IAbsCmd cmd : cmdList) {
-				cmd.check();
+				cmd.check(ident);
 			}
 
 		}
@@ -712,15 +897,15 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			if (expr.check() != Types.COND_BOOL) {
+		public void check(String ident) throws ContextError {
+			if (expr.check(ident) != Types.COND_BOOL) {
 				throw new ContextError("Expression is not boolean");
 			}
-			if (expr.isLValue()) {
+			if (!expr.isRValue()) {
 				throw new ContextError("Expression is not a right hand expression");
 			}
-			cmd1.check();
-			cmd2.check();
+			cmd1.check(ident);
+			cmd2.check(ident);
 
 		}
 
@@ -743,14 +928,14 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			if (expr.check() != Types.COND_BOOL) {
+		public void check(String ident) throws ContextError {
+			if (expr.check(ident) != Types.COND_BOOL) {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (expr.isLValue()) {
 				throw new ContextError("Expression is not a right hand expression");
 			}
-			cmd.check();
+			cmd.check(ident);
 		}
 
 		@Override
@@ -773,11 +958,11 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
+		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
 
 		}
-
+		
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -795,14 +980,14 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		@Override
+		public void check(String ident) throws ContextError {
+			// TODO Auto-generated method stub
 		}
 
 	}
@@ -816,7 +1001,7 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void check() throws ContextError {
+		public void check(String ident) throws ContextError {
 			// TODO Auto-generated method stub
 		}
 
