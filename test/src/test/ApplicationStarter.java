@@ -29,9 +29,15 @@ public class ApplicationStarter {
 				+ "if credits > 150 &? gradeTimesTen > 50 &? (age < 35 |? recommendation) then "
 				+ "debugout true " + "else " + "debugout false endif "
 				+ "endprogram";
+		String test2 = "program isSorted () " + "global " + "a: int64; "
+				+ "b: int64; " + "c: int64 " + "do " + "debugin a init; "
+				+ "debugin b init; " + "debugin c init; "
+				+ "if ( a <= b <= c ) then " + "debugout true " + "else "
+				+ "if ( a >= b >= c ) then " + "debugout true " + "else "
+				+ "debugout false " + "endif " + "endif " + "endprogram";
 		Scanner scanner = new Scanner();
-		IParser parser = new Parser(scanner.scan(test.subSequence(0,
-				test.length())));
+		IParser parser = new Parser(scanner.scan(test2.subSequence(0,
+				test2.length())));
 		IAbsTree.Program tree = parser.parse().toAbs();
 		tree.check();
 		ICodeArray array = tree.generateCode();
