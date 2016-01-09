@@ -59,8 +59,11 @@ public class DefaultState implements IScannerState {
 		} else if (ch.matches(" ")) {
 			return new DefaultState();
 		} else {
-			throw new ScannerException("Invalid Character in default State: "
-					+ ch);
+			if (ch != null && !ch.isEmpty()) {
+				throw new ScannerException(
+						"Invalid Character in default State: " + ch);
+			}
+			return new DefaultState();
 		}
 
 	}
