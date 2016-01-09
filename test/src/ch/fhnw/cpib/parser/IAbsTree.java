@@ -23,7 +23,6 @@ import ch.fhnw.cpib.virtualMachine.ICodeArray;
 import ch.fhnw.cpib.virtualMachine.ICodeArray.CodeTooSmallError;
 import ch.fhnw.cpib.virtualMachine.IInstructions;
 import ch.fhnw.cpib.virtualMachine.IInstructions.IInstr;
-import ch.fhnw.cpib.virtualMachine.VirtualMachine;
 
 public interface IAbsTree {
 
@@ -55,8 +54,7 @@ public interface IAbsTree {
 			ChangeMode changemode;
 			FlowMode flowmode;
 
-			public IdentState(boolean initialised, boolean directAccess,
-					ChangeMode constant, FlowMode flowmode) {
+			public IdentState(boolean initialised, boolean directAccess, ChangeMode constant, FlowMode flowmode) {
 				super();
 				this.initialised = initialised;
 				this.directAccess = directAccess;
@@ -95,6 +93,7 @@ public interface IAbsTree {
 				ChangeMode changemode, FlowMode flowmode, boolean isInputParam) {
 			IdentState identState = new IdentState(false, directAccess,
 					changemode, flowmode);
+
 			if (isInputParam) {
 				inputParams.add(identState);
 			}
@@ -103,7 +102,6 @@ public interface IAbsTree {
 				returnIdent = ident;
 			}
 			return (idents.put(ident, identState) == null);
-
 		}
 
 		boolean setTypeForIdent(String ident, Types type) {
@@ -130,8 +128,7 @@ public interface IAbsTree {
 
 		Types check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context, boolean isSave);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context, boolean isSave);
 
 		boolean isLValue();
 
@@ -143,38 +140,33 @@ public interface IAbsTree {
 
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 
 	}
 
 	public interface IAbsProgParam {
 		void check() throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 	}
 
 	public interface IAbsDecl {
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 	}
 
 	public interface IAbsParam {
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 	}
 
 	public interface IAbsGlobalImp {
 
 		public boolean addToContext(String ident);
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 
 	}
 
@@ -231,6 +223,7 @@ public interface IAbsTree {
 				return currentContext.addIdent(this.ident.getIdent(), true,
 						changemode.getChangeMode(), flowmode.getFlowMode(),
 						false);
+
 			}
 			return false;
 		}
@@ -248,8 +241,7 @@ public interface IAbsTree {
 		private IAbsDecl decl;
 		private IAbsCmd cmd;
 
-		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl,
-				IAbsCmd cmd) {
+		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.progParam = progParam;
@@ -304,11 +296,9 @@ public interface IAbsTree {
 		public void check() throws ContextError {
 			Context context = contexts.get(GLOBAL_IDENT);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(),
-					flowmode.getFlowMode(), true)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), true)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
-						.getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -324,8 +314,7 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
-					context.variableCounter++);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter++);
 
 		}
 	}
@@ -380,11 +369,9 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			Context context = contexts.get(ident);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(),
-					flowmode.getFlowMode(), false)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), false)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
-						.getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -401,8 +388,7 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
-					context.variableCounter++);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter++);
 
 		}
 
@@ -429,8 +415,7 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			contexts.put(this.ident.getIdent(),
-					new Context(this.ident.getIdent()));
+			contexts.put(this.ident.getIdent(), new Context(this.ident.getIdent()));
 			param.check(this.ident.getIdent());
 			contexts.get(this.ident.getIdent()).addReturnIdent = true;
 			stoDecl.check(this.ident.getIdent());
@@ -461,6 +446,7 @@ public interface IAbsTree {
 					codeArray.size()));
 			methods.put(ident.getIdent(), functionStart + 2);
 
+
 			context.variableCounter = funContext.variableCounter;
 
 		}
@@ -487,8 +473,7 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			contexts.put(this.ident.getIdent(),
-					new Context(this.ident.getIdent()));
+			contexts.put(this.ident.getIdent(), new Context(this.ident.getIdent()));
 			param.check(this.ident.getIdent());
 			stoDecl.check(this.ident.getIdent());
 			globImp.addToContext(this.ident.getIdent());
@@ -616,9 +601,7 @@ public interface IAbsTree {
 				directAccess = true;
 			}
 			if (context != null) {
-				context.addIdent(identName, directAccess,
-						changemode.getChangeMode(), flowmode.getFlowMode(),
-						true);
+				context.addIdent(identName, directAccess, changemode.getChangeMode(), flowmode.getFlowMode(), true);
 				context.setTypeForIdent(identName, type);
 			} else {
 				throw new ContextError("Error at param");
@@ -630,10 +613,8 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
-					context.variableCounter);
-			variables.put(context.name + context.paramCounter++,
-					context.variableCounter++);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter);
+			variables.put(context.name + context.paramCounter++, context.variableCounter++);
 
 		}
 	}
@@ -690,10 +671,8 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
-					literal.getValue());
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
+			IInstructions.IInstr instruction = new IInstructions.LoadImInt(literal.getValue());
 			codeArray.add(instruction);
 
 		}
@@ -741,16 +720,14 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
 			if (isSave) {
 				IInstructions.IInstr instructionAdd = new IInstructions.LoadImInt(
 						variables.get(ident.getIdent()));
 				codeArray.add(instructionAdd);
 
 			} else {
-				IInstructions.IInstr instruction = new IInstructions.LoadImInt(
-						variables.get(ident.getIdent()));
+				IInstructions.IInstr instruction = new IInstructions.LoadImInt(variables.get(ident.getIdent()));
 				codeArray.add(instruction);
 				instruction = new IInstructions.Deref();
 				codeArray.add(instruction);
@@ -784,17 +761,13 @@ public interface IAbsTree {
 						throw new ContextError("Param is not the right type");
 					}
 					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
-						throw new ContextError(
-								"Input param is not a right hand expression");
+						throw new ContextError("Input param is not a right hand expression");
 					}
-					if (state.flowmode == FlowMode.INOUT
-							&& !(expr.isRValue() && expr.isLValue())) {
-						throw new ContextError(
-								"Inout param is not right and left hand expression");
+					if (state.flowmode == FlowMode.INOUT && !(expr.isRValue() && expr.isLValue())) {
+						throw new ContextError("Inout param is not right and left hand expression");
 					}
 					if (state.flowmode == FlowMode.OUT && !expr.isLValue()) {
-						throw new ContextError(
-								"Out param is not Left hand expression");
+						throw new ContextError("Out param is not Left hand expression");
 					}
 
 				}
@@ -905,12 +878,10 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
 			expression.generateCode(codeArray, context, isSave);
 			if (operator == Operators.NOTOPR) {
-				IInstructions.IInstr instruction = new IInstructions.CondJump(
-						codeArray.size() + 3);
+				IInstructions.IInstr instruction = new IInstructions.CondJump(codeArray.size() + 3);
 				codeArray.add(instruction);
 				instruction = new IInstructions.LoadImInt(1);
 				codeArray.add(instruction);
@@ -995,27 +966,26 @@ public interface IAbsTree {
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case LT:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						if (type1 == Types.INTEGER && (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
 				throw new ContextError("Type error in operator " + operator
 						+ ".");
 			case LE:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
-						// TODO:
-						if (type1 == Types.INTEGER && type2 == Types.INTEGER)
-							;
-						else if (type1 == Types.INTEGER
-								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator,
-									expression1, expression2);
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						if (type1 == Types.INTEGER && (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
@@ -1032,21 +1002,64 @@ public interface IAbsTree {
 				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
 						// TODO:
+						if (type1 == Types.INTEGER && type2 == Types.EQUAL_BOOL) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if (type1 == Types.EQUAL_BOOL && type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.EQUAL_BOOL;
 					} else if (type2 == Types.LESSEQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& type2 == Types.EQUAL_BOOL) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if (type1 == Types.EQUAL_BOOL
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					} else if (type2 == Types.GREATEREQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					} else if (type2 == Types.NOT_EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.NOT_EQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.NOT_EQUAL_BOOL;
 					}
 				} else if (type1 == Types.LESSEQUAL_BOOL) {
 					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER
 							|| type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					}
 				} else if (type1 == Types.GREATEREQUAL_BOOL) {
@@ -1054,6 +1067,15 @@ public interface IAbsTree {
 							|| type2 == Types.INTEGER
 							|| type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					}
 				} else if (type1 == Types.NOT_EQUAL_BOOL) {
@@ -1061,6 +1083,15 @@ public interface IAbsTree {
 							|| type2 == Types.NOT_EQUAL_BOOL
 							|| type2 == Types.INTEGER) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.NOT_EQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
@@ -1074,6 +1105,15 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
@@ -1089,6 +1129,15 @@ public interface IAbsTree {
 							|| type2 == Types.GREATEREQUAL_BOOL
 							|| type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
@@ -1101,6 +1150,15 @@ public interface IAbsTree {
 							|| type2 == Types.GREATEREQUAL_BOOL
 							|| type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
@@ -1111,13 +1169,11 @@ public interface IAbsTree {
 			}
 		}
 
-		private IAbsExpr leftIntCANDDyadicExpr(Operators op, IAbsExpr ex1,
-				IAbsExpr ex2) {
+		private IAbsExpr leftIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
 			return new DyadicExpr(op, ex1, ((DyadicExpr) ex2).getExpression1());
 		}
 
-		private IAbsExpr rightIntCANDDyadicExpr(Operators op, IAbsExpr ex1,
-				IAbsExpr ex2) {
+		private IAbsExpr rightIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
 			return new DyadicExpr(op, ex1, ((DyadicExpr) ex2).getExpression1());
 		}
 
@@ -1139,7 +1195,6 @@ public interface IAbsTree {
 			expression1.generateCode(codeArray, context, isSave);
 			expression2.generateCode(codeArray, context, isSave);
 			IInstructions.IInstr instruction;
-
 			switch (operator) {
 			case PLUS:
 				instruction = new IInstructions.AddInt();
@@ -1190,7 +1245,6 @@ public interface IAbsTree {
 				codeArray.add(instruction);
 			default:
 			}
-
 		}
 	}
 
@@ -1242,7 +1296,6 @@ public interface IAbsTree {
 			codeArray.add(instruction);
 
 		}
-
 	}
 
 	public class CpsCmd implements IAbsCmd {
@@ -1268,7 +1321,6 @@ public interface IAbsTree {
 			}
 
 		}
-
 	}
 
 	public class CondCmd implements IAbsCmd {
@@ -1302,7 +1354,6 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
 
 	public class WhileCmd implements IAbsCmd {
@@ -1330,9 +1381,7 @@ public interface IAbsTree {
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			// TODO Auto-generated method stub
-
 		}
-
 	}
 
 	public class ProcCallCmd implements IAbsCmd {
@@ -1379,7 +1428,6 @@ public interface IAbsTree {
 			} else {
 				throw new ContextError("Function does not exist");
 			}
-
 		}
 
 		@Override
@@ -1417,7 +1465,6 @@ public interface IAbsTree {
 			}
 
 		}
-
 	}
 
 	public class InputCmd implements IAbsCmd {
