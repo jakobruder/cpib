@@ -983,44 +983,37 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MINUS:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case TIMES:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case DIV_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MOD_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case CAND:
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case COR:
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case LT:
 				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
 						|| type1 == Types.EQUAL_BOOL) {
@@ -1040,8 +1033,7 @@ public interface IAbsTree {
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case LE:
 				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
 						|| type1 == Types.EQUAL_BOOL) {
@@ -1054,15 +1046,13 @@ public interface IAbsTree {
 							operator = Operators.CAND;
 						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator,
-									expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case EQ:
 				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
@@ -1121,8 +1111,7 @@ public interface IAbsTree {
 						return Types.NOT_EQUAL_BOOL;
 					}
 				} else if (type1 == Types.LESSEQUAL_BOOL) {
-					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER
-							|| type2 == Types.EQUAL_BOOL) {
+					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
@@ -1138,9 +1127,7 @@ public interface IAbsTree {
 						return Types.LESSEQUAL_BOOL;
 					}
 				} else if (type1 == Types.GREATEREQUAL_BOOL) {
-					if (type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.INTEGER
-							|| type2 == Types.EQUAL_BOOL) {
+					if (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
@@ -1156,9 +1143,7 @@ public interface IAbsTree {
 						return Types.GREATEREQUAL_BOOL;
 					}
 				} else if (type1 == Types.NOT_EQUAL_BOOL) {
-					if (type2 == Types.EQUAL_BOOL
-							|| type2 == Types.NOT_EQUAL_BOOL
-							|| type2 == Types.INTEGER) {
+					if (type2 == Types.EQUAL_BOOL || type2 == Types.NOT_EQUAL_BOOL || type2 == Types.INTEGER) {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
@@ -1178,8 +1163,7 @@ public interface IAbsTree {
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case NE:
 				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
@@ -1201,14 +1185,10 @@ public interface IAbsTree {
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case GE:
-				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER
-							|| type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
@@ -1224,14 +1204,10 @@ public interface IAbsTree {
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case GT:
-				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER
-							|| type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
@@ -1247,8 +1223,7 @@ public interface IAbsTree {
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			default:
 				throw new RuntimeException();
 			}
