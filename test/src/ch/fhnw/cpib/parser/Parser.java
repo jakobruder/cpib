@@ -877,6 +877,10 @@ public class Parser implements IParser {
 			return new IConcTree.RepAddoprTerm3();
 		case SENTINEL:
 			return new IConcTree.RepAddoprTerm3();
+		case DEBUGIN:
+			return new IConcTree.RepAddoprTerm3();
+		case DEBUGOUT:
+			return new IConcTree.RepAddoprTerm3();
 		default:
 			throw new GrammarError("Unexpected token: " + terminal);
 		}
@@ -952,6 +956,10 @@ public class Parser implements IParser {
 		case BOOLAND:
 			return new IConcTree.RepMultoprFactor();
 		case BOOLOR:
+			return new IConcTree.RepMultoprFactor();
+		case DEBUGIN:
+			return new IConcTree.RepMultoprFactor();
+		case DEBUGOUT:
 			return new IConcTree.RepMultoprFactor();
 		default:
 			throw new GrammarError("Unexpected token: " + terminal);
@@ -1103,6 +1111,10 @@ public class Parser implements IParser {
 			return new IConcTree.Term2op();
 		case BOOLOR:
 			return new IConcTree.Term2op();
+		case DEBUGIN:
+			return new IConcTree.Term2op();
+		case DEBUGOUT:
+			return new IConcTree.Term2op();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
@@ -1200,6 +1212,10 @@ public class Parser implements IParser {
 		case BECOMES:
 			return new IConcTree.Term1OpAnd();
 		case RPAREN:
+			return new IConcTree.Term1OpAnd();
+		case DEBUGIN:
+			return new IConcTree.Term1OpAnd();
+		case DEBUGOUT:
 			return new IConcTree.Term1OpAnd();
 		default:
 			throw new GrammarError("Unexpected token");

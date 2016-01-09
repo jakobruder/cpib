@@ -15,12 +15,20 @@ public class ApplicationStarter {
 
 	public static void main(String[] args) throws GrammarError, ContextError,
 			CodeTooSmallError, ExecutionError {
-		String test = "program testAndOr () " + "global " + "const m: bool; "
-				+ "const n: bool; " + "const q: bool " + "do "
-				+ "debugin m init; " + "debugin n init; " + "debugin q init;"
-				+ "debugout ( m &? n &? q ); " + "debugout ( m |? n |? q ); "
-				+ "debugout ( ( m &? n ) |? q ); "
-				+ "debugout ( m &? ( n |? q ) ) endprogram";
+		String test = "program isEligibleForMaster ()"
+				+ "global "
+				+ "credits: int64; "
+				+ "gradeTimesTen: int64; "
+				+ "age: int64; "
+				+ "recommendation: bool "
+				+ "do "
+				+ "debugin credits init; "
+				+ "debugin gradeTimesTen init; "
+				+ "debugin age init; "
+				+ "debugin recommendation init; "
+				+ "if credits > 150 &? gradeTimesTen > 50 &? (age < 35 |? recommendation) then "
+				+ "debugout true " + "else " + "debugout false endif "
+				+ "endprogram";
 		Scanner scanner = new Scanner();
 		IParser parser = new Parser(scanner.scan(test.subSequence(0,
 				test.length())));
