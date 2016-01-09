@@ -23,7 +23,6 @@ import ch.fhnw.cpib.virtualMachine.ICodeArray;
 import ch.fhnw.cpib.virtualMachine.ICodeArray.CodeTooSmallError;
 import ch.fhnw.cpib.virtualMachine.IInstructions;
 import ch.fhnw.cpib.virtualMachine.IInstructions.IInstr;
-import ch.fhnw.cpib.virtualMachine.VirtualMachine;
 
 public interface IAbsTree {
 
@@ -55,8 +54,7 @@ public interface IAbsTree {
 			ChangeMode changemode;
 			FlowMode flowmode;
 
-			public IdentState(boolean initialised, boolean directAccess,
-					ChangeMode constant, FlowMode flowmode) {
+			public IdentState(boolean initialised, boolean directAccess, ChangeMode constant, FlowMode flowmode) {
 				super();
 				this.initialised = initialised;
 				this.directAccess = directAccess;
@@ -91,16 +89,9 @@ public interface IAbsTree {
 			return false;
 		}
 
-<<<<<<< HEAD
 		boolean addIdent(String ident, boolean directAccess, ChangeMode changemode, FlowMode flowmode,
 				boolean isInputParam) {
 			IdentState identState = new IdentState(false, directAccess, changemode, flowmode);
-=======
-		boolean addIdent(String ident, boolean directAccess,
-				ChangeMode changemode, FlowMode flowmode, boolean isInputParam) {
-			IdentState identState = new IdentState(false, directAccess,
-					changemode, flowmode);
->>>>>>> bbcfa8bdcb6769a0988455e4fa24a741ccb6e4e8
 			if (isInputParam) {
 				inputParams.add(identState);
 			}
@@ -109,7 +100,6 @@ public interface IAbsTree {
 				returnIdent = ident;
 			}
 			return (idents.put(ident, identState) == null);
-
 		}
 
 		boolean setTypeForIdent(String ident, Types type) {
@@ -136,8 +126,7 @@ public interface IAbsTree {
 
 		Types check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context, boolean isSave);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context, boolean isSave);
 
 		boolean isLValue();
 
@@ -149,38 +138,33 @@ public interface IAbsTree {
 
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 
 	}
 
 	public interface IAbsProgParam {
 		void check() throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 	}
 
 	public interface IAbsDecl {
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 	}
 
 	public interface IAbsParam {
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 	}
 
 	public interface IAbsGlobalImp {
 
 		public boolean addToContext(String ident);
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
-				Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
 
 	}
 
@@ -232,14 +216,8 @@ public interface IAbsTree {
 		public boolean addToContext(String ident) {
 			if (contexts.get(GLOBAL_IDENT).hasIdent(ident)) {
 				Context currentContext = contexts.get(ident);
-<<<<<<< HEAD
 				return currentContext.addIdent(this.ident.getIdent(), true, changemode.getChangeMode(),
 						flowmode.getFlowMode(), false);
-=======
-				return currentContext.addIdent(this.ident.getIdent(), true,
-						changemode.getChangeMode(), flowmode.getFlowMode(),
-						false);
->>>>>>> bbcfa8bdcb6769a0988455e4fa24a741ccb6e4e8
 			}
 			return false;
 		}
@@ -257,8 +235,7 @@ public interface IAbsTree {
 		private IAbsDecl decl;
 		private IAbsCmd cmd;
 
-		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl,
-				IAbsCmd cmd) {
+		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.progParam = progParam;
@@ -312,11 +289,9 @@ public interface IAbsTree {
 		public void check() throws ContextError {
 			Context context = contexts.get(GLOBAL_IDENT);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(),
-					flowmode.getFlowMode(), true)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), true)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
-						.getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -332,8 +307,7 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
-					context.variableCounter++);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter++);
 
 		}
 	}
@@ -388,11 +362,9 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			Context context = contexts.get(ident);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(),
-					flowmode.getFlowMode(), false)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), false)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
-						.getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -409,8 +381,7 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
-					context.variableCounter++);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter++);
 
 		}
 
@@ -437,8 +408,7 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			contexts.put(this.ident.getIdent(),
-					new Context(this.ident.getIdent()));
+			contexts.put(this.ident.getIdent(), new Context(this.ident.getIdent()));
 			param.check(this.ident.getIdent());
 			contexts.get(this.ident.getIdent()).addReturnIdent = true;
 			stoDecl.check(this.ident.getIdent());
@@ -461,8 +431,7 @@ public interface IAbsTree {
 			codeArray.add(new IInstructions.UncondJump(0));
 			methods.put(ident.getIdent(), jumpPointer + 2);
 			cmd.generateCode(codeArray, funContext);
-			codeArray.set(jumpPointer,
-					new IInstructions.UncondJump(codeArray.size()));
+			codeArray.set(jumpPointer, new IInstructions.UncondJump(codeArray.size()));
 
 			context.variableCounter = funContext.variableCounter;
 
@@ -490,8 +459,7 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			contexts.put(this.ident.getIdent(),
-					new Context(this.ident.getIdent()));
+			contexts.put(this.ident.getIdent(), new Context(this.ident.getIdent()));
 			param.check(this.ident.getIdent());
 			stoDecl.check(this.ident.getIdent());
 			globImp.addToContext(this.ident.getIdent());
@@ -513,8 +481,7 @@ public interface IAbsTree {
 			codeArray.add(new IInstructions.UncondJump(0));
 			methods.put(ident.getIdent(), jumpPointer + 2);
 			cmd.generateCode(codeArray, procContext);
-			codeArray.set(jumpPointer,
-					new IInstructions.UncondJump(codeArray.size()));
+			codeArray.set(jumpPointer, new IInstructions.UncondJump(codeArray.size()));
 			context.variableCounter = procContext.variableCounter;
 
 		}
@@ -614,9 +581,7 @@ public interface IAbsTree {
 				directAccess = true;
 			}
 			if (context != null) {
-				context.addIdent(identName, directAccess,
-						changemode.getChangeMode(), flowmode.getFlowMode(),
-						true);
+				context.addIdent(identName, directAccess, changemode.getChangeMode(), flowmode.getFlowMode(), true);
 				context.setTypeForIdent(identName, type);
 			} else {
 				throw new ContextError("Error at param");
@@ -628,10 +593,8 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
-					context.variableCounter);
-			variables.put(context.name + context.paramCounter++,
-					context.variableCounter++);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter);
+			variables.put(context.name + context.paramCounter++, context.variableCounter++);
 
 		}
 	}
@@ -688,10 +651,8 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
-					literal.getValue());
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
+			IInstructions.IInstr instruction = new IInstructions.LoadImInt(literal.getValue());
 			codeArray.add(instruction);
 
 		}
@@ -739,18 +700,15 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
 			if (isSave) {
-				IInstructions.IInstr instructionAdd = new IInstructions.LoadImInt(
-						variables.get(ident.getIdent()));
+				IInstructions.IInstr instructionAdd = new IInstructions.LoadImInt(variables.get(ident.getIdent()));
 				codeArray.set(codeArray.size() - 2, instructionAdd);
 				IInstructions.IInstr store = new IInstructions.Store();
 				codeArray.add(store);
 
 			} else {
-				IInstructions.IInstr instruction = new IInstructions.LoadImInt(
-						variables.get(ident.getIdent()));
+				IInstructions.IInstr instruction = new IInstructions.LoadImInt(variables.get(ident.getIdent()));
 				codeArray.add(instruction);
 				instruction = new IInstructions.Deref();
 				codeArray.add(instruction);
@@ -784,17 +742,13 @@ public interface IAbsTree {
 						throw new ContextError("Param is not the right type");
 					}
 					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
-						throw new ContextError(
-								"Input param is not a right hand expression");
+						throw new ContextError("Input param is not a right hand expression");
 					}
-					if (state.flowmode == FlowMode.INOUT
-							&& !(expr.isRValue() && expr.isLValue())) {
-						throw new ContextError(
-								"Inout param is not right and left hand expression");
+					if (state.flowmode == FlowMode.INOUT && !(expr.isRValue() && expr.isLValue())) {
+						throw new ContextError("Inout param is not right and left hand expression");
 					}
 					if (state.flowmode == FlowMode.OUT && !expr.isLValue()) {
-						throw new ContextError(
-								"Out param is not Left hand expression");
+						throw new ContextError("Out param is not Left hand expression");
 					}
 
 				}
@@ -817,10 +771,8 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
-			IInstructions.IInstr call = new IInstructions.Call(
-					methods.get(identM.getIdent()));
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
+			IInstructions.IInstr call = new IInstructions.Call(methods.get(identM.getIdent()));
 			codeArray.add(call);
 
 		}
@@ -870,12 +822,10 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
 			expression.generateCode(codeArray, context, isSave);
 			if (operator == Operators.NOTOPR) {
-				IInstructions.IInstr instruction = new IInstructions.CondJump(
-						codeArray.size() + 3);
+				IInstructions.IInstr instruction = new IInstructions.CondJump(codeArray.size() + 3);
 				codeArray.add(instruction);
 				instruction = new IInstructions.LoadImInt(1);
 				codeArray.add(instruction);
@@ -1097,7 +1047,7 @@ public interface IAbsTree {
 				
 			default:
 				
-
+			}
 		}
 	}
 
@@ -1144,7 +1094,6 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
 
 	public class CpsCmd implements IAbsCmd {
@@ -1168,7 +1117,6 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
 
 	public class CondCmd implements IAbsCmd {
@@ -1201,7 +1149,6 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
 
 	public class WhileCmd implements IAbsCmd {
@@ -1228,9 +1175,7 @@ public interface IAbsTree {
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			// TODO Auto-generated method stub
-
 		}
-
 	}
 
 	public class ProcCallCmd implements IAbsCmd {
@@ -1272,7 +1217,6 @@ public interface IAbsTree {
 			} else {
 				throw new ContextError("Function does not exist");
 			}
-
 		}
 
 		@Override
@@ -1280,7 +1224,6 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
 
 	public class InputCmd implements IAbsCmd {
@@ -1330,5 +1273,6 @@ public interface IAbsTree {
 		}
 
 	}
+
 
 }
