@@ -444,16 +444,21 @@ public interface IAbsTree {
 			Context funContext = contexts.get(ident.getIdent());
 			funContext.variableCounter = context.variableCounter;
 			funContext.frameSize = context.variableCounter;
+			int functionStart = codeArray.size();
+			codeArray.add(new IInstructions.AllocBlock(0));
+			codeArray.add(new IInstructions.UncondJump(0));
 			param.generateCode(codeArray, funContext);
 			stoDecl.generateCode(codeArray, funContext);
 			globImp.generateCode(codeArray, funContext);
 			stoDeclLocal.generateCode(codeArray, funContext);
-			int jumpPointer = codeArray.size();
-			codeArray.add(new IInstructions.UncondJump(0));
-			methods.put(ident.getIdent(), jumpPointer + 2);
 			cmd.generateCode(codeArray, funContext);
-			codeArray.set(jumpPointer,
-					new IInstructions.UncondJump(codeArray.size()));
+			codeArray.add(new IInstructions.Return(funContext.variableCounter
+					- funContext.frameSize));
+			codeArray.set(functionStart, new IInstructions.AllocBlock(
+					funContext.variableCounter - funContext.frameSize));
+			codeArray.set(functionStart + 1, new IInstructions.UncondJump(
+					codeArray.size()));
+			methods.put(ident.getIdent(), functionStart + 2);
 
 			context.variableCounter = funContext.variableCounter;
 
@@ -496,16 +501,21 @@ public interface IAbsTree {
 			Context procContext = contexts.get(ident.getIdent());
 			procContext.variableCounter = context.variableCounter;
 			procContext.frameSize = context.variableCounter;
+			int functionStart = codeArray.size();
+			codeArray.add(new IInstructions.AllocBlock(0));
+			codeArray.add(new IInstructions.UncondJump(0));
 			param.generateCode(codeArray, procContext);
 			stoDecl.generateCode(codeArray, procContext);
 			globImp.generateCode(codeArray, procContext);
 			stoDeclLocal.generateCode(codeArray, procContext);
-			int jumpPointer = codeArray.size();
-			codeArray.add(new IInstructions.UncondJump(0));
-			methods.put(ident.getIdent(), jumpPointer + 2);
 			cmd.generateCode(codeArray, procContext);
-			codeArray.set(jumpPointer,
-					new IInstructions.UncondJump(codeArray.size()));
+			codeArray.add(new IInstructions.Return(procContext.variableCounter
+					- procContext.frameSize));
+			codeArray.set(functionStart, new IInstructions.AllocBlock(
+					procContext.variableCounter - procContext.frameSize));
+			codeArray.set(functionStart + 1, new IInstructions.UncondJump(
+					codeArray.size()));
+			methods.put(ident.getIdent(), functionStart + 2);
 			context.variableCounter = procContext.variableCounter;
 
 		}
@@ -735,9 +745,7 @@ public interface IAbsTree {
 			if (isSave) {
 				IInstructions.IInstr instructionAdd = new IInstructions.LoadImInt(
 						variables.get(ident.getIdent()));
-				codeArray.set(codeArray.size() - 2, instructionAdd);
-				IInstructions.IInstr store = new IInstructions.Store();
-				codeArray.add(store);
+				codeArray.add(instructionAdd);
 
 			} else {
 				IInstructions.IInstr instruction = new IInstructions.LoadImInt(
@@ -1052,35 +1060,60 @@ public interface IAbsTree {
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context,
 				boolean isSave) {
+			expression1.generateCode(codeArray, context, isSave);
+			expression2.generateCode(codeArray, context, isSave);
+			IInstructions.IInstr instruction;
+
 			switch (operator) {
 			case PLUS:
-				
+				instruction = new IInstructions.AddInt();
+				codeArray.add(instruction);
 			case MINUS:
-				
+				instruction = new IInstructions.SubInt();
+				codeArray.add(instruction);
 			case TIMES:
-				
+				instruction = new IInstructions.MultInt();
+				codeArray.add(instruction);
 			case DIV_E:
-				
+				instruction = new IInstructions.DivTruncInt();
+				codeArray.add(instruction);
 			case MOD_E:
-				
+				instruction = new IInstructions.ModTruncInt();
+				codeArray.add(instruction);
 			case CAND:
-				
+				instruction = new IInstructions.AddInt();
+				codeArray.add(instruction);
+				instruction = new IInstructions.LoadImInt(2);
+				codeArray.add(instruction);
+				instruction = new IInstructions.EqInt();
+				codeArray.add(instruction);
 			case COR:
-				
+				instruction = new IInstructions.AddInt();
+				codeArray.add(instruction);
+				instruction = new IInstructions.LoadImInt(1);
+				codeArray.add(instruction);
+				instruction = new IInstructions.GeInt();
+				codeArray.add(instruction);
 			case LT:
-				
+				instruction = new IInstructions.LtInt();
+				codeArray.add(instruction);
 			case LE:
-				
+				instruction = new IInstructions.LeInt();
+				codeArray.add(instruction);
 			case EQ:
-				
+				instruction = new IInstructions.EqInt();
+				codeArray.add(instruction);
 			case NE:
-				
+				instruction = new IInstructions.NeInt();
+				codeArray.add(instruction);
 			case GE:
-				
+				instruction = new IInstructions.GeInt();
+				codeArray.add(instruction);
 			case GT:
-				
+				instruction = new IInstructions.GtInt();
+				codeArray.add(instruction);
 			default:
-				
+			}
 
 		}
 	}
@@ -1127,7 +1160,10 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			// TODO Auto-generated method stub
+			expr1.generateCode(codeArray, context, true);
+			expr2.generateCode(codeArray, context, false);
+			IInstructions.IInstr instruction = new IInstructions.Store();
+			codeArray.add(instruction);
 
 		}
 
