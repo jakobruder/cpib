@@ -51,7 +51,7 @@ public class CodeArray implements ICodeArray {
         {
             if (code[i] != null)
             {
-                b.append(i + ": " + code[i] + "\n");
+				b.append(i + ": " + code[i] + "\n");
             }
         }
         return b.toString();

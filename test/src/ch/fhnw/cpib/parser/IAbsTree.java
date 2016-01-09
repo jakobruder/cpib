@@ -91,10 +91,16 @@ public interface IAbsTree {
 			return false;
 		}
 
+<<<<<<< HEAD
+		boolean addIdent(String ident, boolean directAccess, ChangeMode changemode, FlowMode flowmode,
+				boolean isInputParam) {
+			IdentState identState = new IdentState(false, directAccess, changemode, flowmode);
+=======
 		boolean addIdent(String ident, boolean directAccess,
 				ChangeMode changemode, FlowMode flowmode, boolean isInputParam) {
 			IdentState identState = new IdentState(false, directAccess,
 					changemode, flowmode);
+>>>>>>> bbcfa8bdcb6769a0988455e4fa24a741ccb6e4e8
 			if (isInputParam) {
 				inputParams.add(identState);
 			}
@@ -207,8 +213,7 @@ public interface IAbsTree {
 		private FlowModeToken flowmode;
 		private ChangeModeToken changemode;
 
-		public GlobalImp(Ident ident, FlowModeToken flowmode,
-				ChangeModeToken changemode) {
+		public GlobalImp(Ident ident, FlowModeToken flowmode, ChangeModeToken changemode) {
 			super();
 			this.ident = ident;
 			if (flowmode == null) {
@@ -227,9 +232,14 @@ public interface IAbsTree {
 		public boolean addToContext(String ident) {
 			if (contexts.get(GLOBAL_IDENT).hasIdent(ident)) {
 				Context currentContext = contexts.get(ident);
+<<<<<<< HEAD
+				return currentContext.addIdent(this.ident.getIdent(), true, changemode.getChangeMode(),
+						flowmode.getFlowMode(), false);
+=======
 				return currentContext.addIdent(this.ident.getIdent(), true,
 						changemode.getChangeMode(), flowmode.getFlowMode(),
 						false);
+>>>>>>> bbcfa8bdcb6769a0988455e4fa24a741ccb6e4e8
 			}
 			return false;
 		}
@@ -283,8 +293,7 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private ITypedIdent typedIdent;
 
-		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode,
-				ITypedIdent typedIdent) {
+		public ProgParam(FlowModeToken flowmode, ChangeModeToken changemode, ITypedIdent typedIdent) {
 			super();
 			if (flowmode == null) {
 				this.flowmode = new FlowModeToken(FlowMode.IN);
@@ -415,8 +424,8 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public FunDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal,
+				IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -473,8 +482,8 @@ public interface IAbsTree {
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl, IAbsGlobalImp globImp, IAbsDecl stoDeclLocal,
+				IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
@@ -579,8 +588,8 @@ public interface IAbsTree {
 		private ChangeModeToken changemode;
 		private TypedIdent typedIdent;
 
-		public Param(FlowModeToken flowmode, MechModeToken mechmode,
-				ChangeModeToken changemode, TypedIdent typedIdent) {
+		public Param(FlowModeToken flowmode, MechModeToken mechmode, ChangeModeToken changemode,
+				TypedIdent typedIdent) {
 			super();
 			if (flowmode == null) {
 				this.flowmode = new FlowModeToken(FlowMode.IN);
@@ -845,14 +854,12 @@ public interface IAbsTree {
 				if (type == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MINUS:
 				if (type == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			default:
 				throw new RuntimeException();
 			}
@@ -897,8 +904,15 @@ public interface IAbsTree {
 		private IAbsExpr expression1;
 		private IAbsExpr expression2;
 
-		public DyadicExpr(Operators operator, IAbsExpr expression1,
-				IAbsExpr expression2) {
+		public IAbsExpr getExpression1() {
+			return expression1;
+		}
+
+		public IAbsExpr getExpression2() {
+			return expression2;
+		}
+
+		public DyadicExpr(Operators operator, IAbsExpr expression1, IAbsExpr expression2) {
 			super();
 			this.operator = operator;
 			this.expression1 = expression1;
@@ -914,90 +928,91 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MINUS:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case TIMES:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case DIV_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case MOD_E:
 				if (type1 == Types.INTEGER && type2 == Types.INTEGER) {
 					return Types.INTEGER;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case CAND:
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case COR:
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case LT:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case LE:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						// TODO:
+						if (type1 == Types.INTEGER && type2 == Types.INTEGER)
+							;
+						else if (type1 == Types.INTEGER
+								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case EQ:
 				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
+						// TODO:
 						return Types.EQUAL_BOOL;
 					} else if (type2 == Types.LESSEQUAL_BOOL) {
+						// TODO:
 						return Types.LESSEQUAL_BOOL;
 					} else if (type2 == Types.GREATEREQUAL_BOOL) {
+						// TODO:
 						return Types.GREATEREQUAL_BOOL;
 					} else if (type2 == Types.NOT_EQUAL_BOOL) {
+						// TODO:
 						return Types.NOT_EQUAL_BOOL;
 					}
 				} else if (type1 == Types.LESSEQUAL_BOOL) {
-					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER
-							|| type2 == Types.EQUAL_BOOL) {
+					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						// TODO:
 						return Types.LESSEQUAL_BOOL;
 					}
 				} else if (type1 == Types.GREATEREQUAL_BOOL) {
-					if (type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.INTEGER
-							|| type2 == Types.EQUAL_BOOL) {
+					if (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						// TODO:
 						return Types.GREATEREQUAL_BOOL;
 					}
 				} else if (type1 == Types.NOT_EQUAL_BOOL) {
-					if (type2 == Types.EQUAL_BOOL
-							|| type2 == Types.NOT_EQUAL_BOOL
-							|| type2 == Types.INTEGER) {
+					if (type2 == Types.EQUAL_BOOL || type2 == Types.NOT_EQUAL_BOOL || type2 == Types.INTEGER) {
+						// TODO:
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
@@ -1005,44 +1020,45 @@ public interface IAbsTree {
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case NE:
 				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
+						// TODO:
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
 				if (type1 == Types.COND_BOOL && type2 == Types.COND_BOOL) {
 					return Types.COND_BOOL;
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case GE:
-				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER
-							|| type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						// TODO:
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			case GT:
-				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL
-						|| type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER
-							|| type2 == Types.GREATEREQUAL_BOOL
-							|| type2 == Types.EQUAL_BOOL) {
+				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						// TODO:
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
-				throw new ContextError("Type error in operator " + operator
-						+ ".");
+				throw new ContextError("Type error in operator " + operator + ".");
 			default:
 				throw new RuntimeException();
 			}
+		}
+
+		private IAbsExpr leftIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
+			return new DyadicExpr(op, ex1, ((DyadicExpr)ex2).getExpression1());
+		}
+		
+		private IAbsExpr rightIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
+			return new DyadicExpr(op, ex1, ((DyadicExpr)ex2).getExpression1());
 		}
 
 		@Override
@@ -1146,12 +1162,10 @@ public interface IAbsTree {
 		@Override
 		public void check(String ident) throws ContextError {
 			if (!expr1.isLValue()) {
-				throw new ContextError(
-						"The expression on the left side is not a left hand expression.");
+				throw new ContextError("The expression on the left side is not a left hand expression.");
 			}
 			if (!expr2.isRValue()) {
-				throw new ContextError(
-						"The expression on the right is not a right hand expression.");
+				throw new ContextError("The expression on the right is not a right hand expression.");
 			}
 			if (expr1.check(ident) != expr2.check(ident)) {
 				throw new ContextError("Expressions are not the same type");
@@ -1211,8 +1225,7 @@ public interface IAbsTree {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (!expr.isRValue()) {
-				throw new ContextError(
-						"Expression is not a right hand expression");
+				throw new ContextError("Expression is not a right hand expression");
 			}
 			cmd1.check(ident);
 			cmd2.check(ident);
@@ -1243,8 +1256,7 @@ public interface IAbsTree {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (expr.isLValue()) {
-				throw new ContextError(
-						"Expression is not a right hand expression");
+				throw new ContextError("Expression is not a right hand expression");
 			}
 			cmd.check(ident);
 		}
@@ -1262,8 +1274,7 @@ public interface IAbsTree {
 		private ArrayList<IAbsExpr> exprListRoutine;
 		private ArrayList<Ident> identList;
 
-		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine,
-				ArrayList<Ident> identList) {
+		public ProcCallCmd(Ident ident, ArrayList<IAbsExpr> exprListRoutine, ArrayList<Ident> identList) {
 			super();
 			this.ident = ident;
 			this.exprListRoutine = exprListRoutine;
@@ -1284,17 +1295,13 @@ public interface IAbsTree {
 						throw new ContextError("Param is not the right type");
 					}
 					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
-						throw new ContextError(
-								"Input param is not a right hand expression");
+						throw new ContextError("Input param is not a right hand expression");
 					}
-					if (state.flowmode == FlowMode.INOUT
-							&& !(expr.isRValue() && expr.isLValue())) {
-						throw new ContextError(
-								"Inout param is not right and left hand expression");
+					if (state.flowmode == FlowMode.INOUT && !(expr.isRValue() && expr.isLValue())) {
+						throw new ContextError("Inout param is not right and left hand expression");
 					}
 					if (state.flowmode == FlowMode.OUT && !expr.isLValue()) {
-						throw new ContextError(
-								"Out param is not Left hand expression");
+						throw new ContextError("Out param is not Left hand expression");
 					}
 
 				}
@@ -1324,8 +1331,7 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			expr.check(ident);
 			if (!expr.isLValue()) {
-				throw new ContextError(
-						"Expression is not a left hand expression");
+				throw new ContextError("Expression is not a left hand expression");
 			}
 		}
 
@@ -1349,8 +1355,7 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			expr.check(ident);
 			if (!expr.isRValue()) {
-				throw new ContextError(
-						"Expression is not a right hand expression");
+				throw new ContextError("Expression is not a right hand expression");
 			}
 		}
 
