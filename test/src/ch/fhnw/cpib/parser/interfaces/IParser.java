@@ -1,7 +1,9 @@
 package ch.fhnw.cpib.parser.interfaces;
 
+import ch.fhnw.cpib.parser.IConcTree;
+
 public interface IParser {
-	
+
 	static class GrammarError extends Exception {
 		/**
 		 * 
@@ -13,5 +15,5 @@ public interface IParser {
 		}
 	}
 
-	public IProgram parse() throws GrammarError;
+	public IConcTree.IProgram parse() throws GrammarError;
 }

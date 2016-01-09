@@ -20,8 +20,11 @@ import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
 import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 import ch.fhnw.cpib.virtualMachine.CodeArray;
 import ch.fhnw.cpib.virtualMachine.ICodeArray;
+import ch.fhnw.cpib.virtualMachine.IInstructions.UncondJump;
+import ch.fhnw.cpib.virtualMachine.VirtualMachine;
 import ch.fhnw.cpib.virtualMachine.ICodeArray.CodeTooSmallError;
 import ch.fhnw.cpib.virtualMachine.IInstructions;
+import ch.fhnw.cpib.virtualMachine.IInstructions.IExecInstr;
 import ch.fhnw.cpib.virtualMachine.IInstructions.IInstr;
 
 public interface IAbsTree {
@@ -33,15 +36,15 @@ public interface IAbsTree {
 
 	public class Context {
 		String name;
+		int variableCounter = 0;
+		int frameSize = 0;
+		int paramCounter = 0;
+		int headParamCount = -1;
 
 		public Context(String name) {
 			super();
 			this.name = name;
 		}
-
-		int variableCounter = 0;
-		int frameSize = 0;
-		int paramCounter = 0;
 
 		String returnIdent;
 		boolean addReturnIdent = false;
@@ -54,7 +57,8 @@ public interface IAbsTree {
 			ChangeMode changemode;
 			FlowMode flowmode;
 
-			public IdentState(boolean initialised, boolean directAccess, ChangeMode constant, FlowMode flowmode) {
+			public IdentState(boolean initialised, boolean directAccess,
+					ChangeMode constant, FlowMode flowmode) {
 				super();
 				this.initialised = initialised;
 				this.directAccess = directAccess;
@@ -69,7 +73,7 @@ public interface IAbsTree {
 
 		boolean isStoreOk(String ident, boolean isInit) {
 			IdentState out = idents.get(ident);
-			return !(out == null || (!(out.initialised && isInit)));
+			return !(out == null || (out.initialised && isInit) || ((!out.initialised) && (!isInit)));
 		}
 
 		Types getTypeForIdent(String ident) {
@@ -128,7 +132,8 @@ public interface IAbsTree {
 
 		Types check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context, boolean isSave);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
+				Context context, boolean isSave);
 
 		boolean isLValue();
 
@@ -140,33 +145,38 @@ public interface IAbsTree {
 
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
+				Context context);
 
 	}
 
 	public interface IAbsProgParam {
 		void check() throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
+				Context context);
 	}
 
 	public interface IAbsDecl {
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
+				Context context);
 	}
 
 	public interface IAbsParam {
 		void check(String ident) throws ContextError;
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
+				Context context);
 	}
 
 	public interface IAbsGlobalImp {
 
 		public boolean addToContext(String ident);
 
-		public void generateCode(ArrayList<IInstructions.IInstr> codeArray, Context context);
+		public void generateCode(ArrayList<IInstructions.IInstr> codeArray,
+				Context context);
 
 	}
 
@@ -241,7 +251,8 @@ public interface IAbsTree {
 		private IAbsDecl decl;
 		private IAbsCmd cmd;
 
-		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl, IAbsCmd cmd) {
+		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl,
+				IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.progParam = progParam;
@@ -259,9 +270,16 @@ public interface IAbsTree {
 		public ICodeArray generateCode() throws CodeTooSmallError {
 			ArrayList<IInstructions.IInstr> codeArray = new ArrayList<>();
 			Context context = contexts.get(GLOBAL_IDENT);
+			codeArray.add(new IInstructions.AllocBlock(0));
 			progParam.generateCode(codeArray, context);
 			decl.generateCode(codeArray, context);
 			cmd.generateCode(codeArray, context);
+			codeArray.add(new IInstructions.Stop());
+			if (context.headParamCount == -1) {
+				context.headParamCount = context.variableCounter;
+			}
+			codeArray.set(0, new IInstructions.AllocBlock(
+					context.headParamCount));
 			CodeArray codeArrayOut = new CodeArray(codeArray.size());
 			for (int i = 0; i < codeArray.size(); i++) {
 				codeArrayOut.put(i, codeArray.get(i));
@@ -296,15 +314,18 @@ public interface IAbsTree {
 		public void check() throws ContextError {
 			Context context = contexts.get(GLOBAL_IDENT);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), true)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(),
+					flowmode.getFlowMode(), true)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
+						.getType();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
 					type = Types.INTEGER;
 				}
 				context.setTypeForIdent(identName, type);
+				context.initIdent(identName);
 			} else {
 				throw new ContextError("Error at progParam check");
 			}
@@ -312,9 +333,15 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
+			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
+					context.variableCounter);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter++);
+			instruction = new IInstructions.LoadImInt(0);
+			codeArray.add(instruction);
+			instruction = new IInstructions.Store();
+			codeArray.add(instruction);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
+					context.variableCounter++);
 
 		}
 	}
@@ -369,9 +396,11 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			Context context = contexts.get(ident);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), false)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(),
+					flowmode.getFlowMode(), false)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
+						.getType();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -386,9 +415,15 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
+			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
+					context.variableCounter);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter++);
+			instruction = new IInstructions.LoadImInt(0);
+			codeArray.add(instruction);
+			instruction = new IInstructions.Store();
+			codeArray.add(instruction);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
+					context.variableCounter++);
 
 		}
 
@@ -415,7 +450,8 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			contexts.put(this.ident.getIdent(), new Context(this.ident.getIdent()));
+			contexts.put(this.ident.getIdent(),
+					new Context(this.ident.getIdent()));
 			param.check(this.ident.getIdent());
 			contexts.get(this.ident.getIdent()).addReturnIdent = true;
 			stoDecl.check(this.ident.getIdent());
@@ -427,6 +463,9 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
+			if (context.headParamCount == -1) {
+				context.headParamCount = context.variableCounter;
+			}
 			Context funContext = contexts.get(ident.getIdent());
 			funContext.variableCounter = context.variableCounter;
 			funContext.frameSize = context.variableCounter;
@@ -435,7 +474,6 @@ public interface IAbsTree {
 			codeArray.add(new IInstructions.UncondJump(0));
 			param.generateCode(codeArray, funContext);
 			stoDecl.generateCode(codeArray, funContext);
-			globImp.generateCode(codeArray, funContext);
 			stoDeclLocal.generateCode(codeArray, funContext);
 			cmd.generateCode(codeArray, funContext);
 			codeArray.add(new IInstructions.Return(funContext.variableCounter
@@ -446,7 +484,6 @@ public interface IAbsTree {
 					codeArray.size()));
 			methods.put(ident.getIdent(), functionStart + 2);
 
-
 			context.variableCounter = funContext.variableCounter;
 
 		}
@@ -455,17 +492,15 @@ public interface IAbsTree {
 	public class ProcDecl implements IAbsDecl {
 		private Ident ident;
 		private IAbsParam param;
-		private IAbsDecl stoDecl;
 		private IAbsGlobalImp globImp;
 		private IAbsDecl stoDeclLocal;
 		private IAbsCmd cmd;
 
-		public ProcDecl(Ident ident, IAbsParam param, IAbsDecl stoDecl,
-				IAbsGlobalImp globImp, IAbsDecl stoDeclLocal, IAbsCmd cmd) {
+		public ProcDecl(Ident ident, IAbsParam param, IAbsGlobalImp globImp,
+				IAbsDecl stoDeclLocal, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.param = param;
-			this.stoDecl = stoDecl;
 			this.globImp = globImp;
 			this.stoDeclLocal = stoDeclLocal;
 			this.cmd = cmd;
@@ -473,9 +508,9 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			contexts.put(this.ident.getIdent(), new Context(this.ident.getIdent()));
+			contexts.put(this.ident.getIdent(),
+					new Context(this.ident.getIdent()));
 			param.check(this.ident.getIdent());
-			stoDecl.check(this.ident.getIdent());
 			globImp.addToContext(this.ident.getIdent());
 			stoDeclLocal.check(this.ident.getIdent());
 			cmd.check(this.ident.getIdent());
@@ -484,6 +519,9 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
+			if (context.headParamCount == -1) {
+				context.headParamCount = context.variableCounter;
+			}
 			Context procContext = contexts.get(ident.getIdent());
 			procContext.variableCounter = context.variableCounter;
 			procContext.frameSize = context.variableCounter;
@@ -491,8 +529,6 @@ public interface IAbsTree {
 			codeArray.add(new IInstructions.AllocBlock(0));
 			codeArray.add(new IInstructions.UncondJump(0));
 			param.generateCode(codeArray, procContext);
-			stoDecl.generateCode(codeArray, procContext);
-			globImp.generateCode(codeArray, procContext);
 			stoDeclLocal.generateCode(codeArray, procContext);
 			cmd.generateCode(codeArray, procContext);
 			codeArray.add(new IInstructions.Return(procContext.variableCounter
@@ -592,7 +628,7 @@ public interface IAbsTree {
 			String identName = typedIdent.getIdent().getIdent();
 			boolean directAccess = false;
 			Types type;
-			if (typedIdent.getType().getTerminal() == Terminals.BOOL) {
+			if (typedIdent.getType().getType() == Terminals.BOOL) {
 				type = Types.COND_BOOL;
 			} else {
 				type = Types.INTEGER;
@@ -601,8 +637,11 @@ public interface IAbsTree {
 				directAccess = true;
 			}
 			if (context != null) {
-				context.addIdent(identName, directAccess, changemode.getChangeMode(), flowmode.getFlowMode(), true);
+				context.addIdent(identName, directAccess,
+						changemode.getChangeMode(), flowmode.getFlowMode(),
+						true);
 				context.setTypeForIdent(identName, type);
+				context.initIdent(identName);
 			} else {
 				throw new ContextError("Error at param");
 			}
@@ -611,10 +650,17 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(0);
+			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
+					context.variableCounter);
 			codeArray.add(instruction);
-			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(), context.variableCounter);
-			variables.put(context.name + context.paramCounter++, context.variableCounter++);
+			instruction = new IInstructions.LoadImInt(0);
+			codeArray.add(instruction);
+			instruction = new IInstructions.Store();
+			codeArray.add(instruction);
+			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
+					context.variableCounter);
+			variables.put(context.name + context.paramCounter++,
+					context.variableCounter++);
 
 		}
 	}
@@ -655,7 +701,7 @@ public interface IAbsTree {
 
 		@Override
 		public Types check(String ident) throws ContextError {
-			return Types.LITERAL;
+			return literal.getType();
 		}
 
 		@Override
@@ -671,8 +717,10 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(literal.getValue());
+		public void generateCode(ArrayList<IInstr> codeArray, Context context,
+				boolean isSave) {
+			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
+					literal.getValue());
 			codeArray.add(instruction);
 
 		}
@@ -720,14 +768,16 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context,
+				boolean isSave) {
 			if (isSave) {
 				IInstructions.IInstr instructionAdd = new IInstructions.LoadImInt(
 						variables.get(ident.getIdent()));
 				codeArray.add(instructionAdd);
 
 			} else {
-				IInstructions.IInstr instruction = new IInstructions.LoadImInt(variables.get(ident.getIdent()));
+				IInstructions.IInstr instruction = new IInstructions.LoadImInt(
+						variables.get(ident.getIdent()));
 				codeArray.add(instruction);
 				instruction = new IInstructions.Deref();
 				codeArray.add(instruction);
@@ -761,13 +811,17 @@ public interface IAbsTree {
 						throw new ContextError("Param is not the right type");
 					}
 					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
-						throw new ContextError("Input param is not a right hand expression");
+						throw new ContextError(
+								"Input param is not a right hand expression");
 					}
-					if (state.flowmode == FlowMode.INOUT && !(expr.isRValue() && expr.isLValue())) {
-						throw new ContextError("Inout param is not right and left hand expression");
+					if (state.flowmode == FlowMode.INOUT
+							&& !(expr.isRValue() && expr.isLValue())) {
+						throw new ContextError(
+								"Inout param is not right and left hand expression");
 					}
 					if (state.flowmode == FlowMode.OUT && !expr.isLValue()) {
-						throw new ContextError("Out param is not Left hand expression");
+						throw new ContextError(
+								"Out param is not Left hand expression");
 					}
 
 				}
@@ -878,10 +932,12 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context,
+				boolean isSave) {
 			expression.generateCode(codeArray, context, isSave);
 			if (operator == Operators.NOTOPR) {
-				IInstructions.IInstr instruction = new IInstructions.CondJump(codeArray.size() + 3);
+				IInstructions.IInstr instruction = new IInstructions.CondJump(
+						codeArray.size() + 3);
 				codeArray.add(instruction);
 				instruction = new IInstructions.LoadImInt(1);
 				codeArray.add(instruction);
@@ -959,14 +1015,19 @@ public interface IAbsTree {
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case LT:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
-						if (type1 == Types.INTEGER && (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
+						|| type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
+							|| type2 == Types.EQUAL_BOOL) {
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.LESSEQUAL_BOOL;
@@ -974,10 +1035,14 @@ public interface IAbsTree {
 				}
 				throw new ContextError("Type error in operator " + operator + ".");
 			case LE:
-				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
-					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
-						if (type1 == Types.INTEGER && (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL
+						|| type1 == Types.EQUAL_BOOL) {
+					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL
+							|| type2 == Types.EQUAL_BOOL) {
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
@@ -993,22 +1058,26 @@ public interface IAbsTree {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
 						// TODO:
 						if (type1 == Types.INTEGER && type2 == Types.EQUAL_BOOL) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
-						} else if (type1 == Types.EQUAL_BOOL && type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+						} else if (type1 == Types.EQUAL_BOOL
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.EQUAL_BOOL;
 					} else if (type2 == Types.LESSEQUAL_BOOL) {
 						// TODO:
-						if (type1 == Types.INTEGER
-								&& type2 == Types.EQUAL_BOOL) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+						if (type1 == Types.INTEGER && type2 == Types.EQUAL_BOOL) {
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if (type1 == Types.EQUAL_BOOL
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.LESSEQUAL_BOOL;
@@ -1016,11 +1085,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.GREATEREQUAL_BOOL;
@@ -1028,11 +1099,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.NOT_EQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.NOT_EQUAL_BOOL;
@@ -1042,11 +1115,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.LESSEQUAL_BOOL;
@@ -1056,11 +1131,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.GREATEREQUAL_BOOL;
@@ -1070,11 +1147,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.NOT_EQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.NOT_EQUAL_BOOL;
@@ -1091,11 +1170,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.NOT_EQUAL_BOOL;
@@ -1111,11 +1192,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.GREATEREQUAL_BOOL;
@@ -1128,11 +1211,13 @@ public interface IAbsTree {
 						// TODO:
 						if (type1 == Types.INTEGER
 								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
-							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							expression1 = leftIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
 								&& type2 == Types.INTEGER) {
-							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							expression2 = rightIntCANDDyadicExpr(operator,
+									expression1, expression2);
 							operator = Operators.CAND;
 						}
 						return Types.GREATEREQUAL_BOOL;
@@ -1144,11 +1229,13 @@ public interface IAbsTree {
 			}
 		}
 
-		private IAbsExpr leftIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
+		private IAbsExpr leftIntCANDDyadicExpr(Operators op, IAbsExpr ex1,
+				IAbsExpr ex2) {
 			return new DyadicExpr(op, ex1, ((DyadicExpr) ex2).getExpression1());
 		}
 
-		private IAbsExpr rightIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
+		private IAbsExpr rightIntCANDDyadicExpr(Operators op, IAbsExpr ex1,
+				IAbsExpr ex2) {
 			return new DyadicExpr(op, ex1, ((DyadicExpr) ex2).getExpression1());
 		}
 
@@ -1174,18 +1261,23 @@ public interface IAbsTree {
 			case PLUS:
 				instruction = new IInstructions.AddInt();
 				codeArray.add(instruction);
+				break;
 			case MINUS:
 				instruction = new IInstructions.SubInt();
 				codeArray.add(instruction);
+				break;
 			case TIMES:
 				instruction = new IInstructions.MultInt();
 				codeArray.add(instruction);
+				break;
 			case DIV_E:
 				instruction = new IInstructions.DivTruncInt();
 				codeArray.add(instruction);
+				break;
 			case MOD_E:
 				instruction = new IInstructions.ModTruncInt();
 				codeArray.add(instruction);
+				break;
 			case CAND:
 				instruction = new IInstructions.AddInt();
 				codeArray.add(instruction);
@@ -1193,6 +1285,7 @@ public interface IAbsTree {
 				codeArray.add(instruction);
 				instruction = new IInstructions.EqInt();
 				codeArray.add(instruction);
+				break;
 			case COR:
 				instruction = new IInstructions.AddInt();
 				codeArray.add(instruction);
@@ -1200,24 +1293,31 @@ public interface IAbsTree {
 				codeArray.add(instruction);
 				instruction = new IInstructions.GeInt();
 				codeArray.add(instruction);
+				break;
 			case LT:
 				instruction = new IInstructions.LtInt();
 				codeArray.add(instruction);
+				break;
 			case LE:
 				instruction = new IInstructions.LeInt();
 				codeArray.add(instruction);
+				break;
 			case EQ:
 				instruction = new IInstructions.EqInt();
 				codeArray.add(instruction);
+				break;
 			case NE:
 				instruction = new IInstructions.NeInt();
 				codeArray.add(instruction);
+				break;
 			case GE:
 				instruction = new IInstructions.GeInt();
 				codeArray.add(instruction);
+				break;
 			case GT:
 				instruction = new IInstructions.GtInt();
 				codeArray.add(instruction);
+				break;
 			default:
 			}
 		}
@@ -1250,6 +1350,8 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
+			expr1.check(ident);
+			expr2.check(ident);
 			if (!expr1.isLValue()) {
 				throw new ContextError(
 						"The expression on the left side is not a left hand expression.");
@@ -1257,9 +1359,6 @@ public interface IAbsTree {
 			if (!expr2.isRValue()) {
 				throw new ContextError(
 						"The expression on the right is not a right hand expression.");
-			}
-			if (expr1.check(ident) != expr2.check(ident)) {
-				throw new ContextError("Expressions are not the same type");
 			}
 		}
 
@@ -1312,7 +1411,11 @@ public interface IAbsTree {
 
 		@Override
 		public void check(String ident) throws ContextError {
-			if (expr.check(ident) != Types.COND_BOOL) {
+			if (!(expr.check(ident) == Types.COND_BOOL
+					|| expr.check(ident) == Types.EQUAL_BOOL
+					|| expr.check(ident) == Types.GREATEREQUAL_BOOL
+					|| expr.check(ident) == Types.LESSEQUAL_BOOL || expr
+						.check(ident) == Types.NOT_EQUAL_BOOL)) {
 				throw new ContextError("Expression is not boolean");
 			}
 			if (!expr.isRValue()) {
@@ -1326,7 +1429,17 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			// TODO Auto-generated method stub
+			expr.generateCode(codeArray, context, false);
+			int startPoint = codeArray.size();
+			codeArray.add(new IInstructions.CondJump(0));
+			cmd1.generateCode(codeArray, context);
+			int jumperPoint = codeArray.size();
+			codeArray.add(new IInstructions.UncondJump(0));
+			codeArray.set(startPoint,
+					new IInstructions.CondJump(codeArray.size()));
+			cmd2.generateCode(codeArray, context);
+			codeArray.set(jumperPoint,
+					new IInstructions.UncondJump(codeArray.size()));
 
 		}
 	}
@@ -1355,7 +1468,20 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			// TODO Auto-generated method stub
+			int startPoint = codeArray.size();
+			expr.generateCode(codeArray, context, false);
+			IInstructions.IInstr instruction = new IInstructions.CondJump(
+					codeArray.size() + 2);
+			codeArray.add(instruction);
+			int jumperPoint = codeArray.size();
+			instruction = new IInstructions.UncondJump(0);
+			codeArray.add(instruction);
+			cmd.generateCode(codeArray, context);
+			instruction = new IInstructions.UncondJump(startPoint);
+			codeArray.add(instruction);
+			codeArray.set(jumperPoint,
+					new IInstructions.UncondJump(codeArray.size()));
+
 		}
 	}
 
@@ -1382,9 +1508,7 @@ public interface IAbsTree {
 				for (int i = 0; i < context.inputParams.size(); i++) {
 					IdentState state = context.inputParams.get(i);
 					IAbsExpr expr = exprListRoutine.get(i);
-					if (state.type != expr.check(ident)) {
-						throw new ContextError("Param is not the right type");
-					}
+					expr.check(ident);
 					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
 						throw new ContextError(
 								"Input param is not a right hand expression");
@@ -1416,8 +1540,11 @@ public interface IAbsTree {
 							variables.get(ident.getIdent() + i));
 					codeArray.add(instruction);
 					exprListRoutine.get(i).generateCode(codeArray, procContext,
-							false);
-
+							true);
+					instruction = new IInstructions.Deref();
+					codeArray.add(instruction);
+					instruction = new IInstructions.Store();
+					codeArray.add(instruction);
 				}
 			}
 			IInstructions.IInstr call = new IInstructions.Call(
@@ -1501,12 +1628,12 @@ public interface IAbsTree {
 			if (type == Types.COND_BOOL) {
 				expr.generateCode(codeArray, context, false);
 				IInstructions.IInstr call = new IInstructions.OutputBool(
-						"Please insert something: ");
+						"output: ");
 				codeArray.add(call);
 			} else {
 				expr.generateCode(codeArray, context, false);
 				IInstructions.IInstr call = new IInstructions.OutputInt(
-						"Please insert something: ");
+						"output: ");
 				codeArray.add(call);
 			}
 

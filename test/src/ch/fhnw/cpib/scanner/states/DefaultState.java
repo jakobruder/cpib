@@ -30,7 +30,7 @@ public class DefaultState implements IScannerState {
 			return new LessState();
 		} else if (ch.matches(">")) {
 			return new GreaterState();
-		} else if (ch.matches("|")) {
+		} else if (ch.equals("|")) {
 			return new BoolOrState();
 		} else if (ch.matches(",")) {
 			list.add(new Base(Terminals.COMMA));
