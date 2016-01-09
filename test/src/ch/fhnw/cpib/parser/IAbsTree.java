@@ -38,8 +38,7 @@ public interface IAbsTree {
 			ChangeMode changemode;
 			FlowMode flowmode;
 
-			public IdentState(boolean initialised, boolean directAccess,
-					ChangeMode constant, FlowMode flowmode) {
+			public IdentState(boolean initialised, boolean directAccess, ChangeMode constant, FlowMode flowmode) {
 				super();
 				this.initialised = initialised;
 				this.directAccess = directAccess;
@@ -74,10 +73,8 @@ public interface IAbsTree {
 			return false;
 		}
 
-		boolean addIdent(String ident, boolean directAccess,
-				ChangeMode changemode, FlowMode flowmode, boolean isInputParam) {
-			IdentState identState = new IdentState(false, directAccess,
-					changemode, flowmode);
+		boolean addIdent(String ident, boolean directAccess, ChangeMode changemode, FlowMode flowmode, boolean isInputParam) {
+			IdentState identState = new IdentState(false, directAccess, changemode, flowmode);
 			if (isInputParam) {
 				inputParams.add(identState);
 			}
@@ -114,7 +111,7 @@ public interface IAbsTree {
 		Types check(String ident) throws ContextError;
 
 		public int generateCode(int loc, VirtualMachine vm, Context context);
-		
+
 		boolean isLValue();
 
 		boolean isRValue();
@@ -189,9 +186,7 @@ public interface IAbsTree {
 		public boolean addToContext(String ident) {
 			if (contexts.get(GLOBAL_IDENT).hasIdent(ident)) {
 				Context currentContext = contexts.get(ident);
-				return currentContext.addIdent(this.ident.getIdent(), true,
-						changemode.getChangeMode(), flowmode.getFlowMode(),
-						false);
+				return currentContext.addIdent(this.ident.getIdent(), true, changemode.getChangeMode(), flowmode.getFlowMode(), false);
 			}
 			return false;
 		}
@@ -203,8 +198,7 @@ public interface IAbsTree {
 		private IAbsDecl decl;
 		private IAbsCmd cmd;
 
-		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl,
-				IAbsCmd cmd) {
+		public Program(Ident ident, IAbsProgParam progParam, IAbsDecl decl, IAbsCmd cmd) {
 			super();
 			this.ident = ident;
 			this.progParam = progParam;
@@ -244,11 +238,9 @@ public interface IAbsTree {
 		public void check() throws ContextError {
 			Context context = contexts.get(GLOBAL_IDENT);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(),
-					flowmode.getFlowMode(), true)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), true)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
-						.getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -303,11 +295,9 @@ public interface IAbsTree {
 		public void check(String ident) throws ContextError {
 			Context context = contexts.get(ident);
 			String identName = typedIdent.getTypedIdent().getIdent().getIdent();
-			if (context.addIdent(identName, true, changemode.getChangeMode(),
-					flowmode.getFlowMode(), false)) {
+			if (context.addIdent(identName, true, changemode.getChangeMode(), flowmode.getFlowMode(), false)) {
 				Types type;
-				Terminals typeTerminal = typedIdent.getTypedIdent().getType()
-						.getTerminal();
+				Terminals typeTerminal = typedIdent.getTypedIdent().getType().getTerminal();
 				if (typeTerminal == Terminals.BOOL) {
 					type = Types.COND_BOOL;
 				} else {
@@ -460,9 +450,7 @@ public interface IAbsTree {
 				directAccess = true;
 			}
 			if (context != null) {
-				context.addIdent(identName, directAccess,
-						changemode.getChangeMode(), flowmode.getFlowMode(),
-						true);
+				context.addIdent(identName, directAccess, changemode.getChangeMode(), flowmode.getFlowMode(), true);
 				context.setTypeForIdent(identName, type);
 			} else {
 				throw new ContextError("Error at param");
@@ -513,7 +501,7 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
-	
+
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -583,17 +571,13 @@ public interface IAbsTree {
 					IdentState state = context.inputParams.get(i);
 					IAbsExpr expr = expressions.get(i);
 					if (state.flowmode == FlowMode.IN && !expr.isRValue()) {
-						throw new ContextError(
-								"Input param is not a right hand expression");
+						throw new ContextError("Input param is not a right hand expression");
 					}
-					if (state.flowmode == FlowMode.INOUT
-							&& !(expr.isRValue() && expr.isLValue())) {
-						throw new ContextError(
-								"Inout param is not right and left hand expression");
+					if (state.flowmode == FlowMode.INOUT && !(expr.isRValue() && expr.isLValue())) {
+						throw new ContextError("Inout param is not right and left hand expression");
 					}
 					if (state.flowmode == FlowMode.OUT && !expr.isLValue()) {
-						throw new ContextError(
-								"Out param is not Left hand expression");
+						throw new ContextError("Out param is not Left hand expression");
 					}
 
 				}
@@ -614,7 +598,7 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
-	
+
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -664,7 +648,7 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
-		
+
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
@@ -807,10 +791,10 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 			return true;
 		}
-		
+
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
-			// TODO Auto-generated method stub
+			// TODO:
 			return 0;
 		}
 	}
@@ -940,8 +924,9 @@ public interface IAbsTree {
 
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
-			//TODO:
-			return 0;		}
+			// TODO:
+			return 0;
+		}
 
 	}
 
@@ -962,7 +947,7 @@ public interface IAbsTree {
 			// TODO Auto-generated method stub
 
 		}
-		
+
 		@Override
 		public int generateCode(int loc, VirtualMachine vm, Context context) {
 			// TODO Auto-generated method stub
