@@ -904,6 +904,14 @@ public interface IAbsTree {
 			case LT:
 				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
+						if (type1 == Types.INTEGER && (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					}
 				}
@@ -911,11 +919,7 @@ public interface IAbsTree {
 			case LE:
 				if (type1 == Types.INTEGER || type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
-						// TODO:
-						if (type1 == Types.INTEGER && type2 == Types.INTEGER)
-							;
-						else if (type1 == Types.INTEGER
-								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+						if (type1 == Types.INTEGER && (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
 							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
 							operator = Operators.CAND;
 						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
@@ -931,30 +935,91 @@ public interface IAbsTree {
 				if (type1 == Types.EQUAL_BOOL || type1 == Types.INTEGER) {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.INTEGER) {
 						// TODO:
+						if (type1 == Types.INTEGER && type2 == Types.EQUAL_BOOL) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if (type1 == Types.EQUAL_BOOL && type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.EQUAL_BOOL;
 					} else if (type2 == Types.LESSEQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& type2 == Types.EQUAL_BOOL) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if (type1 == Types.EQUAL_BOOL
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					} else if (type2 == Types.GREATEREQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					} else if (type2 == Types.NOT_EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.NOT_EQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.NOT_EQUAL_BOOL;
 					}
 				} else if (type1 == Types.LESSEQUAL_BOOL) {
 					if (type2 == Types.LESSEQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.LESSEQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.LESSEQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.LESSEQUAL_BOOL;
 					}
 				} else if (type1 == Types.GREATEREQUAL_BOOL) {
 					if (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					}
 				} else if (type1 == Types.NOT_EQUAL_BOOL) {
 					if (type2 == Types.EQUAL_BOOL || type2 == Types.NOT_EQUAL_BOOL || type2 == Types.INTEGER) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.NOT_EQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.NOT_EQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
@@ -967,6 +1032,15 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.NOT_EQUAL_BOOL;
 					}
 				}
@@ -978,6 +1052,15 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
@@ -986,6 +1069,15 @@ public interface IAbsTree {
 				if (type1 == Types.INTEGER || type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL) {
 					if (type2 == Types.INTEGER || type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL) {
 						// TODO:
+						if (type1 == Types.INTEGER
+								&& (type2 == Types.GREATEREQUAL_BOOL || type2 == Types.EQUAL_BOOL)) {
+							expression1 = leftIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						} else if ((type1 == Types.GREATEREQUAL_BOOL || type1 == Types.EQUAL_BOOL)
+								&& type2 == Types.INTEGER) {
+							expression2 = rightIntCANDDyadicExpr(operator, expression1, expression2);
+							operator = Operators.CAND;
+						}
 						return Types.GREATEREQUAL_BOOL;
 					}
 				}
@@ -996,11 +1088,11 @@ public interface IAbsTree {
 		}
 
 		private IAbsExpr leftIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
-			return new DyadicExpr(op, ex1, ((DyadicExpr)ex2).getExpression1());
+			return new DyadicExpr(op, ex1, ((DyadicExpr) ex2).getExpression1());
 		}
-		
+
 		private IAbsExpr rightIntCANDDyadicExpr(Operators op, IAbsExpr ex1, IAbsExpr ex2) {
-			return new DyadicExpr(op, ex1, ((DyadicExpr)ex2).getExpression1());
+			return new DyadicExpr(op, ex1, ((DyadicExpr) ex2).getExpression1());
 		}
 
 		@Override
@@ -1016,37 +1108,36 @@ public interface IAbsTree {
 		}
 
 		@Override
-		public void generateCode(ArrayList<IInstr> codeArray, Context context,
-				boolean isSave) {
+		public void generateCode(ArrayList<IInstr> codeArray, Context context, boolean isSave) {
 			switch (operator) {
 			case PLUS:
-				
+
 			case MINUS:
-				
+
 			case TIMES:
-				
+
 			case DIV_E:
-				
+
 			case MOD_E:
-				
+
 			case CAND:
-				
+
 			case COR:
-				
+
 			case LT:
-				
+
 			case LE:
-				
+
 			case EQ:
-				
+
 			case NE:
-				
+
 			case GE:
-				
+
 			case GT:
-				
+
 			default:
-				
+
 			}
 		}
 	}
@@ -1273,6 +1364,5 @@ public interface IAbsTree {
 		}
 
 	}
-
 
 }
