@@ -5,27 +5,27 @@ import ch.fhnw.cpib.scanner.symbols.Base;
 
 public class Literal extends Base {
 
-	private final String value;
+	private int intValue;
 
 	public Literal(int value) {
 		super(Terminals.LITERAL);
-		this.value = String.valueOf(value);
+		intValue = value;
 	}
 
 	public Literal(boolean value) {
 		super(Terminals.LITERAL);
 		if (value) {
-			this.value = "BoolVal true";
+			intValue = 1;
 		} else {
-			this.value = "BoolVal false";
+			intValue = 0;
 		}
 	}
 
-	public String getValue() {
-		return value;
+	public int getValue() {
+		return intValue;
 	}
 
 	public String toString() {
-		return "(" + super.toString() + "," + value + ")";
+		return "(" + super.toString() + "," + intValue + ")";
 	}
 }
