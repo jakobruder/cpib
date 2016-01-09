@@ -21,7 +21,8 @@ public class ApplicationStarter {
 				+ "var ou:int64 "
 				+ "do "
 				+ "debugin m init; ou init := 1; "
-				+ "if 1 < 2 < 3 then debugout 1 else debugout 2 endif; "
+				+ "if false |? true |? false then debugout 1 else debugout 2 endif;"
+//				+ "if 3 < 2 < 3 then debugout 1 else debugout 2 endif; "
 				+ "debugout m; " + "debugout ou " + "endprogram";
 		Scanner scanner = new Scanner();
 		IParser parser = new Parser(scanner.scan(test.subSequence(0,
