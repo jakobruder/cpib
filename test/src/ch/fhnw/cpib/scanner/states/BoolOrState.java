@@ -9,7 +9,7 @@ public class BoolOrState implements IScannerState {
 	@Override
 	public IScannerState handleCharacter(String ch, ITokenList list)
 			throws ScannerException {
-		if (ch.matches("?")) {
+		if (ch.equals("?")) {
 			return new COrState();
 		} else {
 			throw new ScannerException("Invalid Character in BoolOr State: "

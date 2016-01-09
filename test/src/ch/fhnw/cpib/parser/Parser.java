@@ -18,8 +18,8 @@ import ch.fhnw.cpib.parser.IConcTree.ITerm1opor;
 import ch.fhnw.cpib.parser.IConcTree.ITerm2;
 import ch.fhnw.cpib.parser.IConcTree.ITerm2op;
 import ch.fhnw.cpib.parser.IConcTree.ITerm3;
+import ch.fhnw.cpib.parser.IConcTree.RepMultoprFactor;
 import ch.fhnw.cpib.parser.interfaces.IParser;
-import ch.fhnw.cpib.parser.interfaces.IProgram;
 import ch.fhnw.cpib.scanner.Ident;
 import ch.fhnw.cpib.scanner.Literal;
 import ch.fhnw.cpib.scanner.enums.Terminals;
@@ -35,8 +35,9 @@ import ch.fhnw.cpib.scanner.symbols.FlowModeToken;
 import ch.fhnw.cpib.scanner.symbols.MechModeToken;
 import ch.fhnw.cpib.scanner.symbols.MultOpr;
 import ch.fhnw.cpib.scanner.symbols.RelOpr;
+import ch.fhnw.cpib.scanner.symbols.Type;
 
-class Parser implements IParser {
+public class Parser implements IParser {
 	private ITokenList tokenList;
 	private Base token;
 	private Terminals terminal;
@@ -55,13 +56,12 @@ class Parser implements IParser {
 	}
 
 	@Override
-	public IProgram parse() throws GrammarError {
+	public IConcTree.IProgram parse() throws GrammarError {
 
-		// To be changed to receive a tree once it is implemented
-		program();
+		IConcTree.IProgram program = program();
 
 		consume(Terminals.SENTINEL);
-		return null;
+		return program;
 	}
 
 	// to be changed to return a tree
@@ -336,15 +336,13 @@ class Parser implements IParser {
 			IToken proc = consume(Terminals.PROC);
 			Ident ident = (Ident) consume(Terminals.IDENT);
 			IConcTree.IParamList paramList = paramList();
-			IToken returns = consume(Terminals.RETURNS);
-			IConcTree.IStoDecl stoDecl = stoDecl();
 			IConcTree.IFunDeclop1 funDeclOp1 = funDeclop1();
 			IConcTree.IFunDeclop2 funDeclOp2 = funDeclop2();
 			IToken tokenDo = consume(Terminals.DO);
 			IConcTree.ICpsCmd cpsCmd = cpsCmd();
 			IToken endProc = consume(Terminals.ENDPROC);
-			return new IConcTree.ProcDecl(proc, ident, paramList, returns,
-					stoDecl, funDeclOp1, funDeclOp2, tokenDo, cpsCmd, endProc);
+			return new IConcTree.ProcDecl(proc, ident, paramList, funDeclOp1,
+					funDeclOp2, tokenDo, cpsCmd, endProc);
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
 		}
@@ -365,7 +363,7 @@ class Parser implements IParser {
 	private IConcTree.ITypedIdent typedIdent() throws GrammarError {
 		if (terminal == Terminals.IDENT) {
 			return new IConcTree.TypedIdent((Ident) consume(Terminals.IDENT),
-					consume(Terminals.COLON), consume(Terminals.TYPE));
+					consume(Terminals.COLON), (Type) consume(Terminals.TYPE));
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
 		}
@@ -722,6 +720,10 @@ class Parser implements IParser {
 		ITerm1 term1;
 		IExprbool exprbool;
 		switch (terminal) {
+		case LITERAL:
+			term1 = term1();
+			exprbool = exprbool();
+			return new IConcTree.ExprLiteral(term1, exprbool);
 		case LPAREN:
 			term1 = term1();
 			exprbool = exprbool();
@@ -824,6 +826,10 @@ class Parser implements IParser {
 			return new IConcTree.Exprbool();
 		case RPAREN:
 			return new IConcTree.Exprbool();
+		case COMMA:
+			return new IConcTree.Exprbool();
+		case SENTINEL:
+			return new IConcTree.Exprbool();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
@@ -865,8 +871,12 @@ class Parser implements IParser {
 			return new IConcTree.RepAddoprTerm3();
 		case RELOPR:
 			return new IConcTree.RepAddoprTerm3();
+		case COMMA:
+			return new IConcTree.RepAddoprTerm3();
+		case SENTINEL:
+			return new IConcTree.RepAddoprTerm3();
 		default:
-			throw new GrammarError("Unexpected token");
+			throw new GrammarError("Unexpected token: " + terminal);
 		}
 	}
 
@@ -874,6 +884,10 @@ class Parser implements IParser {
 		IFactor factor;
 		IRepmultoprfactor repMULTOPRfactor;
 		switch (terminal) {
+		case LITERAL:
+			factor = factor();
+			repMULTOPRfactor = repMULTOPRfactor();
+			return new IConcTree.Term3Literal(factor, repMULTOPRfactor);
 		case LPAREN:
 			factor = factor();
 			repMULTOPRfactor = repMULTOPRfactor();
@@ -927,8 +941,18 @@ class Parser implements IParser {
 			return new IConcTree.RepMultoprFactor();
 		case RELOPR:
 			return new IConcTree.RepMultoprFactor();
+		case ADDOPR:
+			return new IConcTree.RepMultoprFactor();
+		case COMMA:
+			return new IConcTree.RepMultoprFactor();
+		case SENTINEL:
+			return new IConcTree.RepMultoprFactor();
+		case BOOLAND:
+			return new IConcTree.RepMultoprFactor();
+		case BOOLOR:
+			return new IConcTree.RepMultoprFactor();
 		default:
-			throw new GrammarError("Unexpected token");
+			throw new GrammarError("Unexpected token: " + terminal);
 		}
 	}
 
@@ -998,11 +1022,15 @@ class Parser implements IParser {
 			return new IConcTree.FactorOp();
 		case RELOPR:
 			return new IConcTree.FactorOp();
+		case COMMA:
+			return new IConcTree.FactorOp();
 		case INIT:
 			Base init = consume(Terminals.INIT);
 			return new IConcTree.FactorOpInit(init);
+		case SENTINEL:
+			return new IConcTree.FactorOp();
 		default:
-			throw new GrammarError("Unexpected token");
+			throw new GrammarError("Unexpected token: " + terminal);
 		}
 	}
 
@@ -1010,6 +1038,10 @@ class Parser implements IParser {
 		ITerm3 term3;
 		IRepaddoprterm3 repaddoprterm3;
 		switch (terminal) {
+		case LITERAL:
+			term3 = term3();
+			repaddoprterm3 = repADDOPRterm3();
+			return new IConcTree.Term2Literal(term3, repaddoprterm3);
 		case LPAREN:
 			term3 = term3();
 			repaddoprterm3 = repADDOPRterm3();
@@ -1061,6 +1093,14 @@ class Parser implements IParser {
 			return new IConcTree.Term2op();
 		case RPAREN:
 			return new IConcTree.Term2op();
+		case COMMA:
+			return new IConcTree.Term2op();
+		case SENTINEL:
+			return new IConcTree.Term2op();
+		case BOOLAND:
+			return new IConcTree.Term2op();
+		case BOOLOR:
+			return new IConcTree.Term2op();
 		default:
 			throw new GrammarError("Unexpected token");
 		}
@@ -1070,6 +1110,10 @@ class Parser implements IParser {
 		ITerm2 term2;
 		ITerm2op term2op;
 		switch (terminal) {
+		case LITERAL:
+			term2 = term2();
+			term2op = term2op();
+			return new IConcTree.Term1Literal(term2, term2op);
 		case LPAREN:
 			term2 = term2();
 			term2op = term2op();
@@ -1215,7 +1259,7 @@ class Parser implements IParser {
 	private IExprListopop exprListopop() throws GrammarError {
 		switch (terminal) {
 		case COMMA:
-			Comma comma = (Comma) consume(Terminals.COMMA);
+			IToken comma = consume(Terminals.COMMA);
 			IConcExpr expr = expr();
 			IExprListopop exprListopop = exprListopop();
 			return new IConcTree.ExprListOpOpComma(comma, expr, exprListopop);
