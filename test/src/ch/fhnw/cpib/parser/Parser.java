@@ -253,6 +253,8 @@ public class Parser implements IParser {
 			return new IConcTree.CpsCmdop();
 		} else if (terminal == Terminals.ENDPROGRAM) {
 			return new IConcTree.CpsCmdop();
+		} else if (terminal == Terminals.SENTINEL) {
+			return new IConcTree.CpsCmdop();
 		} else {
 			throw new GrammarError("Wrong token found " + terminal);
 		}
