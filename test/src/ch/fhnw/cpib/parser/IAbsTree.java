@@ -1551,17 +1551,14 @@ public interface IAbsTree {
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
 			int startPoint = codeArray.size();
 			expr.generateCode(codeArray, context, false);
-			IInstructions.IInstr instruction = new IInstructions.CondJump(
-					codeArray.size() + 2);
-			codeArray.add(instruction);
 			int jumperPoint = codeArray.size();
-			instruction = new IInstructions.UncondJump(0);
+			IInstructions.IInstr instruction = new IInstructions.CondJump(0);
 			codeArray.add(instruction);
 			cmd.generateCode(codeArray, context);
 			instruction = new IInstructions.UncondJump(startPoint);
 			codeArray.add(instruction);
 			codeArray.set(jumperPoint,
-					new IInstructions.UncondJump(codeArray.size()));
+					new IInstructions.CondJump(codeArray.size()));
 
 		}
 	}
