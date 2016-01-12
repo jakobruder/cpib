@@ -35,9 +35,33 @@ public class ApplicationStarter {
 				+ "if ( a <= b <= c ) then " + "debugout true " + "else "
 				+ "if ( a >= b >= c ) then " + "debugout true " + "else "
 				+ "debugout false " + "endif " + "endif " + "endprogram";
+		String test3 = "program isSorted ()"
+				+ " global"
+				+ " a: int64;"
+				+ " b: int64;"
+				+ " c: int64;"
+				+ " proc sorted(in copy a:int64, in copy b:int64, in copy c:int64)"
+				+ " do"
+				+ " if ( a <= b <= c ) then"
+				+ " debugout true"
+				+ " else"
+				+ " if ( a >= b >= c ) then"
+				+ " debugout true"
+				+ " else"
+				+ " debugout false"
+				+ " endif"
+				+ " endif"
+				+ " endproc"
+				+ " do"
+				+ " debugin a init;"
+				+ " debugin b init;"
+				+ " debugin c init;"
+				+ " call sorted(a, b, c)"
+				+ " endprogram";
+		
 		Scanner scanner = new Scanner();
-		IParser parser = new Parser(scanner.scan(test2.subSequence(0,
-				test2.length())));
+		IParser parser = new Parser(scanner.scan(test3.subSequence(0,
+				test3.length())));
 		IAbsTree.Program tree = parser.parse().toAbs();
 		tree.check();
 		ICodeArray array = tree.generateCode();
