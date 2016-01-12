@@ -1217,8 +1217,10 @@ public class Parser implements IParser {
 			return new IConcTree.Term1OpAnd();
 		case DEBUGOUT:
 			return new IConcTree.Term1OpAnd();
+		case SENTINEL:
+			return new IConcTree.Term1OpAnd();
 		default:
-			throw new GrammarError("Unexpected token");
+			throw new GrammarError("Unexpected token" + terminal);
 		}
 	}
 

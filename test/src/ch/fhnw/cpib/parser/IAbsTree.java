@@ -652,13 +652,16 @@ public interface IAbsTree {
 
 		@Override
 		public void generateCode(ArrayList<IInstr> codeArray, Context context) {
-			IInstructions.IInstr instruction = new IInstructions.LoadImInt(
-					context.variableCounter);
-			codeArray.add(instruction);
-			instruction = new IInstructions.LoadImInt(0);
-			codeArray.add(instruction);
-			instruction = new IInstructions.Store();
-			codeArray.add(instruction);
+			if (flowmode.getFlowMode() == FlowMode.OUT) {
+				IInstructions.IInstr instruction = new IInstructions.LoadImInt(
+						context.variableCounter);
+				codeArray.add(instruction);
+				instruction = new IInstructions.LoadImInt(0);
+				codeArray.add(instruction);
+				instruction = new IInstructions.Store();
+				codeArray.add(instruction);
+
+			}
 			variables.put(typedIdent.getTypedIdent().getIdent().getIdent(),
 					context.variableCounter);
 			variables.put(context.name + context.paramCounter++,
