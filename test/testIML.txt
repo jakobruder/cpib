@@ -1,0 +1,17 @@
+program isEligibleForMaster ()
+	global
+		credits: int64;
+		gradeTimesTen: int64;
+	age: int64;
+	recommendation: bool
+	do 
+		debugin credits init;
+		debugin gradeTimesTen init;
+		debugin age init;
+		debugin recommendation init;
+		if credits > 150 &? gradeTimesTen > 50 &? (age < 35 |? recommendation) then
+			debugout true 
+			else 
+				debugout false 
+			endif
+endprogram
